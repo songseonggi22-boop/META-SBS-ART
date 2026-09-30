@@ -14,7 +14,7 @@ export default function PortfolioShowcase() {
             <h2>과정별<br /><em>실제 결과물.</em></h2>
           </div>
           <p className="heading-aside">
-            전국 캠퍼스 수강생들이 실제로 완성한 작품입니다.<br />
+            전국 캠퍼스 수강생들이 실제로 완성한 작품입니다. <br className="desktop-only" />
             사진·영상·작품 소개까지 눌러서 바로 확인해 보세요.
           </p>
         </div>

@@ -79,7 +79,7 @@ const courses = [
     resourceId: undefined,
     interest: "cert" as const,
     title: "컴퓨터 자격증",
-    tools: "컴퓨터활용능력 1급 · 2급 (Excel · Access)",
+    tools: "컴활 1급 · 2급 · Excel · Access",
     description: "엑셀 실무부터 Access 데이터베이스까지, 컴활 1급·2급 실기 대비.",
     icon: Check,
     accent: "orange",
@@ -225,7 +225,7 @@ export default function Home() {
         <div className="container intro-grid">
           <div className="section-kicker"><span>01</span><span>WHY US</span></div>
           <div className="intro-content">
-            <p className="section-lede">툴을 배우는 곳이 아니라,<br /><span>작업하는 사람</span>이 되는 곳.</p>
+            <p className="section-lede">툴을 배우는 곳이 아니라, <br className="desktop-only" /><span>작업하는 사람</span>이 되는 곳.</p>
             <div className="intro-support">
               <p>기능을 나열하는 수업 대신, 하나의 작업이 완성되는 과정을 따라갑니다. 기초 툴부터 실무형 결과물, 그리고 반복을 줄이는 AI 워크플로우까지 한 흐름으로 연결합니다.</p>
               <div className="intro-tags">
@@ -245,7 +245,7 @@ export default function Home() {
               <div className="section-kicker"><span>02</span><span>THE PROGRAM</span></div>
               <h2>만드는 방식에<br /><em>맞춘 트랙.</em></h2>
             </div>
-            <p className="heading-aside">필요한 도구를 고르고,<br />나만의 제작 루틴을 만드세요.</p>
+            <p className="heading-aside">필요한 도구를 고르고, <br className="desktop-only" />나만의 제작 루틴을 만드세요.</p>
           </div>
           <div className="course-grid">
             {courses.map((course) => <CourseCard key={course.number} course={course} />)}
@@ -267,7 +267,7 @@ export default function Home() {
           <div className="method-card method-card-dark">
             <div className="method-card-header"><span>PROCESS / 04</span><Move3d size={20} /></div>
             <div className="method-letter">M</div>
-            <p>막연한 아이디어를<br /><strong>움직이는 결과물</strong>로.</p>
+            <p>막연한 아이디어를 <br className="desktop-only" /><strong>움직이는 결과물</strong>로.</p>
           </div>
           <div className="method-copy">
             <div className="section-kicker"><span>04</span><span>HOW WE WORK</span></div>
@@ -298,7 +298,7 @@ export default function Home() {
           <div className="cta-label"><Sparkles size={16} /> START MAKING</div>
           <h2>다음 작업을<br /><em>오늘 시작하세요.</em></h2>
           <div className="cta-bottom">
-            <p>관심 있는 트랙과 현재 상황을 알려주시면,<br />가장 현실적인 시작점을 함께 찾습니다.</p>
+            <p>관심 있는 트랙과 현재 상황을 알려주시면, <br className="desktop-only" />가장 현실적인 시작점을 함께 찾습니다.</p>
             <button type="button" className="button button-light" onClick={() => open({ sourcePage: "home-cta" })}>상담 시작하기 <ArrowUpRight size={17} /></button>
           </div>
           <div className="cta-fee">

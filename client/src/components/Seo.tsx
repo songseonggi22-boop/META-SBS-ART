@@ -37,5 +37,30 @@ export default function Seo() {
       document.head.appendChild(s);
     });
   }, [location]);
+  // 페이지 이동 시 항상 화면 맨 위에서 시작 (해시 링크는 해당 섹션으로). 이전 페이지의 스크롤 위치가 남지 않게 한다.
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    const target = hash ? document.getElementById(decodeURIComponent(hash)) : null;
+    if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: "instant" as ScrollBehavior }));
+    else {
+      // html { scroll-behavior: smooth } 때문에 이동 후 스크롤이 천천히 올라오지 않도록 잠시 끄고 즉시 맨 위로.
+      const root = document.documentElement;
+      root.style.scrollBehavior = "auto";
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+      requestAnimationFrame(() => requestAnimationFrame(() => (root.style.scrollBehavior = "")));
+    }
+  }, [location]);
+
+  // 같은 페이지 안의 해시 링크("/#courses")는 경로가 안 바뀌어 위 효과가 돌지 않으므로 클릭 시 직접 스크롤한다.
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const href = (e.target as Element).closest?.("a")?.getAttribute("href") ?? "";
+      const id = href.match(/^\/?#(.+)$/)?.[1];
+      if (id) setTimeout(() => document.getElementById(decodeURIComponent(id))?.scrollIntoView({ behavior: "smooth" }), 0);
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, []);
+
   return null;
 }

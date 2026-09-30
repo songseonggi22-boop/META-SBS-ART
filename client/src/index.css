@@ -637,3 +637,16 @@
 .course-faq summary { cursor: pointer; font-weight: 600; font-size: 14px; }
 .course-faq details p { margin: 10px 0 0; color: var(--muted-foreground); font-size: 14px; line-height: 1.7; }
 @media (max-width: 900px) { .course-facts { grid-template-columns: 1fr; } }
+
+/* ── 한글 줄바꿈: 단어 중간에서 끊지 않고(keep-all), 제목은 균형 있게, 본문은 마지막 줄 고아 방지 ── */
+html { word-break: keep-all; overflow-wrap: break-word; line-break: strict; }
+h1, h2, h3, .section-lede, .hero-description, .heading-aside, .cta-bottom p, .method-copy p { text-wrap: balance; }
+p, li, dd, summary, figcaption { text-wrap: pretty; }
+.tip-callout, .course-facts dd, .course-chips a, .resource-teaser strong, .resource-row h2, .footer-links a { overflow-wrap: anywhere; }
+input, textarea, select, button { word-break: keep-all; }
+.brand-copy strong { letter-spacing: -.02em; white-space: nowrap; }
+.brand-copy span { white-space: nowrap; }
+/* 상세 페이지 제목: 긴 한글 제목은 줄 간격을 넓히고 자간을 완화 */
+.resource-detail-title { line-height: 1.18 !important; letter-spacing: -.045em !important; margin: 18px 0 14px !important; }
+.tip-steps h2, .tip-steps h3 { line-height: 1.3; }
+.course-card h3 { line-height: 1.2; }
