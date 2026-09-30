@@ -204,7 +204,7 @@ export default function Home() {
 
       <section className="intro-section section-pad">
         <div className="container intro-grid">
-          <div className="section-kicker"><span>01</span><span>WHY CULT</span></div>
+          <div className="section-kicker"><span>01</span><span>WHY US</span></div>
           <div className="intro-content">
             <p className="section-lede">툴을 배우는 곳이 아니라,<br /><span>작업하는 사람</span>이 되는 곳.</p>
             <div className="intro-support">

@@ -17,10 +17,12 @@ function isCurrent(pathname: string, href: string) {
 export default function SiteShell({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return window.localStorage.getItem("cult-academy-theme") === "dark";
-  });
+  // 프리렌더 HTML과 첫 렌더를 일치시키려고 초기값은 항상 라이트 — 저장된 테마는 마운트 후에 적용.
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    if (window.localStorage.getItem("cult-academy-theme") === "dark") setIsDark(true);
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", isDark);
@@ -35,11 +37,11 @@ export default function SiteShell({ children }: { children: ReactNode }) {
     <div className="site-frame min-h-screen overflow-x-clip">
       <header className="site-header">
         <div className="container site-header-inner">
-          <Link href="/" className="brand-lockup" aria-label="CULT Computer Academy 홈">
-            <span className="brand-mark">C/</span>
+          <Link href="/" className="brand-lockup" aria-label="대전AI컴퓨터디자인학원 홈">
+            <span className="brand-mark">AI</span>
             <span className="brand-copy">
-              <strong>CULT</strong>
-              <span>COMPUTER ACADEMY</span>
+              <strong>대전AI컴퓨터디자인학원</strong>
+              <span>DAEJEON AI COMPUTER DESIGN</span>
             </span>
           </Link>
 

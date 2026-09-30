@@ -4,6 +4,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import SiteShell from "./components/SiteShell";
 import ConsultModal from "./components/ConsultModal";
 import { ConsultModalProvider } from "./components/ConsultModalContext";
+import Seo from "./components/Seo";
 import FloatingCta from "./components/FloatingCta";
 import Home from "./pages/Home";
 import Resources from "./pages/Resources";
@@ -38,6 +39,7 @@ export default function App() {
     <ErrorBoundary>
       <Toaster position="bottom-right" />
       <ConsultModalProvider>
+        <Seo />
         <SiteShell><Router /></SiteShell>
         <FloatingCta />
         <ConsultModal />

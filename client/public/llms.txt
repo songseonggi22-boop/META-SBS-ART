@@ -1,0 +1,13 @@
+# 대전AI컴퓨터디자인학원
+
+> 대전광역시 서구 둔산동의 컴퓨터·디자인 학원. 그래픽(포토샵·일러스트레이터), 모션그래픽(프리미어·애프터 이펙트·C4D), CG/3D(ZBrush·Maya), 인테리어(CAD·스케치업·3ds Max), 자격증·AI(컴활·바이브코딩·자동화) 과정을 운영합니다.
+
+- 주소: 대전광역시 서구 대덕대로 179, 9·10층 (둔산동)
+- 대표전화: 042-719-8383
+- 상담: 사이트의 상담 신청 또는 빠른 수강료 조회(이름·연락처)
+
+## 주요 페이지
+- [홈 · 과정 안내](https://cult-computer-academy.vercel.app/)
+- [학습 자료실](https://cult-computer-academy.vercel.app/blog): 포토샵 레이어 정리, 일러스트레이터 벡터 감각, 프리미어→애프터 이펙트, ZBrush, CAD→3D, AI 자동화 팁
+- [학원 안내](https://cult-computer-academy.vercel.app/about)
+- [수강 안내](https://cult-computer-academy.vercel.app/pricing)
