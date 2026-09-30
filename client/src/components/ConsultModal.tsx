@@ -15,7 +15,8 @@ const INTEREST_OPTIONS: { value: CourseInterest; label: string }[] = [
   { value: "motion", label: "모션그래픽 (Premiere·AE·C4D)" },
   { value: "cg", label: "CG / 3D (ZBrush·Maya)" },
   { value: "interior", label: "인테리어 디자인 (CAD·SketchUp)" },
-  { value: "ai", label: "자격증 & AI (컴활·Vibe Coding)" },
+  { value: "cert", label: "컴퓨터 자격증 (컴활 1급·2급)" },
+  { value: "ai", label: "AI 활용 (ChatGPT·바이브코딩·자동화)" },
 ];
 
 // 연락처 검증 — 010 등 01[016789]로 시작, 하이픈 유무 모두 허용.

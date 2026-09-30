@@ -1,3 +1,4 @@
+import { courses, trackLabels, getCourse } from "@/lib/courses";
 import { resources } from "@/lib/resources";
 import { courseLabels, getPortfolioItem, portfolioItems } from "@/lib/portfolio";
 
@@ -89,6 +90,28 @@ export function getMeta(path: string): PageMeta {
     };
   }
 
+  const cm = p.match(/^\/course\/([^/]+)$/);
+  const course = cm && getCourse(cm[1]);
+  if (course) {
+    const desc = `${course.title} 수강 안내. ${course.tagline} ${course.period} · ${course.tools}. 커리큘럼과 무료 상담.`;
+    return {
+      path: p,
+      title: brand(`${course.title} · 대전 ${trackLabels[course.track]} 과정`),
+      description: clip(desc),
+      jsonld: [
+        {
+          "@context": "https://schema.org",
+          "@type": "Course",
+          name: course.title,
+          description: course.tagline,
+          provider: { "@id": ORG_ID },
+          url: SITE.url + p,
+        },
+        crumbs([["홈", "/"], [trackLabels[course.track], "/#courses"], [course.title, p]]),
+      ],
+    };
+  }
+
   const pf = p.match(/^\/portfolio\/([^/]+)$/);
   const item = pf && getPortfolioItem(pf[1]);
   if (item) {
@@ -106,5 +129,6 @@ export function getMeta(path: string): PageMeta {
 export const allRoutes = (): string[] => [
   ...Object.keys(staticMeta),
   ...resources.map((r) => `/blog/${r.id}`),
+  ...courses.map((c) => `/course/${c.slug}`),
   ...portfolioItems.map((i) => `/portfolio/${i.id}`),
 ];

@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useMemo, useState, type ReactNo
 
 // 어느 페이지에서든(히어로 CTA·과정 카드·수강 안내 등) 같은 상담 모달을 열 수 있게 하는 전역 상태.
 // evawacademy.com(홈페이지만들기 프로젝트)의 ConsultModalContext와 동일한 패턴.
-export type CourseInterest = "graphic" | "motion" | "cg" | "interior" | "ai";
+export type CourseInterest = "graphic" | "motion" | "cg" | "interior" | "cert" | "ai";
 
 type OpenOptions = {
   interest?: CourseInterest; // 과정 카드 등에서 넘어온 관심 분야 프리셋

@@ -18,6 +18,7 @@ import { useConsultModal } from "@/components/ConsultModalContext";
 import QuickFeeForm from "@/components/QuickFeeForm";
 import PortfolioShowcase from "@/components/PortfolioShowcase";
 import { portfolioItems } from "@/lib/portfolio";
+import { coursesByTrack } from "@/lib/courses";
 
 // 각 과정 카드의 썸네일은 같은 사업자(SBS아카데미AIX학원) 공식 포트폴리오(sbsart.com, 2026-09-21 확인)의
 // 실제 수강생 결과물 1건씩(lib/portfolio.ts) — 눌러도 sbsart.com으로 나가지 않고 이 사이트 안의 `/portfolio/:id`
@@ -75,11 +76,22 @@ const courses = [
   },
   {
     number: "05",
+    resourceId: undefined,
+    interest: "cert" as const,
+    title: "컴퓨터 자격증",
+    tools: "컴퓨터활용능력 1급 · 2급 (Excel · Access)",
+    description: "엑셀 실무부터 Access 데이터베이스까지, 컴활 1급·2급 실기 대비.",
+    icon: Check,
+    accent: "orange",
+    portfolio: null,
+  },
+  {
+    number: "06",
     resourceId: "ai",
     interest: "ai" as const,
-    title: "자격증 & AI",
-    tools: "컴활 · Vibe Coding · Agent · Automation",
-    description: "업무에 바로 쓰는 자격과 AI 활용법을 작업 흐름에 연결합니다.",
+    title: "AI 활용",
+    tools: "ChatGPT · Claude · 바이브코딩 · n8n 자동화",
+    description: "업무와 콘텐츠에 바로 쓰는 AI 활용, 코딩 없이 만드는 자동화.",
     icon: WandSparkles,
     accent: "pink",
     portfolio: null,
@@ -143,13 +155,20 @@ function CourseCard({ course }: { course: (typeof courses)[number] }) {
         <h3>{course.title}</h3>
         <p className="course-tools">{course.tools}</p>
         <p className="course-description">{course.description}</p>
+        <ul className="course-chips">
+          {coursesByTrack(course.interest).map((c) => (
+            <li key={c.slug}><Link href={`/course/${c.slug}`}>{c.title}</Link></li>
+          ))}
+        </ul>
         <button type="button" className="course-consult" onClick={() => open({ interest: course.interest, sourcePage: `course-${course.resourceId}` })}>
           이 과정 상담받기 <ArrowRight size={13} />
         </button>
       </div>
-    <Link href={`/blog/${course.resourceId}`} className="course-card-link" aria-label={`${course.title} 자료실 보기`}>
-        <ArrowUpRight size={16} />
-      </Link>
+    {course.resourceId && (
+        <Link href={`/blog/${course.resourceId}`} className="course-card-link" aria-label={`${course.title} 자료실 보기`}>
+          <ArrowUpRight size={16} />
+        </Link>
+      )}
     </article>
   );
 }
