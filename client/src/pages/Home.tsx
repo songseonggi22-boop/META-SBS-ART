@@ -9,6 +9,7 @@ import {
   FileImage,
   Layers3,
   Move3d,
+  PenTool,
   Play,
   Sparkles,
   WandSparkles,
@@ -19,6 +20,7 @@ import QuickFeeForm from "@/components/QuickFeeForm";
 import PortfolioShowcase from "@/components/PortfolioShowcase";
 import { portfolioItems } from "@/lib/portfolio";
 import { coursesByTrack } from "@/lib/courses";
+import { courseHref } from "@/lib/landings";
 
 // 각 과정 카드의 썸네일은 같은 사업자(SBS아카데미AIX학원) 공식 포트폴리오(sbsart.com, 2026-09-21 확인)의
 // 실제 수강생 결과물 1건씩(lib/portfolio.ts) — 눌러도 sbsart.com으로 나가지 않고 이 사이트 안의 `/portfolio/:id`
@@ -34,8 +36,8 @@ const courses = [
     number: "01",
     resourceId: "photoshop",
     interest: "graphic" as const,
-    title: "그래픽 디자인",
-    tools: "Photoshop · Illustrator",
+    title: "시각편집디자인",
+    tools: "Photoshop · Illustrator · InDesign · GTQ",
     description: "이미지와 벡터를 다루는 기본기부터 브랜드 그래픽까지.",
     icon: FileImage,
     accent: "lime",
@@ -77,6 +79,17 @@ const courses = [
   {
     number: "05",
     resourceId: undefined,
+    interest: "drawing" as const,
+    title: "웹툰·디지털드로잉",
+    tools: "Clip Studio · Procreate · iPad",
+    description: "캐릭터·채색부터 웹툰·이모티콘·굿즈까지, 그림이 결과물인 트랙.",
+    icon: PenTool,
+    accent: "violet",
+    portfolio: null,
+  },
+  {
+    number: "06",
+    resourceId: undefined,
     interest: "cert" as const,
     title: "컴퓨터 자격증",
     tools: "컴활 1급 · 2급 · Excel · Access",
@@ -86,7 +99,7 @@ const courses = [
     portfolio: null,
   },
   {
-    number: "06",
+    number: "07",
     resourceId: "ai",
     interest: "ai" as const,
     title: "AI 활용",
@@ -94,6 +107,17 @@ const courses = [
     description: "업무와 콘텐츠에 바로 쓰는 AI 활용, 코딩 없이 만드는 자동화.",
     icon: WandSparkles,
     accent: "pink",
+    portfolio: null,
+  },
+  {
+    number: "08",
+    resourceId: undefined,
+    interest: "it" as const,
+    title: "IT 프로그래밍",
+    tools: "Python · Java · HTML/CSS · JavaScript",
+    description: "언어를 직접 익히는 코딩 기초부터 웹 개발까지.",
+    icon: Code2,
+    accent: "cyan",
     portfolio: null,
   },
 ];
@@ -157,7 +181,7 @@ function CourseCard({ course }: { course: (typeof courses)[number] }) {
         <p className="course-description">{course.description}</p>
         <ul className="course-chips">
           {coursesByTrack(course.interest).map((c) => (
-            <li key={c.slug}><Link href={`/course/${c.slug}`}>{c.title}</Link></li>
+            <li key={c.slug}><Link href={courseHref(c.slug)}>{c.title}</Link></li>
           ))}
         </ul>
         <button type="button" className="course-consult" onClick={() => open({ interest: course.interest, sourcePage: `course-${course.resourceId}` })}>

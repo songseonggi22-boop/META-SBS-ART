@@ -1,15 +1,18 @@
 import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
-import { Link, useParams } from "wouter";
+import { Link, Redirect, useParams } from "wouter";
 import { useConsultModal } from "@/components/ConsultModalContext";
 import QuickFeeForm from "@/components/QuickFeeForm";
 import { NotFoundPage } from "./InfoPages";
 import { coursesByTrack, getCourse, trackLabels } from "@/lib/courses";
+import { courseHref, coursePrimaryLanding } from "@/lib/landings";
 
 export default function CourseDetail() {
   const { slug } = useParams<{ slug: string }>();
   const { open } = useConsultModal();
   const course = slug ? getCourse(slug) : undefined;
   if (!course) return <NotFoundPage />;
+  // 대표 랜딩에 커리큘럼 전체가 실린 과정은 랜딩으로 보낸다(서버에서는 vercel.json 301).
+  if (coursePrimaryLanding(course.slug)) return <Redirect to={courseHref(course.slug)} replace />;
 
   const source = `course-${course.slug}`;
   const related = coursesByTrack(course.track).filter((c) => c.slug !== course.slug);
@@ -98,7 +101,7 @@ export default function CourseDetail() {
             <h3>{trackLabels[course.track]} 다른 과정</h3>
             <div className="resource-teaser-list">
               {related.map((c) => (
-                <Link key={c.slug} href={`/course/${c.slug}`} className="resource-teaser"><span>{c.period}</span><strong>{c.title}</strong><ArrowUpRight size={17} /></Link>
+                <Link key={c.slug} href={courseHref(c.slug)} className="resource-teaser"><span>{c.period}</span><strong>{c.title}</strong><ArrowUpRight size={17} /></Link>
               ))}
             </div>
           </div>

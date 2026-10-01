@@ -174,7 +174,7 @@
 .section-heading-row { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 54px; }
 .section-heading-row h2 { margin-bottom: 0; font-size: clamp(48px, 6vw, 82px); }
 .heading-aside { margin: 0 0 8px; color: var(--muted-foreground); font-size: 14px; line-height: 1.7; text-align: right; }
-.course-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.course-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .course-card { position: relative; min-height: 340px; display: flex; flex-direction: column; padding: 23px 20px 20px; background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out); }
 .course-card:hover { transform: translateY(-8px); box-shadow: 12px 14px 0 rgba(24,24,21,.1); }
 .course-card::after { content: ""; position: absolute; right: -30px; bottom: -50px; width: 120px; height: 120px; border-radius: 50%; background: var(--card-accent); opacity: .55; filter: blur(1px); }
@@ -457,7 +457,7 @@
   .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(340px, .86fr); }
   .hero-copy { padding-left: 38px; padding-right: 38px; }
   .hero-note { left: 38px; }
-  .course-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .course-card:nth-child(4), .course-card:nth-child(5) { min-height: 280px; }
   .intro-content { gap: 40px; }
   .method-grid { gap: 55px; }
@@ -654,3 +654,55 @@ input, textarea, select, button { word-break: keep-all; }
 .course-card:not(.has-media) { min-height: 0 !important; }
 .course-card:not(.has-media) .course-card-body { margin-top: 28px; }
 .course-card:not(.has-media) .course-card-link { top: auto; bottom: 16px; }
+
+/* ── 상단 메가메뉴: 과정 메뉴 hover/탭 → 하단 키워드 바 ── */
+.mega-nav { gap: 22px; }
+.mega-nav .nav-link { padding: 6px 0; border: 0; background: none; cursor: pointer; font: 600 14px "Noto Sans KR", sans-serif; letter-spacing: -.02em; white-space: nowrap; }
+.util-nav { display: flex; align-items: center; gap: 14px; margin-right: 6px; }
+.util-link { color: var(--muted-foreground); font-size: 12px; white-space: nowrap; transition: color 160ms; }
+.util-link:hover, .util-link.active { color: var(--foreground); }
+.mega-bar { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--background); border-bottom: 1px solid var(--border); box-shadow: 0 14px 24px rgba(24,24,21,.06); }
+.mega-bar.open { display: block; animation: mega-in 160ms var(--ease-out); }
+@keyframes mega-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+.mega-bar-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding-top: 16px; padding-bottom: 16px; }
+.mega-bar-label { margin-right: 10px; color: #8875f5; font: 700 13px "Noto Sans KR", sans-serif; }
+.mega-link { padding: 8px 14px; border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; transition: background 160ms, color 160ms, border-color 160ms; }
+.mega-link:hover { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.mobile-menu-group { display: grid; }
+button.mobile-nav-link { width: 100%; border-left: 0; border-right: 0; border-top: 0; background: none; color: inherit; font: inherit; font-size: 16px; text-align: left; cursor: pointer; }
+button.mobile-nav-link svg { transition: transform 180ms; }
+button.mobile-nav-link.open svg { transform: rotate(180deg); }
+.mobile-sub { display: none; flex-wrap: wrap; gap: 8px; padding: 12px 0 16px; border-bottom: 1px solid var(--border); }
+.mobile-sub.open { display: flex; }
+.mobile-sub-link { padding: 8px 12px; border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; }
+@media (max-width: 1240px) {
+  .desktop-nav, .util-nav, .mega-bar, .header-actions .login-link { display: none !important; }
+  .mobile-menu-button { display: grid; }
+  .mobile-nav { display: block; max-height: 0; overflow: hidden; background: var(--background); transition: max-height 260ms var(--ease-out); }
+  .mobile-nav.open { max-height: calc(100vh - 64px); overflow-y: auto; border-top: 1px solid var(--border); }
+  .mobile-nav-inner { display: grid; padding-top: 6px; padding-bottom: 16px; }
+  .mobile-nav-link { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 16px; }
+}
+
+/* ── 키워드 랜딩 ── */
+.landing-lead { max-width: 760px; margin: 0; font-size: 16px; line-height: 1.8; color: var(--foreground); }
+.landing-points { list-style: none; margin: 0 0 20px; padding: 0; display: grid; gap: 10px; }
+.landing-points li { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; line-height: 1.5; }
+.landing-points svg { flex: none; margin-top: 3px; color: #679000; }
+.landing-branches, .landing-related { margin-bottom: 48px; }
+.landing-branch { margin-top: 20px; padding: 22px; border: 1px solid var(--border); background: var(--card); }
+.landing-branch h3 { margin: 0 0 8px; font: 700 18px/1.35 "Noto Sans KR", sans-serif; }
+.landing-branch > p { margin: 0 0 14px; color: var(--muted-foreground); font-size: 14px; line-height: 1.7; }
+.landing-course { margin-bottom: 56px; scroll-margin-top: 100px; }
+.landing-course-tagline { margin: 4px 0 18px; color: var(--muted-foreground); font-size: 14px; }
+.landing-course-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.landing-course-card { position: relative; display: grid; gap: 6px; padding: 18px 44px 18px 18px; border: 1px solid var(--border); background: var(--background); transition: border-color 160ms, transform 160ms; }
+.landing-course-card:hover { border-color: var(--foreground); transform: translateY(-2px); }
+.landing-course-card span { color: #8875f5; font-size: 11px; font-weight: 700; }
+.landing-course-card strong { font-size: 15px; line-height: 1.35; }
+.landing-course-card p { margin: 0; color: var(--muted-foreground); font-size: 13px; line-height: 1.55; }
+.landing-course-card svg { position: absolute; top: 18px; right: 16px; }
+.landing-location { margin-top: 44px; padding: 20px; border: 1px solid var(--border); background: var(--card); }
+.landing-location h3 { margin: 0 0 10px; font-size: 16px; }
+.landing-location p { display: flex; align-items: center; gap: 8px; margin: 6px 0 0; font-size: 14px; }
+@media (max-width: 760px) { .landing-course-grid { grid-template-columns: 1fr; } }

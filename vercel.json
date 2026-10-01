@@ -1,4 +1,101 @@
 {
   "buildCommand": "pnpm run build:static",
-  "outputDirectory": "dist/public"
+  "outputDirectory": "dist/public",
+  "redirects": [
+    {
+      "source": "/course/photoshop",
+      "destination": "/daejeon/photoshop",
+      "permanent": true
+    },
+    {
+      "source": "/course/illustrator",
+      "destination": "/daejeon/illustrator",
+      "permanent": true
+    },
+    {
+      "source": "/course/indesign",
+      "destination": "/daejeon/indesign",
+      "permanent": true
+    },
+    {
+      "source": "/course/gtq",
+      "destination": "/daejeon/gtq",
+      "permanent": true
+    },
+    {
+      "source": "/course/premiere",
+      "destination": "/daejeon/premiere",
+      "permanent": true
+    },
+    {
+      "source": "/course/youtube-ai",
+      "destination": "/daejeon/youtube",
+      "permanent": true
+    },
+    {
+      "source": "/course/after-effects",
+      "destination": "/daejeon/after-effects",
+      "permanent": true
+    },
+    {
+      "source": "/course/cinema-4d",
+      "destination": "/daejeon/cinema4d",
+      "permanent": true
+    },
+    {
+      "source": "/course/autocad",
+      "destination": "/daejeon/cad",
+      "permanent": true
+    },
+    {
+      "source": "/course/sketchup",
+      "destination": "/daejeon/sketchup",
+      "permanent": true
+    },
+    {
+      "source": "/course/3ds-max",
+      "destination": "/daejeon/max",
+      "permanent": true
+    },
+    {
+      "source": "/course/maya-modeling",
+      "destination": "/daejeon/maya",
+      "permanent": true
+    },
+    {
+      "source": "/course/maya-rigging",
+      "destination": "/daejeon/maya",
+      "permanent": true
+    },
+    {
+      "source": "/course/webtoon",
+      "destination": "/daejeon/webtoon",
+      "permanent": true
+    },
+    {
+      "source": "/course/digital-drawing",
+      "destination": "/daejeon/digital-drawing",
+      "permanent": true
+    },
+    {
+      "source": "/course/ipad-drawing",
+      "destination": "/daejeon/ipad-drawing",
+      "permanent": true
+    },
+    {
+      "source": "/course/emoticon",
+      "destination": "/daejeon/emoticon",
+      "permanent": true
+    },
+    {
+      "source": "/course/computer-ability-2",
+      "destination": "/daejeon/computer",
+      "permanent": true
+    },
+    {
+      "source": "/course/computer-ability-1",
+      "destination": "/daejeon/computer",
+      "permanent": true
+    }
+  ]
 }

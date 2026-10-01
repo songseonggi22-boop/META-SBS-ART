@@ -1,22 +1,39 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
-import { ArrowUpRight, Menu, Moon, Sun, X } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Menu, Moon, Sun, X } from "lucide-react";
+import { getLanding, landingsByMenu, menus, type MenuKey } from "@/lib/landings";
 
-const navItems = [
-  { label: "커리큘럼", href: "/#courses" },
+const utilLinks = [
   { label: "자료실", href: "/blog" },
   { label: "학원 안내", href: "/about" },
   { label: "수강 안내", href: "/pricing" },
 ];
 
-function isCurrent(pathname: string, href: string) {
-  if (href === "/#courses") return pathname === "/";
-  return pathname === href;
+// 상단 메뉴(시각편집·모션그래픽…) — PC는 마우스를 올리면, 터치 기기는 탭하면 아래에 키워드 바가 열린다.
+// 키워드 링크는 닫혀 있어도 HTML에 남겨 두어(숨김 처리) 검색 크롤러가 모든 랜딩을 따라갈 수 있게 한다.
+function MegaBars({ openMenu }: { openMenu: MenuKey | null }) {
+  return (
+    <>
+      {menus.map((m) => (
+        <div key={m.key} className={openMenu === m.key ? "mega-bar open" : "mega-bar"} id={`mega-${m.key}`}>
+          <div className="container mega-bar-inner">
+            <span className="mega-bar-label">{m.label}</span>
+            {landingsByMenu(m.key).map((l) => (
+              <Link key={l.slug} href={`/daejeon/${l.slug}`} className="mega-link">{l.keyword}</Link>
+            ))}
+          </div>
+        </div>
+      ))}
+    </>
+  );
 }
 
 export default function SiteShell({ children }: { children: ReactNode }) {
   const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<MenuKey | null>(null);
+  const [mobileSub, setMobileSub] = useState<MenuKey | null>(null);
+  const activeMenu = location.startsWith("/daejeon/") ? getLanding(location.split("/")[2])?.menu : undefined;
   // 프리렌더 HTML과 첫 렌더를 일치시키려고 초기값은 항상 라이트 — 저장된 테마는 마운트 후에 적용.
   const [isDark, setIsDark] = useState(false);
 
@@ -31,11 +48,18 @@ export default function SiteShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setMenuOpen(false);
+    setOpenMenu(null);
   }, [location]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenMenu(null);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   return (
     <div className="site-frame min-h-screen overflow-x-clip">
-      <header className="site-header">
+      <header className="site-header" onMouseLeave={() => setOpenMenu(null)}>
         <div className="container site-header-inner">
           <Link href="/" className="brand-lockup" aria-label="대전AI컴퓨터디자인학원 홈">
             <span className="brand-mark">AI</span>
@@ -45,22 +69,28 @@ export default function SiteShell({ children }: { children: ReactNode }) {
             </span>
           </Link>
 
-          <nav className="desktop-nav" aria-label="주요 내비게이션">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={isCurrent(location, item.href) ? "nav-link active" : "nav-link"}
+          <nav className="desktop-nav mega-nav" aria-label="과정 메뉴">
+            {menus.map((m) => (
+              <button
+                key={m.key}
+                type="button"
+                className={openMenu === m.key || activeMenu === m.key ? "nav-link active" : "nav-link"}
+                aria-expanded={openMenu === m.key}
+                aria-controls={`mega-${m.key}`}
+                onPointerEnter={(e) => e.pointerType === "mouse" && setOpenMenu(m.key)}
+                onClick={() => setOpenMenu((cur) => (cur === m.key ? null : m.key))}
               >
-                {item.label}
-              </Link>
+                {m.label}
+              </button>
             ))}
           </nav>
 
           <div className="header-actions">
-            <Link href="/auth/login" className="login-link">
-              로그인
-            </Link>
+            <nav className="util-nav" aria-label="학원 안내">
+              {utilLinks.map((u) => (
+                <Link key={u.href} href={u.href} className={location === u.href ? "util-link active" : "util-link"}>{u.label}</Link>
+              ))}
+            </nav>
             <button
               type="button"
               className="icon-button theme-toggle"
@@ -83,11 +113,31 @@ export default function SiteShell({ children }: { children: ReactNode }) {
           </div>
         </div>
 
+        <MegaBars openMenu={openMenu} />
+
         <div className={menuOpen ? "mobile-nav open" : "mobile-nav"} id="mobile-navigation">
           <div className="container mobile-nav-inner">
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href} className="mobile-nav-link">
-                <span>{item.label}</span>
+            {menus.map((m) => (
+              <div key={m.key} className="mobile-menu-group">
+                <button
+                  type="button"
+                  className={mobileSub === m.key ? "mobile-nav-link open" : "mobile-nav-link"}
+                  aria-expanded={mobileSub === m.key}
+                  onClick={() => setMobileSub((cur) => (cur === m.key ? null : m.key))}
+                >
+                  <span>{m.label}</span>
+                  <ChevronDown size={16} />
+                </button>
+                <div className={mobileSub === m.key ? "mobile-sub open" : "mobile-sub"}>
+                  {landingsByMenu(m.key).map((l) => (
+                    <Link key={l.slug} href={`/daejeon/${l.slug}`} className="mobile-sub-link">{l.keyword}</Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+            {utilLinks.map((u) => (
+              <Link key={u.href} href={u.href} className="mobile-nav-link">
+                <span>{u.label}</span>
                 <ArrowUpRight size={16} />
               </Link>
             ))}

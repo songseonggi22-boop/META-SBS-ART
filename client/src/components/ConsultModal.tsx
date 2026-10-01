@@ -11,12 +11,14 @@ import { useConsultModal, type CourseInterest } from "./ConsultModalContext";
 import PrivacyPolicyText from "./PrivacyPolicyText";
 
 const INTEREST_OPTIONS: { value: CourseInterest; label: string }[] = [
-  { value: "graphic", label: "그래픽 디자인 (Photoshop·Illustrator)" },
+  { value: "graphic", label: "시각편집디자인 (포토샵·일러스트·인디자인·GTQ)" },
   { value: "motion", label: "모션그래픽 (Premiere·AE·C4D)" },
   { value: "cg", label: "CG / 3D (ZBrush·Maya)" },
   { value: "interior", label: "인테리어 디자인 (CAD·SketchUp)" },
   { value: "cert", label: "컴퓨터 자격증 (컴활 1급·2급)" },
   { value: "ai", label: "AI 활용 (ChatGPT·바이브코딩·자동화)" },
+  { value: "it", label: "IT 프로그래밍 (파이썬·자바·웹)" },
+  { value: "drawing", label: "웹툰·디지털드로잉 (아이패드·이모티콘)" },
 ];
 
 // 연락처 검증 — 010 등 01[016789]로 시작, 하이픈 유무 모두 허용.

@@ -9,6 +9,7 @@ import FloatingCta from "./components/FloatingCta";
 import Home from "./pages/Home";
 import Resources from "./pages/Resources";
 import ResourceDetail from "./pages/ResourceDetail";
+import Landing from "./pages/Landing";
 import CourseDetail from "./pages/CourseDetail";
 import PortfolioDetail from "./pages/PortfolioDetail";
 import { AboutPage, AuthPage, CheckoutPage, InfoPage, NotFoundPage, PricingPage, PrivacyPage } from "./pages/InfoPages";
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/docs"><InfoPage kind="docs" /></Route>
       <Route path="/terms"><InfoPage kind="terms" /></Route>
       <Route path="/privacy" component={PrivacyPage} />
+      <Route path="/daejeon/:slug" component={Landing} />
       <Route path="/course/:slug" component={CourseDetail} />
       <Route path="/portfolio/:id" component={PortfolioDetail} />
       <Route path="/404" component={NotFoundPage} />

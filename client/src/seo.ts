@@ -1,5 +1,6 @@
 import { courses, trackLabels, getCourse } from "@/lib/courses";
 import { resources } from "@/lib/resources";
+import { coursePrimaryLanding, getLanding, landingFaq, landings, menus } from "@/lib/landings";
 import { courseLabels, getPortfolioItem, portfolioItems } from "@/lib/portfolio";
 
 // 페이지별 SEO 메타 + JSON-LD 단일 원천. 빌드 시 프리렌더(scripts/prerender.mjs)와 클라이언트 이동(Seo.tsx)이 같이 쓴다.
@@ -90,6 +91,28 @@ export function getMeta(path: string): PageMeta {
     };
   }
 
+  const lm = p.match(/^\/daejeon\/([^/]+)$/);
+  const landing = lm && getLanding(lm[1]);
+  if (landing) {
+    const menuLabel = menus.find((m) => m.key === landing.menu)!.label;
+    const faq = landingFaq(landing);
+    return {
+      path: p,
+      title: landing.title,
+      description: landing.description,
+      jsonld: [
+        ...landing.main.map((slug) => {
+          const c = getCourse(slug)!;
+          return { "@context": "https://schema.org", "@type": "Course", name: c.title, description: c.tagline, provider: { "@id": ORG_ID }, url: SITE.url + p };
+        }),
+        ...(faq.length
+          ? [{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }]
+          : []),
+        crumbs([["홈", "/"], [menuLabel, p], [landing.keyword, p]]),
+      ],
+    };
+  }
+
   const cm = p.match(/^\/course\/([^/]+)$/);
   const course = cm && getCourse(cm[1]);
   if (course) {
@@ -129,6 +152,7 @@ export function getMeta(path: string): PageMeta {
 export const allRoutes = (): string[] => [
   ...Object.keys(staticMeta),
   ...resources.map((r) => `/blog/${r.id}`),
-  ...courses.map((c) => `/course/${c.slug}`),
+  ...landings.map((l) => `/daejeon/${l.slug}`),
+  ...courses.filter((c) => !coursePrimaryLanding(c.slug)).map((c) => `/course/${c.slug}`),
   ...portfolioItems.map((i) => `/portfolio/${i.id}`),
 ];
