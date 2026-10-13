@@ -727,3 +727,38 @@ button.mobile-nav-link.open svg { transform: rotate(180deg); }
 @media (max-width: 900px) {
   .funding-programs, .courses-index-grid { grid-template-columns: 1fr; }
 }
+
+/* ── 과정 빠르게 둘러보기(가로 스크롤 캐러셀) ── */
+.quick-browse { padding: 44px 0 0; }
+.quick-browse-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+.quick-browse-head h2 { margin: 10px 0 0; font-family: "Space Grotesk", "Noto Sans KR", sans-serif; font-size: clamp(26px, 3vw, 38px); line-height: 1.1; letter-spacing: -.05em; font-weight: 700; }
+.quick-browse-arrows { display: flex; gap: 8px; flex: none; }
+.quick-browse-track { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x proximity; padding: 2px var(--container-pad, 24px) 18px; scrollbar-width: none; }
+.quick-browse-track::-webkit-scrollbar { display: none; }
+.quick-course-card { flex: none; width: 168px; scroll-snap-align: start; display: grid; gap: 10px; }
+.quick-course-media { width: 168px; height: 168px; border-radius: 4px; object-fit: cover; display: block; background: var(--secondary); }
+.quick-course-tile { display: grid; place-items: center; color: var(--foreground); background: color-mix(in srgb, var(--card-accent) 30%, var(--background)); }
+.quick-course-chip { color: #8875f5; font: 700 10px "Space Grotesk", sans-serif; letter-spacing: .1em; }
+.quick-course-card strong { font-size: 14px; line-height: 1.35; letter-spacing: -.02em; }
+@media (max-width: 760px) {
+  .quick-browse { padding-top: 32px; }
+  .quick-browse-track { padding-left: 16px; padding-right: 16px; }
+  .quick-course-card, .quick-course-media { width: 136px; height: 136px; }
+}
+
+/* ── 학원 안내: 교육시설 ── */
+.facility-features { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 36px; }
+.facility-feature { padding: 18px; border: 1px solid var(--border); background: var(--card); }
+.facility-feature strong { display: block; margin: 8px 0 6px; font-size: 15px; }
+.facility-feature p { margin: 0; color: var(--muted-foreground); font-size: 13px; line-height: 1.6; }
+.facility-gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.facility-gallery figure { margin: 0; }
+.facility-gallery img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; display: block; background: var(--secondary); }
+.facility-gallery figcaption { margin-top: 8px; font-size: 13px; color: var(--muted-foreground); }
+@media (max-width: 900px) {
+  .facility-features { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .facility-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 540px) {
+  .facility-features { grid-template-columns: 1fr; }
+}

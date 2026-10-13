@@ -6,6 +6,36 @@ import QuickFeeForm from "@/components/QuickFeeForm";
 import PrivacyPolicyText from "@/components/PrivacyPolicyText";
 import { useConsultModal } from "@/components/ConsultModalContext";
 
+// 교육시설 사진·소개 문구 — 같은 사업자(주식회사 에스씨에이아카데미대전, 학원등록번호 대전서부 제서4019호,
+// daejeoncom.kr 공식 사이트, 2026-10-13 확인)의 실제 대전 지점 시설. daejeoncom.kr은 HTTPS를 지원하지 않아
+// (TLS 핸드셰이크 실패) 우리 HTTPS 사이트에서 그대로 참조(hotlink)하면 믹스드 콘텐츠로 전부 깨진다 —
+// 그래서 다른 소스(sbsart.com 포트폴리오)와 달리 이 사진만 `client/public/facility/`에 내려받아 자체 호스팅한다.
+const facilityIntro = {
+  label: "FACILITY",
+  title: "작업이 끊기지 않는 환경",
+  body: "실습 중심 교육에서 장비는 곧 수업의 속도입니다. 렌더링을 기다리느라 진도가 멈추지 않도록 사양과 공간을 맞췄습니다.",
+};
+const facilityFeatures = [
+  { label: "SYSTEM", title: "전문가용 작업 사양", body: "고사양 워크스테이션과 색보정 디스플레이, 펜 태블릿을 1인 1대로 배치해 3D·영상 렌더링 작업이 수업 중에 그대로 돌아갑니다." },
+  { label: "SPACE", title: "감각적인 인테리어", body: "강의실·실습실·라운지를 분리해 수업과 개인 작업이 서로 방해받지 않도록 구성했습니다." },
+  { label: "LICENSE", title: "정품 소프트웨어", body: "Adobe·Autodesk·Maya 등 실무에서 쓰는 프로그램을 정품 라이선스로 제공해 수업에서 배운 환경 그대로 실습합니다." },
+  { label: "ACCESS", title: "역세권 접근성", body: "지하철역 도보 거리에 있어 퇴근 후·주말 수강도 이동 부담이 적습니다." },
+];
+const facilityPhotos = [
+  { file: "fac01", caption: "강의실 전경" },
+  { file: "fac02", caption: "실습용 워크스테이션" },
+  { file: "fac03", caption: "개인 작업 공간" },
+  { file: "fac04", caption: "그룹 프로젝트룸" },
+  { file: "fac05", caption: "자율 학습 공간" },
+  { file: "fac06", caption: "휴게 라운지" },
+  { file: "fac07", caption: "상담 공간" },
+  { file: "fac08", caption: "스튜디오 촬영 장비" },
+  { file: "fac09", caption: "드로잉·태블릿 실습실" },
+  { file: "fac10", caption: "대형 스크린 강의실" },
+  { file: "fac11", caption: "포트폴리오 리뷰룸" },
+  { file: "fac12", caption: "로비와 안내 데스크" },
+].map((p) => ({ ...p, src: `/facility/${p.file}.webp` }));
+
 const legacyCheckoutLinks = [
   "https://cult-polar-starter.vercel.app/auth/sign-up?returnUrl=%2Fcheckout%3FproductId%3Dbf1a3211-7ed6-4ff4-9fcd-fbc62e423229%26priceId%3D75e18906-163f-4b82-9e1f-140d8b4dcf1a%26amount%3D800%26type%3Dfixed",
   "https://cult-polar-starter.vercel.app/auth/sign-up?returnUrl=%2Fcheckout%3FproductId%3Dbe0f649e-c848-47ae-930b-61b66921e771%26priceId%3Dfd8f2a02-e30b-4fa4-a6c4-5467f854bb0b%26amount%3D1200%26type%3Dfixed",
@@ -22,6 +52,32 @@ export function AboutPage() {
         </div>
       </section>
       <section className="section-pad about-content"><div className="container about-grid"><div className="section-kicker"><span>01</span><span>OUR POINT OF VIEW</span></div><div><p className="section-lede">배운 것을 <br className="desktop-only" /><span>써먹을 수 있게.</span></p><p className="long-copy">대전AI컴퓨터디자인학원은 그래픽 디자인, 모션그래픽, CG, 인테리어, 자격증, AI 활용을 각각의 섬으로 두지 않습니다. 하나의 프로젝트 안에서 도구가 어떻게 이어지는지, 어디서 시간을 줄이고 어디에 집중해야 하는지 함께 탐구합니다.</p><div className="check-list"><span><Check size={14} /> 결과물 중심 커리큘럼</span><span><Check size={14} /> 도구 간 연결을 고려한 수업</span><span><Check size={14} /> 반복 가능한 작업 루틴</span></div></div></div></section>
+      <section className="section-pad-small facility-section">
+        <div className="container">
+          <div className="section-kicker"><span>02</span><span>{facilityIntro.label}</span></div>
+          <div className="section-heading-row">
+            <h2 className="course-section-title" style={{ marginBottom: 0 }}>{facilityIntro.title}</h2>
+          </div>
+          <p className="landing-lead" style={{ margin: "14px 0 32px" }}>{facilityIntro.body}</p>
+          <div className="facility-features">
+            {facilityFeatures.map((f) => (
+              <div className="facility-feature" key={f.label}>
+                <span className="side-cta-label">{f.label}</span>
+                <strong>{f.title}</strong>
+                <p>{f.body}</p>
+              </div>
+            ))}
+          </div>
+          <div className="facility-gallery">
+            {facilityPhotos.map((p) => (
+              <figure key={p.file}>
+                <img src={p.src} alt={`대전AI컴퓨터디자인학원 교육시설 - ${p.caption}`} loading="lazy" width={1600} height={1067} />
+                <figcaption>{p.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
       <section className="dark-strip"><div className="container dark-strip-inner"><span>MAKE / LEARN / REPEAT</span><strong>Build your next scene.</strong><button type="button" className="arrow-link light-link" onClick={() => open({ sourcePage: "about" })}>상담 시작하기 <ArrowUpRight size={16} /></button></div></section>
     </div>
   );

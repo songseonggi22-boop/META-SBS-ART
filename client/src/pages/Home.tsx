@@ -1,5 +1,7 @@
+import { useRef } from "react";
 import {
   ArrowDownRight,
+  ArrowLeft,
   ArrowRight,
   ArrowUpRight,
   Box,
@@ -19,7 +21,7 @@ import { useConsultModal } from "@/components/ConsultModalContext";
 import QuickFeeForm from "@/components/QuickFeeForm";
 import PortfolioShowcase from "@/components/PortfolioShowcase";
 import { portfolioItems } from "@/lib/portfolio";
-import { coursesByTrack } from "@/lib/courses";
+import { coursesByTrack, getCourse, trackLabels } from "@/lib/courses";
 import { courseHref } from "@/lib/landings";
 
 // 각 과정 카드의 썸네일은 같은 사업자(SBS아카데미AIX학원) 공식 포트폴리오(sbsart.com, 2026-09-21 확인)의
@@ -121,6 +123,67 @@ const courses = [
     portfolio: null,
   },
 ];
+
+// 가로 스크롤 "과정 빠르게 둘러보기" — 히어로 바로 아래. 과정 하나하나가 카드로 흐르듯 지나가는
+// 교육기관 사이트 특유의 모집중 과정 슬라이더 패턴(화살표로 넘기기)을 우리 실제 과정 데이터로 구현한다.
+// 개강일·모집상태 같은 실제 일정 데이터는 없으므로(상담에서 확인) 넣지 않고, 분야 칩 + 제목만 보여준다.
+const quickBrowseSlugs = [
+  "photoshop", "illustrator", "premiere", "after-effects", "maya-modeling",
+  "autocad", "sketchup", "computer-ability-1", "computer-ability-2",
+  "vibe-coding", "ai-agent", "chatgpt-first", "webtoon", "ipad-drawing", "python",
+];
+const trackIcon: Record<string, typeof FileImage> = {
+  graphic: FileImage, motion: Play, cg: Cuboid, interior: Box, cert: Check, ai: WandSparkles, drawing: PenTool, it: Code2,
+};
+const trackAccent: Record<string, string> = {
+  graphic: "lime", motion: "violet", cg: "cyan", interior: "orange", cert: "orange", ai: "pink", drawing: "violet", it: "cyan",
+};
+const thumbTracks = new Set(["graphic", "motion", "cg", "interior"]);
+
+function QuickBrowse() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const items = quickBrowseSlugs.map(getCourse).filter((c): c is NonNullable<typeof c> => !!c);
+  const thumbSeen: Partial<Record<string, number>> = {};
+  const scroll = (dir: 1 | -1) => trackRef.current?.scrollBy({ left: dir * 300, behavior: "smooth" });
+
+  return (
+    <section className="quick-browse" aria-label="과정 빠르게 둘러보기">
+      <div className="container quick-browse-head">
+        <div>
+          <div className="section-kicker"><span>00</span><span>QUICK BROWSE</span></div>
+          <h2>과정을<br /><em>빠르게 둘러보세요.</em></h2>
+        </div>
+        <div className="quick-browse-arrows">
+          <button type="button" className="icon-button" aria-label="이전 과정" onClick={() => scroll(-1)}><ArrowLeft size={18} /></button>
+          <button type="button" className="icon-button" aria-label="다음 과정" onClick={() => scroll(1)}><ArrowRight size={18} /></button>
+        </div>
+      </div>
+      <div className="quick-browse-track" ref={trackRef}>
+        {items.map((c) => {
+          const Icon = trackIcon[c.track];
+          let thumb;
+          if (thumbTracks.has(c.track)) {
+            const pool = portfolioItems.filter((p) => p.course === c.track);
+            const i = thumbSeen[c.track] ?? 0;
+            thumb = pool[i % pool.length];
+            thumbSeen[c.track] = i + 1;
+          }
+          return (
+            <Link key={c.slug} href={courseHref(c.slug)} className="quick-course-card">
+              {thumb ? (
+                <img className="quick-course-media" src={thumb.img} alt={thumb.title} loading="lazy" />
+              ) : (
+                <div className={`quick-course-media quick-course-tile accent-${trackAccent[c.track]}`}><Icon size={26} strokeWidth={1.5} /></div>
+              )}
+              <span className="quick-course-chip">{trackLabels[c.track]}</span>
+              <strong>{c.title}</strong>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
 
 function HeroVisual() {
   return (
@@ -234,6 +297,8 @@ export default function Home() {
           <HeroVisual />
         </div>
       </section>
+
+      <QuickBrowse />
 
       <div className="ticker" aria-label="교육 분야">
         <div className="ticker-track">
