@@ -1,7 +1,8 @@
-import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
 import { useConsultModal } from "@/components/ConsultModalContext";
 import QuickFeeForm from "@/components/QuickFeeForm";
+import PortfolioCard from "@/components/PortfolioCard";
 import { portfolioItems } from "@/lib/portfolio";
 import { landings, menus } from "@/lib/landings";
 
@@ -61,13 +62,7 @@ export default function Careers() {
             <Link href="/community" className="arrow-link">작품 전체 보기 <ArrowUpRight size={16} /></Link>
           </div>
           <div className="portfolio-grid" style={{ marginTop: 20 }}>
-            {sample.map((item) => (
-              <Link className="portfolio-card" href={`/portfolio/${item.id}`} key={item.id}>
-                <img src={item.img} alt={item.title} loading="lazy" />
-                {item.video && <span className="course-card-play portfolio-card-play"><Play size={14} fill="currentColor" /></span>}
-                <span className="portfolio-card-title">{item.title} <ArrowUpRight size={14} /></span>
-              </Link>
-            ))}
+            {sample.map((item) => <PortfolioCard key={item.id} item={item} />)}
           </div>
         </div>
       </section>

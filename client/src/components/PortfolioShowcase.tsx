@@ -1,6 +1,5 @@
-import { ArrowUpRight, Play } from "lucide-react";
-import { Link } from "wouter";
 import { courseLabels, portfolioItems, type CourseKey } from "@/lib/portfolio";
+import PortfolioCard from "./PortfolioCard";
 
 const courseOrder: CourseKey[] = ["graphic", "motion", "cg", "interior"];
 
@@ -15,11 +14,11 @@ export default function PortfolioShowcase() {
           </div>
           <p className="heading-aside">
             전국 캠퍼스 수강생들이 실제로 완성한 작품입니다. <br className="desktop-only" />
-            사진·영상·작품 소개까지 눌러서 바로 확인해 보세요.
+            카드를 누르면 작품 소개·사용 툴까지 바로 볼 수 있습니다.
           </p>
         </div>
 
-        {courseOrder.map((course) => {
+        {courseOrder.map((course, groupIndex) => {
           const info = courseLabels[course];
           const items = portfolioItems.filter((item) => item.course === course);
           return (
@@ -29,18 +28,8 @@ export default function PortfolioShowcase() {
                 <span>{info.tools}</span>
               </div>
               <div className="portfolio-grid">
-                {items.map((item) => (
-                  <Link className="portfolio-card" href={`/portfolio/${item.id}`} key={item.id}>
-                    <img src={item.img} alt={item.title} loading="lazy" />
-                    {item.video && (
-                      <span className="course-card-play portfolio-card-play">
-                        <Play size={14} fill="currentColor" />
-                      </span>
-                    )}
-                    <span className="portfolio-card-title">
-                      {item.title} <ArrowUpRight size={14} />
-                    </span>
-                  </Link>
+                {items.map((item, i) => (
+                  <PortfolioCard key={item.id} item={item} eager={groupIndex === 0 && i < 3} />
                 ))}
               </div>
             </div>

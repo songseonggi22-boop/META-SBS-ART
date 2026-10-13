@@ -1,7 +1,8 @@
 import { useMemo, useState } from "react";
-import { ArrowRight, ArrowUpRight, Play } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
 import { useConsultModal } from "@/components/ConsultModalContext";
+import PortfolioCard from "@/components/PortfolioCard";
 import { courseLabels, portfolioItems, type CourseKey } from "@/lib/portfolio";
 
 // "수강후기·작품" — 실제 후기 텍스트(제3자 작성)는 옮기지 않으므로(섹션 22 원칙) 이 페이지는
@@ -46,13 +47,7 @@ export default function Community() {
           </div>
           <div className="resource-count"><span>{items.length.toString().padStart(2, "0")}</span> WORKS</div>
           <div className="portfolio-grid">
-            {items.map((item) => (
-              <Link className="portfolio-card" href={`/portfolio/${item.id}`} key={item.id}>
-                <img src={item.img} alt={item.title} loading="lazy" />
-                {item.video && <span className="course-card-play portfolio-card-play"><Play size={14} fill="currentColor" /></span>}
-                <span className="portfolio-card-title">{item.title} <ArrowUpRight size={14} /></span>
-              </Link>
-            ))}
+            {items.map((item, i) => <PortfolioCard key={item.id} item={item} eager={i < 3} />)}
           </div>
         </div>
       </section>

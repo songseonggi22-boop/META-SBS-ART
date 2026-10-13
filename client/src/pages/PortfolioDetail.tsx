@@ -1,6 +1,7 @@
-import { ArrowLeft, ArrowUpRight, Play } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Link, useParams } from "wouter";
 import { useConsultModal } from "@/components/ConsultModalContext";
+import PortfolioCard from "@/components/PortfolioCard";
 import { courseLabels, getPortfolioItem, portfolioItems } from "@/lib/portfolio";
 import { NotFoundPage } from "./InfoPages";
 
@@ -109,19 +110,7 @@ export default function PortfolioDetail() {
               <span>{courseInfo.tools}</span>
             </div>
             <div className="portfolio-grid">
-              {related.map((other) => (
-                <Link className="portfolio-card" href={`/portfolio/${other.id}`} key={other.id}>
-                  <img src={other.img} alt={other.title} loading="lazy" />
-                  {other.video && (
-                    <span className="course-card-play portfolio-card-play">
-                      <Play size={14} fill="currentColor" />
-                    </span>
-                  )}
-                  <span className="portfolio-card-title">
-                    {other.title} <ArrowUpRight size={14} />
-                  </span>
-                </Link>
-              ))}
+              {related.map((other) => <PortfolioCard key={other.id} item={other} />)}
             </div>
           </div>
         )}
