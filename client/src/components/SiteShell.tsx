@@ -3,6 +3,28 @@ import { Link, useLocation } from "wouter";
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, Moon, Sun, X } from "lucide-react";
 import { getLanding, landingsByMenu, menus } from "@/lib/landings";
 import { footerNav, topNav } from "@/lib/nav";
+
+// 전국 지점 — 같은 사업자(SBS아카데미AIX학원) 공식 사이트(daejeoncom.kr, 2026-10-13 사용자 제공) 푸터의
+// 지점별 실제 사이트로 연결. 우리 학원(대전)은 daejeon.sbsart.com에 해당.
+const branches = [
+  { label: "강남", href: "https://gangnam.sbsart.com/" },
+  { label: "홍대", href: "https://sinchon.sbsart.com/" },
+  { label: "인천", href: "https://incheon.sbsart.com/" },
+  { label: "부산", href: "https://busan.sbsart.com/" },
+  { label: "대구", href: "https://daegu.sbsart.com/" },
+  { label: "대전", href: "https://daejeon.sbsart.com/" },
+  { label: "광주", href: "https://gwangju.sbsart.com/" },
+  { label: "수원", href: "https://suwon.sbsart.com/" },
+  { label: "일산", href: "https://ilsan.sbsart.com/" },
+  { label: "울산", href: "https://ulsan.sbsart.com/" },
+  { label: "노원", href: "https://nowon.sbsart.com/" },
+  { label: "분당", href: "https://bundang.sbsart.com/" },
+  { label: "종로(혜화)", href: "https://hyehwa.sbsart.com/" },
+  { label: "안산", href: "https://ansan.sbsart.com/" },
+  { label: "안양", href: "https://anyang.sbsart.com/" },
+  { label: "천안", href: "https://cheonan.sbsart.com/" },
+  { label: "청주", href: "https://cheongju.sbsart.com/" },
+];
 import { useConsultModal } from "./ConsultModalContext";
 
 function isCurrent(pathname: string, href: string) {
@@ -183,14 +205,12 @@ export default function SiteShell({ children }: { children: ReactNode }) {
           <p>대전광역시 서구 대덕대로 179, 9·10층 (둔산동,<br className="footer-mobile-break" /> 엠제이피부과굿모닝어학원빌딩)</p>
           <p>사업자(법인)명 주식회사 에스씨에이아카데미대전 · 대표 오도윤 · 개인정보책임자 오도윤 · 교육담당 송성기</p>
           <p>사업자등록번호 822-81-00224 · 통신판매업번호<br className="footer-mobile-break" /> 제2015-대전서구-0647 호</p>
-          <p>학원명 SBS아카데미AI학원 · 학원등록번호 대전서부<br className="footer-mobile-break" /> 제서4019호</p>
+          <p>학원명 SBS아카데미AIX학원 · 학원등록번호 대전서부<br className="footer-mobile-break" /> 제서4019호</p>
           <p>대표전화 <a href="tel:042-719-8383">042-719-8383</a> · 대표이메일<br className="footer-mobile-break" /> <a href="mailto:privacy@koreaedugroup.com">privacy@koreaedugroup.com</a></p>
-          <p>© SBS아카데미AI학원</p>
+          <p>© SBS아카데미AIX학원</p>
         </div>
         <nav className="container branch-links" aria-label="전국 지점 안내">
-          {[
-            "강남", "홍대", "인천", "부산", "대구", "대전", "광주", "수원", "일산", "울산", "노원", "분당", "종로(혜화)", "안산", "안양", "천안", "청주",
-          ].map((branch) => <a key={branch} href="http://daejeoncom.kr/">{branch}</a>)}
+          {branches.map((b) => <a key={b.label} href={b.href} target="_blank" rel="noopener noreferrer">{b.label}</a>)}
         </nav>
       </footer>
     </div>

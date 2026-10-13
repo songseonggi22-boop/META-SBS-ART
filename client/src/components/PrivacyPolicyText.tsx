@@ -1,10 +1,12 @@
 // /privacy 페이지와 상담 신청 모달의 "펼쳐보기"가 같은 조항을 공유하도록 분리.
-// 회사 실제 정보는 CLAUDE_CODE_HANDOFF.md(공식 푸터 정보)와 동일 — SiteShell.tsx 푸터와 어긋나지 않게 유지할 것.
+// 회사 실제 정보는 SiteShell.tsx 푸터와 어긋나지 않게 유지할 것. 학원명 표기는 2026-10-13
+// 사용자가 다시 제공한 daejeoncom.kr 실제 푸터 기준 "SBS아카데미AIX학원"(X 포함)으로 통일 —
+// CLAUDE_CODE_HANDOFF.md 원문은 "AI학원"(X 누락)으로 적혀 있으나 실사이트와 다르다.
 export default function PrivacyPolicyText() {
   return (
     <div className="policy-text">
       <p>
-        주식회사 에스씨에이아카데미대전(SBS아카데미AI학원, 이하 &ldquo;학원&rdquo;)은 이용자의 개인정보를 중요하게
+        주식회사 에스씨에이아카데미대전(SBS아카데미AIX학원, 이하 &ldquo;학원&rdquo;)은 이용자의 개인정보를 중요하게
         생각하며, 「개인정보 보호법」 등 관련 법령을 준수합니다. 학원은 이 개인정보처리방침을 통해 이용자가 제공하는
         개인정보가 어떤 목적과 방식으로 처리되고 있는지 안내합니다.
       </p>
@@ -78,7 +80,7 @@ export default function PrivacyPolicyText() {
         <br />
         사업자등록번호 822-81-00224 · 통신판매업번호 제2015-대전서구-0647호
         <br />
-        학원명 SBS아카데미AI학원 · 학원등록번호 대전서부 제서4019호
+        학원명 SBS아카데미AIX학원 · 학원등록번호 대전서부 제서4019호
         <br />
         주소 대전광역시 서구 대덕대로 179, 9·10층
         <br />

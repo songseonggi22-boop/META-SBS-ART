@@ -22,7 +22,7 @@ const organization = {
   "@type": "EducationalOrganization",
   "@id": ORG_ID,
   name: SITE.name,
-  alternateName: "SBS아카데미AI학원 대전점",
+  alternateName: "SBS아카데미AIX학원",
   url: SITE.url,
   telephone: SITE.phone,
   email: SITE.email,
