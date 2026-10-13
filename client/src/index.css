@@ -655,19 +655,25 @@ input, textarea, select, button { word-break: keep-all; }
 .course-card:not(.has-media) .course-card-body { margin-top: 28px; }
 .course-card:not(.has-media) .course-card-link { top: auto; bottom: 16px; }
 
-/* ── 상단 메가메뉴: 과정 메뉴 hover/탭 → 하단 키워드 바 ── */
+/* ── 상단 내비게이션: "교육과정" 메가메뉴(7분야 한 패널) + 5개 상단 메뉴 ── */
 .mega-nav { gap: 22px; }
 .mega-nav .nav-link { padding: 6px 0; border: 0; background: none; cursor: pointer; font: 600 14px "Noto Sans KR", sans-serif; letter-spacing: -.02em; white-space: nowrap; }
-.util-nav { display: flex; align-items: center; gap: 14px; margin-right: 6px; }
-.util-link { color: var(--muted-foreground); font-size: 12px; white-space: nowrap; transition: color 160ms; }
-.util-link:hover, .util-link.active { color: var(--foreground); }
-.mega-bar { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--background); border-bottom: 1px solid var(--border); box-shadow: 0 14px 24px rgba(24,24,21,.06); }
+.header-cta { padding: 10px 16px; font-size: 12px; white-space: nowrap; }
+.mega-bar { display: none; position: absolute; left: 0; right: 0; top: 100%; background: var(--background); border-bottom: 1px solid var(--border); box-shadow: 0 14px 24px rgba(24,24,21,.06); max-height: 76vh; overflow-y: auto; }
 .mega-bar.open { display: block; animation: mega-in 160ms var(--ease-out); }
 @keyframes mega-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 .mega-bar-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding-top: 16px; padding-bottom: 16px; }
 .mega-bar-label { margin-right: 10px; color: #8875f5; font: 700 13px "Noto Sans KR", sans-serif; }
 .mega-link { padding: 8px 14px; border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; transition: background 160ms, color 160ms, border-color 160ms; }
 .mega-link:hover { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.courses-mega-inner { align-items: start; flex-wrap: nowrap; overflow-x: auto; gap: 28px; padding-top: 24px; padding-bottom: 24px; }
+.mega-col { display: grid; gap: 10px; min-width: 150px; }
+.mega-col .mega-bar-label { margin-right: 0; }
+.mega-col-links { display: grid; gap: 6px; align-content: start; }
+.mega-col-links .mega-link { padding: 0; border: 0; background: none; font-weight: 500; color: var(--muted-foreground); text-align: left; }
+.mega-col-links .mega-link:hover { background: none; color: var(--foreground); text-decoration: underline; }
+.mega-col-all { align-self: center; display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; padding: 10px 16px; border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 700; white-space: nowrap; }
+.mega-col-all:hover { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
 .mobile-menu-group { display: grid; }
 button.mobile-nav-link { width: 100%; border-left: 0; border-right: 0; border-top: 0; background: none; color: inherit; font: inherit; font-size: 16px; text-align: left; cursor: pointer; }
 button.mobile-nav-link svg { transition: transform 180ms; }
@@ -675,8 +681,13 @@ button.mobile-nav-link.open svg { transform: rotate(180deg); }
 .mobile-sub { display: none; flex-wrap: wrap; gap: 8px; padding: 12px 0 16px; border-bottom: 1px solid var(--border); }
 .mobile-sub.open { display: flex; }
 .mobile-sub-link { padding: 8px 12px; border: 1px solid var(--border); border-radius: 999px; font-size: 13px; font-weight: 600; }
+.mobile-sub-grouped.open { display: grid; gap: 18px; }
+.mobile-sub-group-label { display: block; margin-bottom: 8px; color: #8875f5; font: 700 12px "Noto Sans KR", sans-serif; }
+.mobile-sub-group-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 28px 0 22px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.footer-links a:hover { text-decoration: underline; }
 @media (max-width: 1240px) {
-  .desktop-nav, .util-nav, .mega-bar, .header-actions .login-link { display: none !important; }
+  .desktop-nav, .mega-bar, .header-cta { display: none !important; }
   .mobile-menu-button { display: grid; }
   .mobile-nav { display: block; max-height: 0; overflow: hidden; background: var(--background); transition: max-height 260ms var(--ease-out); }
   .mobile-nav.open { max-height: calc(100vh - 64px); overflow-y: auto; border-top: 1px solid var(--border); }
@@ -706,3 +717,13 @@ button.mobile-nav-link.open svg { transform: rotate(180deg); }
 .landing-location h3 { margin: 0 0 10px; font-size: 16px; }
 .landing-location p { display: flex; align-items: center; gap: 8px; margin: 6px 0 0; font-size: 14px; }
 @media (max-width: 760px) { .landing-course-grid { grid-template-columns: 1fr; } }
+
+/* ── 국비지원/취업지원/전체과정 페이지 ── */
+.funding-programs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.funding-program { padding: 24px; border: 1px solid var(--border); background: var(--card); }
+.funding-program h3 { margin: 0 0 10px; font: 700 18px "Noto Sans KR", sans-serif; }
+.funding-program p { margin: 0 0 14px; color: var(--muted-foreground); font-size: 14px; line-height: 1.75; }
+.courses-index-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 900px) {
+  .funding-programs, .courses-index-grid { grid-template-columns: 1fr; }
+}

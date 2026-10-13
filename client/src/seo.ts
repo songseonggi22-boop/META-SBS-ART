@@ -63,6 +63,36 @@ const staticMeta: Record<string, Omit<PageMeta, "path">> = {
     description: `${SITE.name}의 개인정보 수집·이용 및 처리 방침 안내.`,
     jsonld: [],
   },
+  "/courses": {
+    title: brand("전체 교육과정"),
+    description: "시각편집·모션그래픽·인테리어·CG·AI·웹툰/디지털드로잉·자격증·IT까지, 대전AI컴퓨터디자인학원이 운영하는 전체 과정을 분야별로 둘러보세요.",
+    jsonld: [crumbs([["홈", "/"], ["전체과정", "/courses"]])],
+  },
+  "/funding": {
+    title: brand("국비지원 안내"),
+    description: "국민내일배움카드·국민취업지원제도 같은 국비지원 제도 설명과 확인 절차. 대상 여부와 한도는 상담에서 안내해 드립니다.",
+    jsonld: [
+      crumbs([["홈", "/"], ["국비지원", "/funding"]]),
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: [
+          { "@type": "Question", name: "모든 과정이 국비지원 대상인가요?", acceptedAnswer: { "@type": "Answer", text: "과정과 개인 조건에 따라 다릅니다. 관심 과정을 말씀해 주시면 상담에서 확인해 드립니다." } },
+          { "@type": "Question", name: "국비지원을 받으려면 무엇이 필요한가요?", acceptedAnswer: { "@type": "Answer", text: "국민내일배움카드 발급 등 사전 절차가 필요한 경우가 많습니다. 아직 카드가 없다면 발급 방법부터 안내해 드립니다." } },
+        ],
+      },
+    ],
+  },
+  "/careers": {
+    title: brand("취업지원 · 포트폴리오"),
+    description: "과정 단계마다 결과물을 쌓아 포트폴리오로 완성하는 과정과, 수강생 작품·관련 자격증 안내.",
+    jsonld: [crumbs([["홈", "/"], ["취업지원", "/careers"]])],
+  },
+  "/community": {
+    title: brand("수강후기·작품"),
+    description: "과정별 수강생 작품을 모았습니다. 시각편집·모션그래픽·CG·인테리어 분야별로 필터링해 둘러볼 수 있습니다.",
+    jsonld: [crumbs([["홈", "/"], ["수강후기·작품", "/community"]])],
+  },
 };
 
 export function getMeta(path: string): PageMeta {
