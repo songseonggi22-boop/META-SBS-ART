@@ -139,6 +139,18 @@ const trackAccent: Record<string, string> = {
   graphic: "lime", motion: "violet", cg: "cyan", interior: "orange", cert: "orange", ai: "pink", drawing: "violet", it: "cyan",
 };
 const thumbTracks = new Set(["graphic", "motion", "cg", "interior"]);
+// 과정 소개 사진 — 같은 사업자 공식 사이트(daejeoncom.kr, 2026-10-13 사용자 제공 링크)의 과정 상세
+// 페이지 대표 이미지. daejeoncom.kr은 HTTPS 미지원이라 교육시설 사진과 같은 이유로 내려받아
+// client/public/course-hero/에 자체 호스팅한다(원본은 각 slug별 /class/.../*.asp 과정 페이지).
+const courseHero: Partial<Record<string, string>> = {
+  "computer-ability-1": "/course-hero/ca1.webp",
+  "computer-ability-2": "/course-hero/ca2.webp",
+  "vibe-coding": "/course-hero/vibe-coding.webp",
+  "ai-agent": "/course-hero/ai-agent.webp",
+  "chatgpt-first": "/course-hero/chatgpt-first.webp",
+  webtoon: "/course-hero/goods.webp",
+  "ipad-drawing": "/course-hero/procreate.webp",
+};
 
 function QuickBrowse() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -147,11 +159,15 @@ function QuickBrowse() {
   const baseItems = quickBrowseSlugs.map(getCourse).filter((c): c is NonNullable<typeof c> => !!c);
   const thumbSeen: Partial<Record<string, number>> = {};
   const cards = baseItems.map((c) => {
-    let thumb;
-    if (thumbTracks.has(c.track)) {
+    let thumb: { img: string; alt: string } | undefined;
+    const hero = courseHero[c.slug];
+    if (hero) {
+      thumb = { img: hero, alt: c.title };
+    } else if (thumbTracks.has(c.track)) {
       const pool = portfolioItems.filter((p) => p.course === c.track);
       const i = thumbSeen[c.track] ?? 0;
-      thumb = pool[i % pool.length];
+      const pick = pool[i % pool.length];
+      thumb = { img: pick.img, alt: pick.title };
       thumbSeen[c.track] = i + 1;
     }
     return { course: c, thumb };
@@ -210,7 +226,7 @@ function QuickBrowse() {
           return (
             <Link key={`${c.slug}-${i}`} href={courseHref(c.slug)} className="quick-course-card" tabIndex={i < cards.length ? 0 : -1} aria-hidden={i >= cards.length}>
               {thumb ? (
-                <img className="quick-course-media" src={thumb.img} alt={thumb.title} loading="lazy" />
+                <img className="quick-course-media" src={thumb.img} alt={thumb.alt} loading="lazy" />
               ) : (
                 <div className={`quick-course-media quick-course-tile accent-${trackAccent[c.track]}`}><Icon size={26} strokeWidth={1.5} /></div>
               )}
