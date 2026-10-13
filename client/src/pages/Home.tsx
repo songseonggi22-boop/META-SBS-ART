@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   ArrowDownRight,
   ArrowLeft,
@@ -142,9 +142,47 @@ const thumbTracks = new Set(["graphic", "motion", "cg", "interior"]);
 
 function QuickBrowse() {
   const trackRef = useRef<HTMLDivElement>(null);
-  const items = quickBrowseSlugs.map(getCourse).filter((c): c is NonNullable<typeof c> => !!c);
+  const pausedRef = useRef(false);
+  const resumeTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const baseItems = quickBrowseSlugs.map(getCourse).filter((c): c is NonNullable<typeof c> => !!c);
   const thumbSeen: Partial<Record<string, number>> = {};
-  const scroll = (dir: 1 | -1) => trackRef.current?.scrollBy({ left: dir * 300, behavior: "smooth" });
+  const cards = baseItems.map((c) => {
+    let thumb;
+    if (thumbTracks.has(c.track)) {
+      const pool = portfolioItems.filter((p) => p.course === c.track);
+      const i = thumbSeen[c.track] ?? 0;
+      thumb = pool[i % pool.length];
+      thumbSeen[c.track] = i + 1;
+    }
+    return { course: c, thumb };
+  });
+  // 한 벌을 통째로 복제해 뒤에 이어붙이고, 절반 지점을 지나면 스크롤 위치를 되감아 이음새 없이 반복한다
+  // (이미 홈 화면 ticker 섹션에서 쓰는 것과 같은 무한 루프 트릭).
+  const loopedCards = [...cards, ...cards];
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf: number;
+    const tick = () => {
+      if (!pausedRef.current) {
+        const half = el.scrollWidth / 2;
+        el.scrollLeft += 0.6;
+        if (el.scrollLeft >= half) el.scrollLeft -= half;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  const pause = () => { pausedRef.current = true; clearTimeout(resumeTimerRef.current); };
+  const resume = (delay = 0) => { resumeTimerRef.current = setTimeout(() => { pausedRef.current = false; }, delay); };
+  const scroll = (dir: 1 | -1) => {
+    pause();
+    trackRef.current?.scrollBy({ left: dir * 300, behavior: "smooth" });
+    resume(2500);
+  };
 
   return (
     <section className="quick-browse" aria-label="과정 빠르게 둘러보기">
@@ -158,18 +196,19 @@ function QuickBrowse() {
           <button type="button" className="icon-button" aria-label="다음 과정" onClick={() => scroll(1)}><ArrowRight size={18} /></button>
         </div>
       </div>
-      <div className="quick-browse-track" ref={trackRef}>
-        {items.map((c) => {
+      <div
+        className="quick-browse-track"
+        ref={trackRef}
+        onPointerEnter={(e) => e.pointerType === "mouse" && pause()}
+        onPointerLeave={(e) => e.pointerType === "mouse" && resume()}
+        onTouchStart={pause}
+        onFocus={pause}
+        onBlur={() => resume()}
+      >
+        {loopedCards.map(({ course: c, thumb }, i) => {
           const Icon = trackIcon[c.track];
-          let thumb;
-          if (thumbTracks.has(c.track)) {
-            const pool = portfolioItems.filter((p) => p.course === c.track);
-            const i = thumbSeen[c.track] ?? 0;
-            thumb = pool[i % pool.length];
-            thumbSeen[c.track] = i + 1;
-          }
           return (
-            <Link key={c.slug} href={courseHref(c.slug)} className="quick-course-card">
+            <Link key={`${c.slug}-${i}`} href={courseHref(c.slug)} className="quick-course-card" tabIndex={i < cards.length ? 0 : -1} aria-hidden={i >= cards.length}>
               {thumb ? (
                 <img className="quick-course-media" src={thumb.img} alt={thumb.title} loading="lazy" />
               ) : (

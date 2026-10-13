@@ -733,7 +733,7 @@ button.mobile-nav-link.open svg { transform: rotate(180deg); }
 .quick-browse-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
 .quick-browse-head h2 { margin: 10px 0 0; font-family: "Space Grotesk", "Noto Sans KR", sans-serif; font-size: clamp(26px, 3vw, 38px); line-height: 1.1; letter-spacing: -.05em; font-weight: 700; }
 .quick-browse-arrows { display: flex; gap: 8px; flex: none; }
-.quick-browse-track { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x proximity; padding: 2px var(--container-pad, 24px) 18px; scrollbar-width: none; }
+.quick-browse-track { display: flex; gap: 14px; overflow-x: auto; padding: 2px var(--container-pad, 24px) 18px; scrollbar-width: none; }
 .quick-browse-track::-webkit-scrollbar { display: none; }
 .quick-course-card { flex: none; width: 168px; scroll-snap-align: start; display: grid; gap: 10px; }
 .quick-course-media { width: 168px; height: 168px; border-radius: 4px; object-fit: cover; display: block; background: var(--secondary); }
