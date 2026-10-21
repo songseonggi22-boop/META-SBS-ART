@@ -1,6 +1,11 @@
 // 같은 사업자(SBS아카데미AIX학원) 공식 포트폴리오(sbsart.com, 전체 16,198건 중 2026-09-21 기준 선정)의
-// 실제 게시물 데이터. 이미지·영상은 원본 CDN/유튜브를 그대로 참조(재호스팅 안 함), 소개·사용툴·제작기간은
-// 원본 상세페이지(view.asp)의 공개 정보를 그대로 옮김. sbsart.com은 계속 갱신되므로 주기적 재확인 필요.
+// 실제 게시물 데이터. 소개·사용툴·제작기간은 원본 상세페이지(view.asp)의 공개 정보를 그대로 옮김.
+// sbsart.com은 계속 갱신되므로 주기적 재확인 필요. 출처 표기는 sourceHref로 유지.
+//
+// img는 2026-10-21부터 원본 CDN 핫링크 대신 client/public/img-cache/<id>.webp 자체 호스팅으로 바꿨다
+// — 원본이 장당 1~9MB(최장변 리사이즈 없는 원본)라 홈 화면 한 번에 여러 장 불러올 때 체감이 느리다는
+// 피드백을 받아, 640px 폭·webp quality 72로 리사이즈(평균 1.5MB → 115KB, 10배 이상 축소)해 올렸다.
+// video가 있는 항목은 유튜브 임베드만 외부 참조 그대로.
 export type CourseKey = "graphic" | "motion" | "cg" | "interior";
 
 export type PortfolioItem = {
@@ -33,7 +38,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Photoshop, Illustrator",
     duration: "15일",
     program: "편집 포폴",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/02f49ccc0fed00020fed0fedcba98765.jpg",
+    img: "/img-cache/21186.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21186&selMater=dtp",
   },
   {
@@ -48,7 +53,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Photoshop, Illustrator, ChatGPT, Midjourney",
     duration: "2주",
     program: "AI마케팅디자인",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/03ee52d4876500028765876543210fed.png",
+    img: "/img-cache/21181.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21181&selMater=dtp",
   },
   {
@@ -63,7 +68,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Photoshop, Illustrator, Midjourney, ChatGPT, Gemini",
     duration: "2달",
     program: "브랜딩 디자인",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/03cacacc0fed00020fed0fedcba98765.jpg",
+    img: "/img-cache/21134.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21134&selMater=dtp",
   },
   {
@@ -78,7 +83,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Photoshop, Illustrator",
     duration: "5일",
     program: "편집포트폴리오",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/02b51c94876500028765876543210fed.jpg",
+    img: "/img-cache/21125.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21125&selMater=dtp",
   },
   {
@@ -93,7 +98,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Photoshop, Illustrator",
     duration: "7일",
     program: "시각편집 포트폴리오",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/04595c00cba90002cba9cba987654321.jpg",
+    img: "/img-cache/21117.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21117&selMater=dtp",
   },
   {
@@ -108,7 +113,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Photoshop, Illustrator",
     duration: "2주",
     program: "편집디자인 포트폴리오",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/033164dc0fed00020fed0fedcba98765.jpg",
+    img: "/img-cache/21063.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21063&selMater=dtp",
   },
   {
@@ -122,7 +127,7 @@ export const portfolioItems: PortfolioItem[] = [
     intro: "(광고) 다이슨",
     tools: "프리미어, 에프터이펙트, Cinema4D, Octane, Substance Painter, GPT",
     program: "모션학과(3D)",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/0320cc0c0fed00020fed0fedcba98765.png",
+    img: "/img-cache/21197.webp",
     video: "https://www.youtube.com/embed/Cc3PXu9Qgow",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21197&selMater=%EB%AA%A8%EC%85%98%EA%B7%B8%EB%9E%98%ED%94%BD",
   },
@@ -138,7 +143,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "애프터이펙트, 영상AI",
     duration: "3주",
     program: "모션그래픽",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/03ada610cba90002cba9cba987654321.png",
+    img: "/img-cache/21193.webp",
     video: "https://www.youtube.com/embed/NNibcskwhGA",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21193&selMater=%EB%AA%A8%EC%85%98%EA%B7%B8%EB%9E%98%ED%94%BD",
   },
@@ -154,7 +159,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "애프터이펙트, 일러스트레이터",
     duration: "60일",
     program: "모션그래픽 과정",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/01fdd634876500028765876543210fed.jpg",
+    img: "/img-cache/21184.webp",
     video: "https://www.youtube.com/embed/4kzbAEaK8UI",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21184&selMater=%EB%AA%A8%EC%85%98%EA%B7%B8%EB%9E%98%ED%94%BD",
   },
@@ -170,7 +175,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Photoshop, Illustrator, After Effects",
     duration: "표현 1주, 구현 7주",
     program: "모션포폴",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/0369b39c0fed00020fed0fedcba98765.jpg",
+    img: "/img-cache/21178.webp",
     video: "https://www.youtube.com/embed/s_Cj76Pc1i8",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21178&selMater=%EB%AA%A8%EC%85%98%EA%B7%B8%EB%9E%98%ED%94%BD",
   },
@@ -186,7 +191,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Illustrator, Photoshop, After Effects, Cinema4D",
     duration: "15일",
     program: "모션포트폴리오",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/01e9195c0fed00020fed0fedcba98765.jpg",
+    img: "/img-cache/21127.webp",
     video: "https://www.youtube.com/embed/px1oDGdyebg",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21127&selMater=%EB%AA%A8%EC%85%98%EA%B7%B8%EB%9E%98%ED%94%BD",
   },
@@ -202,7 +207,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Cinema 4D, After Effects",
     duration: "3주",
     program: "Cinema 4D 포트폴리오",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/04a81ef843210002432143210fedcba9.jpg",
+    img: "/img-cache/21012.webp",
     video: "https://www.youtube.com/embed/4lgEquMzlWw",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21012&selMater=%EB%AA%A8%EC%85%98%EA%B7%B8%EB%9E%98%ED%94%BD",
   },
@@ -218,7 +223,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Maya, Substance 3D Painter",
     duration: "3달",
     program: "마야포폴",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/034ef4c843210002432143210fedcba9.jpg",
+    img: "/img-cache/21137.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21137&selMater=vfx",
   },
   {
@@ -233,7 +238,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "마야, 섭스페인터, 에펙, 포토샵, 프리미어",
     duration: "1개월",
     program: "maya 포트폴리오",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/0376aa1c0fed00020fed0fedcba98765.jpg",
+    img: "/img-cache/21066.webp",
     video: "https://www.youtube.com/embed/-1QSJu-cRKU",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21066&selMater=vfx",
   },
@@ -249,7 +254,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "AI, 블렌더, 서브스턴스 페인터, 에펙",
     duration: "1주",
     program: "블렌더 VFX 정규과정",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/031c4f1c0fed00020fed0fedcba98765.jpg",
+    img: "/img-cache/21060.webp",
     video: "https://www.youtube.com/embed/iDFXK0lX5YU",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21060&selMater=vfx",
   },
@@ -265,7 +270,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Maya, V-Ray, Mudbox, ZBrush, Substance Painter, After Effects, Photoshop",
     duration: "4개월",
     program: "마야 포폴",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/03a4e8a0cba90002cba9cba987654321.jpg",
+    img: "/img-cache/21011.webp",
     video: "https://www.youtube.com/embed/DY8LKcpmPwE",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21011&selMater=vfx",
   },
@@ -281,7 +286,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "Maya, ZBrush, Substance Painter, Photoshop, After Effects, Nuke",
     duration: "8개월",
     program: "마야 CG 과정",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/03b7aa84876500028765876543210fed.jpg",
+    img: "/img-cache/20915.webp",
     video: "https://www.youtube.com/embed/xljxYqGSNic",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=20915&selMater=vfx",
   },
@@ -297,7 +302,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "마야, 블렌더, 에프터이펙트, 프리미어",
     duration: "5개월",
     program: "애니메이션 과정",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/유영훈 애니메이션.png",
+    img: "/img-cache/20770.webp",
     video: "https://www.youtube.com/embed/VyAIYBQROd8",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=20770&selMater=vfx",
   },
@@ -313,7 +318,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "3Ds Max",
     duration: "16일",
     program: "인테리어 포트폴리오",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/031130c09876000598769876543210fe.jpg",
+    img: "/img-cache/21194.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21194&selMater=interior",
   },
   {
@@ -328,7 +333,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "스케치업, 엔스케이프, 에프터이펙트",
     duration: "5일",
     program: "Enscape",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/03d0df90cba90002cba9cba987654321.png",
+    img: "/img-cache/21177.webp",
     video: "https://www.youtube.com/embed/t8Frx0-AEYU",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21177&selMater=interior",
   },
@@ -344,7 +349,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "AutoCAD, SketchUp, Photoshop",
     duration: "4주",
     program: "인테리어포폴",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/032a7c04876500028765876543210fed.jpg",
+    img: "/img-cache/21143.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21143&selMater=interior",
   },
   {
@@ -359,7 +364,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "SketchUp",
     duration: "15일",
     program: "인테리어포트폴리오",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/03ad8b8843210002432143210fedcba9.jpg",
+    img: "/img-cache/21120.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21120&selMater=interior",
   },
   {
@@ -374,7 +379,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "3Ds Max, Photoshop, ChatGPT, Midjourney",
     duration: "16일",
     program: "인테리어 포트폴리오",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/0380d5ac0fed00020fed0fedcba98765.jpg",
+    img: "/img-cache/21100.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21100&selMater=interior",
   },
   {
@@ -389,7 +394,7 @@ export const portfolioItems: PortfolioItem[] = [
     tools: "3ds Max, V-Ray, Photoshop",
     duration: "7주",
     program: "건축/인테리어 포트폴리오",
-    img: "//cdn.koreaedugroup.com/sbsfile/gallery_img/03628c9843210002432143210fedcba9.png",
+    img: "/img-cache/21036.webp",
     sourceHref: "https://sbsart.com/portfolio/view.asp?seq=21036&selMater=interior",
   },
 ];

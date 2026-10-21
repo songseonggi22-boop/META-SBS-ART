@@ -317,6 +317,10 @@ function CourseCard({ course }: { course: (typeof courses)[number] }) {
 
 export default function Home() {
   const { open } = useConsultModal();
+  const courseGridRef = useRef<HTMLDivElement>(null);
+  // 모바일·태블릿 폭(≤1050px)에서는 course-grid가 세로로 안 쌓이고 옆으로 넘기는 슬라이더가 된다
+  // (CSS에서 flex+overflow-x로 전환). 넓은 화면에서는 기존 그리드 그대로라 이 버튼은 숨겨진다.
+  const scrollCourses = (dir: 1 | -1) => courseGridRef.current?.scrollBy({ left: dir * 280, behavior: "smooth" });
   return (
     <div>
       <section className="hero-section">
@@ -390,8 +394,12 @@ export default function Home() {
               <h2>만드는 방식에<br /><em>맞춘 트랙.</em></h2>
             </div>
             <p className="heading-aside">필요한 도구를 고르고, <br className="desktop-only" />나만의 제작 루틴을 만드세요.</p>
+            <div className="courses-section-arrows">
+              <button type="button" className="icon-button" aria-label="이전 트랙" onClick={() => scrollCourses(-1)}><ArrowLeft size={18} /></button>
+              <button type="button" className="icon-button" aria-label="다음 트랙" onClick={() => scrollCourses(1)}><ArrowRight size={18} /></button>
+            </div>
           </div>
-          <div className="course-grid">
+          <div className="course-grid" ref={courseGridRef}>
             {courses.map((course) => <CourseCard key={course.number} course={course} />)}
           </div>
         </div>

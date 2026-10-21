@@ -174,6 +174,7 @@
 .section-heading-row { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 54px; }
 .section-heading-row h2 { margin-bottom: 0; font-size: clamp(48px, 6vw, 82px); }
 .heading-aside { margin: 0 0 8px; color: var(--muted-foreground); font-size: 14px; line-height: 1.7; text-align: right; }
+.courses-section-arrows { display: none; gap: 8px; flex: none; }
 .course-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .course-card { position: relative; min-height: 340px; display: flex; flex-direction: column; padding: 23px 20px 20px; background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out); }
 .course-card:hover { transform: translateY(-8px); box-shadow: 12px 14px 0 rgba(24,24,21,.1); }
@@ -470,7 +471,12 @@
   .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(340px, .86fr); }
   .hero-copy { padding-left: 38px; padding-right: 38px; }
   .hero-note { left: 38px; }
-  .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* 세로로 쌓지 않고 옆으로 넘기는 슬라이더로 전환 — 좁은 화면에서 설명·칩까지 꽉 찬 카드를 2단으로
+     욱여넣으면 글자가 9px까지 줄어 안 읽혔다. 카드 하나가 화면 폭 대부분을 쓰게 하고 스와이프로 넘긴다. */
+  .courses-section-arrows { display: flex; }
+  .course-grid { display: flex; grid-template-columns: none; overflow-x: auto; scroll-snap-type: x proximity; gap: 14px; padding-bottom: 4px; scrollbar-width: none; }
+  .course-grid::-webkit-scrollbar { display: none; }
+  .course-card { flex: 0 0 auto; width: min(78vw, 360px); scroll-snap-align: start; }
   .course-card:nth-child(4), .course-card:nth-child(5) { min-height: 280px; }
   .intro-content { gap: 40px; }
   .method-grid { gap: 55px; }
@@ -508,11 +514,7 @@
   .section-heading-row { align-items: start; flex-direction: column; gap: 22px; margin-bottom: 34px; }
   .section-heading-row h2, .resource-preview h2, .method-copy h2 { font-size: clamp(48px, 13vw, 70px); }
   .heading-aside { margin: 0; text-align: left; }
-  .course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
-  .course-card, .course-card:nth-child(4), .course-card:nth-child(5) { min-height: 285px; padding: 18px 15px 17px; }
-  .course-card h3 { font-size: 20px; }
-  .course-tools { font-size: 9px; }
-  .course-description { font-size: 11px; }
+  .course-card, .course-card:nth-child(4), .course-card:nth-child(5) { min-height: 285px; padding: 18px 15px 17px; width: 82vw; }
   .method-grid { grid-template-columns: 1fr; gap: 45px; }
   .method-card { min-height: 355px; }
   .method-letter { font-size: 205px; }
