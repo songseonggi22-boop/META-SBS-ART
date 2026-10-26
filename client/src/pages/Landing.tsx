@@ -2,6 +2,7 @@ import { ArrowRight, ArrowUpRight, Check, MapPin, Phone, Play } from "lucide-rea
 import { Link, useParams } from "wouter";
 import { useConsultModal } from "@/components/ConsultModalContext";
 import QuickFeeForm from "@/components/QuickFeeForm";
+import ToolRow from "@/components/ToolRow";
 import { NotFoundPage } from "./InfoPages";
 import { getCourse, type Course } from "@/lib/courses";
 import { courseHref, getLanding, landingFaq, landingsByMenu, menus } from "@/lib/landings";
@@ -40,7 +41,9 @@ export default function Landing() {
 
   return (
     <div className="inner-page resource-detail-page landing-page">
-      <section className="inner-hero compact-hero">
+      <section className="inner-hero compact-hero landing-hero">
+        <img className="landing-hero-media" src={menu.heroImage} alt="" aria-hidden="true" loading="eager" fetchPriority="high" />
+        <div className="landing-hero-overlay" aria-hidden="true" />
         <div className="container inner-hero-grid">
           <div>
             <p className="breadcrumb"><Link href="/">홈</Link> / {menu.label} / {landing.keyword}</p>
@@ -78,7 +81,7 @@ export default function Landing() {
                 <p className="landing-course-tagline">{course.tagline}</p>
                 <dl className="course-facts">
                   <div><dt>수강 기간</dt><dd>{course.period}</dd></div>
-                  <div><dt>학습 도구</dt><dd>{course.tools}</dd></div>
+                  <div><dt>학습 도구</dt><dd><ToolRow tools={course.tools} /></dd></div>
                   <div><dt>선수 과목</dt><dd>{course.prereq}</dd></div>
                 </dl>
                 <ol className="tip-steps">

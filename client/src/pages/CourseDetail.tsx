@@ -2,6 +2,7 @@ import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import { Link, Redirect, useParams } from "wouter";
 import { useConsultModal } from "@/components/ConsultModalContext";
 import QuickFeeForm from "@/components/QuickFeeForm";
+import ToolRow from "@/components/ToolRow";
 import { NotFoundPage } from "./InfoPages";
 import { coursesByTrack, getCourse, trackLabels } from "@/lib/courses";
 import { courseHref, coursePrimaryLanding } from "@/lib/landings";
@@ -37,7 +38,7 @@ export default function CourseDetail() {
           <div className="resource-detail-main">
             <dl className="course-facts">
               <div><dt>수강 기간</dt><dd>{course.period}</dd></div>
-              <div><dt>학습 도구</dt><dd>{course.tools}</dd></div>
+              <div><dt>학습 도구</dt><dd><ToolRow tools={course.tools} /></dd></div>
               <div><dt>선수 과목</dt><dd>{course.prereq}</dd></div>
             </dl>
 

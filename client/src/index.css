@@ -638,7 +638,7 @@
 .course-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; padding: 0; }
 .course-chips a { display: inline-block; padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px; font-size: 12px; background: var(--background); transition: background 160ms, color 160ms; }
 .course-chips a:hover { background: var(--foreground); color: var(--background); }
-.course-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 0 0 28px; background: var(--border); border: 1px solid var(--border); }
+.course-facts { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.5fr) minmax(0, 1fr); gap: 1px; margin: 0 0 28px; background: var(--border); border: 1px solid var(--border); }
 .course-facts > div { padding: 16px; background: var(--card); }
 .course-facts dt { color: var(--muted-foreground); font: 600 11px "Space Grotesk", sans-serif; letter-spacing: .1em; }
 .course-facts dd { margin: 6px 0 0; font-size: 14px; line-height: 1.5; }
@@ -777,3 +777,20 @@ button.mobile-nav-link.open svg { transform: rotate(180deg); }
 @media (max-width: 540px) {
   .facility-features { grid-template-columns: 1fr; }
 }
+
+/* ── 학습 도구 로고 칩 (ToolRow) ── */
+.tool-row { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; }
+.tool-chip { flex: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px 6px 8px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); font-size: 13px; font-weight: 600; }
+.tool-chip:not(.has-logo) { padding-left: 12px; }
+.tool-chip img { width: 22px; height: 22px; border-radius: 6px; flex: none; }
+
+/* ── 랜딩페이지 히어로 배경 사진 (분야별, CC0) ── */
+.landing-hero { position: relative; overflow: hidden; background: #181815; }
+.landing-hero-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.landing-hero-overlay { position: absolute; inset: 0; background: linear-gradient(100deg, rgba(20,20,22,.93) 8%, rgba(20,20,22,.78) 42%, rgba(20,20,22,.48) 100%); }
+.landing-hero .inner-hero-grid { position: relative; z-index: 1; }
+.landing-hero .breadcrumb, .landing-hero .breadcrumb a { color: rgba(247,244,239,.72); }
+.landing-hero .resource-detail-title { color: #f7f4ef; }
+.landing-hero .landing-lead { color: rgba(247,244,239,.92); }
+.landing-hero .landing-points { color: #f7f4ef; }
+.landing-hero .landing-points svg { color: #c8ff39; }

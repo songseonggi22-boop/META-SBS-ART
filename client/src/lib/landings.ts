@@ -7,14 +7,17 @@ import { getCourse } from "./courses";
 
 export type MenuKey = "visual" | "motion" | "interior" | "cg" | "ai" | "drawing" | "cert";
 
-export const menus: { key: MenuKey; label: string; interest: CourseInterest }[] = [
-  { key: "visual", label: "시각편집", interest: "graphic" },
-  { key: "motion", label: "모션그래픽", interest: "motion" },
-  { key: "interior", label: "인테리어", interest: "interior" },
-  { key: "cg", label: "CG", interest: "cg" },
-  { key: "ai", label: "AI", interest: "ai" },
-  { key: "drawing", label: "웹툰/디지털드로잉", interest: "drawing" },
-  { key: "cert", label: "자격증", interest: "cert" },
+// heroImage — 랜딩이 텍스트로만 빽빽하다는 피드백(2026-10-26)으로 분야별 1장씩 추가한 배경 사진.
+// 전부 CC0(저작권 없음, 출처 표기 의무 없음, Openverse로 찾은 rawpixel 사진) — 과정별 상세 사진이
+// 아니라 "그 작업 분야의 분위기"를 보여주는 대표 이미지라 같은 분야 랜딩끼리는 공유한다.
+export const menus: { key: MenuKey; label: string; interest: CourseInterest; heroImage: string }[] = [
+  { key: "visual", label: "시각편집", interest: "graphic", heroImage: "/category-hero/visual.webp" },
+  { key: "motion", label: "모션그래픽", interest: "motion", heroImage: "/category-hero/motion.webp" },
+  { key: "interior", label: "인테리어", interest: "interior", heroImage: "/category-hero/interior.webp" },
+  { key: "cg", label: "CG", interest: "cg", heroImage: "/category-hero/cg.webp" },
+  { key: "ai", label: "AI", interest: "ai", heroImage: "/category-hero/ai.webp" },
+  { key: "drawing", label: "웹툰/디지털드로잉", interest: "drawing", heroImage: "/category-hero/drawing.webp" },
+  { key: "cert", label: "자격증", interest: "cert", heroImage: "/category-hero/cert.webp" },
 ];
 
 export type Landing = {
