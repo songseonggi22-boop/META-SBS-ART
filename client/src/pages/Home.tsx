@@ -138,6 +138,10 @@ const toolLinks: { tool: string; course: string; label: string }[] = [
   { tool: "3dsmax", course: "3ds-max", label: "3ds Max" },
   { tool: "maya", course: "maya-modeling", label: "마야" },
   { tool: "blender", course: "blender", label: "블렌더" },
+  { tool: "python", course: "python", label: "파이썬" },
+  { tool: "clip-studio-paint", course: "webtoon", label: "클립스튜디오" },
+  { tool: "html5", course: "html-css", label: "HTML/CSS" },
+  { tool: "n8n", course: "n8n-efficiency", label: "n8n" },
 ];
 
 function ToolGrid() {
