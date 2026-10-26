@@ -20,9 +20,11 @@ function page(url) {
     `<meta property="og:title" content="${esc(m.title)}" />`,
     `<meta property="og:description" content="${esc(m.description)}" />`,
     `<meta property="og:url" content="${SITE.url}${m.path}" />`,
-    `<meta name="twitter:card" content="summary" />`,
+    `<meta property="og:image" content="${esc(m.image)}" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`,
     `<meta name="twitter:title" content="${esc(m.title)}" />`,
     `<meta name="twitter:description" content="${esc(m.description)}" />`,
+    `<meta name="twitter:image" content="${esc(m.image)}" />`,
     ...m.jsonld.map((o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, "\u003c")}</script>`),
   ].join("\n    ");
   return template

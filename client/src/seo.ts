@@ -14,7 +14,16 @@ export const SITE = {
   locality: "대전광역시 서구",
 };
 
-export type PageMeta = { title: string; description: string; path: string; jsonld: object[]; noindex?: boolean };
+export type PageMeta = { title: string; description: string; path: string; jsonld: object[]; noindex?: boolean; image: string };
+
+// og:image/twitter:image가 사이트 전체에 아예 없어(2026-10-26 fire-your-seo-agency 진단) 소셜 공유·AI 인용
+// 미리보기 카드가 텍스트만 보였다. 실제 학원 로비(간판 보임) 사진을 기본값으로, 랜딩은 분야별 히어로 사진,
+// 포트폴리오는 그 작품 사진으로 — 가짜 이미지 없이 이미 있는 실사진만 재사용한다.
+// 카카오톡 크롤러가 webp og:image를 렌더링하지 못하는 사례가 실제로 보고돼(devtalk.kakao.com) og 전용
+// JPG 사본을 `public/og/`에 미리 만들어 둠(원본 webp는 페이지 안에서는 그대로 사용).
+const DEFAULT_OG_IMAGE = "/og/default.jpg";
+const categoryOgImage = (heroImage: string) => heroImage.replace("/category-hero/", "/og/category-").replace(/\.webp$/, ".jpg");
+const portfolioOgImage = (img: string) => img.replace("/img-cache/", "/og/portfolio-").replace(/\.webp$/, ".jpg");
 
 const ORG_ID = `${SITE.url}/#organization`;
 const organization = {
@@ -37,7 +46,7 @@ const crumbs = (items: [string, string][]) => ({
   itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: SITE.url + path })),
 });
 
-const staticMeta: Record<string, Omit<PageMeta, "path">> = {
+const staticMeta: Record<string, Omit<PageMeta, "path" | "image">> = {
   "/": {
     title: `${SITE.name} | 포토샵·일러스트·모션그래픽·CG·컴활`,
     description: "대전 둔산동 컴퓨터·디자인 학원. 포토샵·일러스트, 프리미어·애프터이펙트·C4D, ZBrush·Maya, CAD·스케치업, 컴활·AI 활용까지 과정 안내와 무료 상담.",
@@ -97,7 +106,7 @@ const staticMeta: Record<string, Omit<PageMeta, "path">> = {
 
 export function getMeta(path: string): PageMeta {
   const p = path.split("?")[0].split("#")[0].replace(/(.)\/$/, "$1");
-  if (staticMeta[p]) return { ...staticMeta[p], path: p };
+  if (staticMeta[p]) return { ...staticMeta[p], path: p, image: SITE.url + DEFAULT_OG_IMAGE };
 
   const blog = p.match(/^\/blog\/([^/]+)$/);
   const r = blog && resources.find((x) => x.id === blog[1]);
@@ -106,6 +115,7 @@ export function getMeta(path: string): PageMeta {
       path: p,
       title: brand(r.title),
       description: clip(r.excerpt + " " + r.steps.map((s) => s.title).join(", ")),
+      image: SITE.url + DEFAULT_OG_IMAGE,
       jsonld: [
         {
           "@context": "https://schema.org",
@@ -124,12 +134,13 @@ export function getMeta(path: string): PageMeta {
   const lm = p.match(/^\/daejeon\/([^/]+)$/);
   const landing = lm && getLanding(lm[1]);
   if (landing) {
-    const menuLabel = menus.find((m) => m.key === landing.menu)!.label;
+    const menu = menus.find((m) => m.key === landing.menu)!;
     const faq = landingFaq(landing);
     return {
       path: p,
       title: landing.title,
       description: landing.description,
+      image: SITE.url + categoryOgImage(menu.heroImage),
       jsonld: [
         ...landing.main.map((slug) => {
           const c = getCourse(slug)!;
@@ -138,7 +149,7 @@ export function getMeta(path: string): PageMeta {
         ...(faq.length
           ? [{ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }]
           : []),
-        crumbs([["홈", "/"], [menuLabel, p], [landing.keyword, p]]),
+        crumbs([["홈", "/"], [menu.label, p], [landing.keyword, p]]),
       ],
     };
   }
@@ -151,6 +162,7 @@ export function getMeta(path: string): PageMeta {
       path: p,
       title: brand(`${course.title} · 대전 ${trackLabels[course.track]} 과정`),
       description: clip(desc),
+      image: SITE.url + DEFAULT_OG_IMAGE,
       jsonld: [
         {
           "@context": "https://schema.org",
@@ -172,11 +184,12 @@ export function getMeta(path: string): PageMeta {
       path: p,
       title: brand(`${courseLabels[item.course].label} 수강생 작품 · ${item.title}`),
       description: clip(item.intro.replace(/\s+/g, " ")),
+      image: SITE.url + portfolioOgImage(item.img),
       jsonld: [crumbs([["홈", "/"], [courseLabels[item.course].label, "/#courses"], [item.title, p]])],
     };
   }
 
-  return { path: p, title: brand("페이지를 찾을 수 없습니다"), description: "요청하신 페이지를 찾을 수 없습니다.", jsonld: [], noindex: true };
+  return { path: p, title: brand("페이지를 찾을 수 없습니다"), description: "요청하신 페이지를 찾을 수 없습니다.", image: SITE.url + DEFAULT_OG_IMAGE, jsonld: [], noindex: true };
 }
 
 export const allRoutes = (): string[] => [
