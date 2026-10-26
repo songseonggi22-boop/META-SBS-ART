@@ -9,6 +9,7 @@ export const toolLogos: Record<string, string> = {
   premiere: "/tool-logos/premiere.png",
   "premiere pro": "/tool-logos/premiere.png",
   "after effects": "/tool-logos/after-effects.png",
+  "after-effects": "/tool-logos/after-effects.png",
   에펙: "/tool-logos/after-effects.png",
   indesign: "/tool-logos/indesign.png",
   인디자인: "/tool-logos/indesign.png",

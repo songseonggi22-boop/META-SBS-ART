@@ -23,6 +23,7 @@ import PortfolioShowcase from "@/components/PortfolioShowcase";
 import { portfolioItems } from "@/lib/portfolio";
 import { coursesByTrack, getCourse, trackLabels } from "@/lib/courses";
 import { courseHref } from "@/lib/landings";
+import { toolLogos } from "@/lib/toolLogos";
 
 // 각 과정 카드의 썸네일은 같은 사업자(SBS아카데미AIX학원) 공식 포트폴리오(sbsart.com, 2026-09-21 확인)의
 // 실제 수강생 결과물 1건씩(lib/portfolio.ts) — 눌러도 sbsart.com으로 나가지 않고 이 사이트 안의 `/portfolio/:id`
@@ -123,6 +124,34 @@ const courses = [
     portfolio: null,
   },
 ];
+
+// THE PROGRAM 상단 — 실제 쓰는 소프트웨어 로고를 눌러 바로 그 과정으로 들어가는 빠른 길.
+// toolLogos에 로고가 있는 도구만(가짜 로고 생성 안 함) 과정 1개씩 연결.
+const toolLinks: { tool: string; course: string; label: string }[] = [
+  { tool: "photoshop", course: "photoshop", label: "포토샵" },
+  { tool: "illustrator", course: "illustrator", label: "일러스트레이터" },
+  { tool: "indesign", course: "indesign", label: "인디자인" },
+  { tool: "premiere", course: "premiere", label: "프리미어 프로" },
+  { tool: "after-effects", course: "after-effects", label: "애프터이펙트" },
+  { tool: "autocad", course: "autocad", label: "오토캐드" },
+  { tool: "sketchup", course: "sketchup", label: "스케치업" },
+  { tool: "3dsmax", course: "3ds-max", label: "3ds Max" },
+  { tool: "maya", course: "maya-modeling", label: "마야" },
+  { tool: "blender", course: "blender", label: "블렌더" },
+];
+
+function ToolGrid() {
+  return (
+    <div className="tool-grid">
+      {toolLinks.map((t) => (
+        <Link key={t.tool} href={courseHref(t.course)} className="tool-grid-item">
+          <img src={toolLogos[t.tool]} alt="" loading="lazy" />
+          <span>{t.label}</span>
+        </Link>
+      ))}
+    </div>
+  );
+}
 
 // 가로 스크롤 "과정 빠르게 둘러보기" — 히어로 바로 아래. 과정 하나하나가 카드로 흐르듯 지나가는
 // 교육기관 사이트 특유의 모집중 과정 슬라이더 패턴(화살표로 넘기기)을 우리 실제 과정 데이터로 구현한다.
@@ -398,6 +427,10 @@ export default function Home() {
               <button type="button" className="icon-button" aria-label="이전 트랙" onClick={() => scrollCourses(-1)}><ArrowLeft size={18} /></button>
               <button type="button" className="icon-button" aria-label="다음 트랙" onClick={() => scrollCourses(1)}><ArrowRight size={18} /></button>
             </div>
+          </div>
+          <div className="tool-grid-intro">
+            <span className="tool-grid-label">자주 찾는 프로그램 · 눌러서 바로 그 과정으로</span>
+            <ToolGrid />
           </div>
           <div className="course-grid" ref={courseGridRef}>
             {courses.map((course) => <CourseCard key={course.number} course={course} />)}
