@@ -1,14 +1,18 @@
 import { useMemo, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useSearch } from "wouter";
 import type { CourseInterest } from "@/components/ConsultModalContext";
 import { courses, trackLabels } from "@/lib/courses";
 import { courseHref } from "@/lib/landings";
 
 const tracks: (CourseInterest | "ALL")[] = ["ALL", "graphic", "motion", "interior", "cg", "ai", "drawing", "cert", "it"];
 
+// 히어로 캐러셀의 "OO 전체과정 보기" 링크(/courses?track=interior)가 해당 탭을 미리 선택해 두도록.
+// 쿼리 없이 들어오면 기존처럼 전체.
 export default function CoursesIndex() {
-  const [active, setActive] = useState<CourseInterest | "ALL">("ALL");
+  const search = useSearch();
+  const initialTrack = new URLSearchParams(search).get("track") as CourseInterest | null;
+  const [active, setActive] = useState<CourseInterest | "ALL">(initialTrack && tracks.includes(initialTrack) ? initialTrack : "ALL");
   const list = useMemo(() => (active === "ALL" ? courses : courses.filter((c) => c.track === active)), [active]);
 
   return (

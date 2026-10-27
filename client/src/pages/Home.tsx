@@ -25,7 +25,7 @@ import { portfolioItems } from "@/lib/portfolio";
 import { courses as allCourses, coursesByTrack, getCourse, trackLabels } from "@/lib/courses";
 import type { CourseInterest } from "@/components/ConsultModalContext";
 import { courseHref, landingsByMenu, menus } from "@/lib/landings";
-import { toolLogos } from "@/lib/toolLogos";
+import { splitTools, toolLogos } from "@/lib/toolLogos";
 
 // 각 과정 카드의 썸네일은 같은 사업자(SBS아카데미AIX학원) 공식 포트폴리오(sbsart.com, 2026-09-21 확인)의
 // 실제 수강생 결과물 1건씩(lib/portfolio.ts) — 눌러도 sbsart.com으로 나가지 않고 이 사이트 안의 `/portfolio/:id`
@@ -275,13 +275,28 @@ function QuickBrowse() {
   );
 }
 
-// 히어로 우측 비주얼 — 추상 3D 도형 → 실제 분야별 사진 슬라이드 배너(2026-10-27, motemote.kr 메인 배너의
-// 자동 슬라이드·인덱스 배지 UX 참고). 이미지·카피는 전부 우리 데이터(category-hero 실사진 + 랜딩 첫 포인트
-// 문구), 가짜 할인·품절임박 같은 조작적 문구는 쓰지 않는다. 7개 분야 전부를 순환.
-// 카드 여러 장이 동시에 보이고 가장자리는 다음/이전 카드가 살짝 비치는 "피크" 캐러셀(2026-10-27,
-// 모트모트 메인 배너 레이아웃 참고 — 사진·캐릭터는 가져오지 않고 레이아웃 메커니즘만). 가로 스크롤은
-// 이 사이트에 이미 있는 QuickBrowse의 풀블리드 스크롤 트랙과 같은 방식(네이티브 overflow-x + 스냅)을
-// 재사용해 터치 스와이프가 공짜로 따라온다. 이미지·카피는 전부 우리 데이터(7개 분야 실사진 + 랜딩 포인트).
+// 히어로 "피크" 캐러셀 — 카드 여러 장이 동시에 보이고 가장자리는 다음/이전 카드가 살짝 비치는 레이아웃
+// (2026-10-27, 모트모트 메인 배너 참고 — 사진·캐릭터는 가져오지 않고 레이아웃 메커니즘만). 가로 스크롤은
+// QuickBrowse와 같은 풀블리드 네이티브 overflow-x+스냅 방식을 재사용해 터치 스와이프가 공짜로 따라온다.
+// 이미지·카피는 전부 우리 데이터(7개 분야 실사진 + 랜딩 포인트).
+//
+// 과정이 7개(분야)뿐이라 슬라이드가 금방 끝나 버린다는 피드백(2026-10-27)으로, 각 분야 카드 아래에
+// "그 분야에서 실제로 배우는 툴" 칩 행을 추가 — 과정 32개를 전부 눌러볼 수 있는 두 번째 경로를 연다.
+// 카드(사진) 클릭 = 그 분야 대표 랜딩으로 바로, 툴 칩 클릭 = 그 툴을 쓰는 특정 과정으로, "전체과정 보기" =
+// /courses?track=에서 그 분야만 필터링. 가짜 툴(레빗 등 실제로 안 가르치는 것)은 넣지 않는다 —
+// lib/courses.ts의 실제 tools 필드에서 과정당 대표 툴 하나씩만 뽑아 쓴다(중복 툴은 첫 과정만).
+function categoryTools(interest: CourseInterest) {
+  const seen = new Set<string>();
+  const result: { label: string; logo?: string; href: string }[] = [];
+  for (const c of coursesByTrack(interest)) {
+    const primary = splitTools(c.tools)[0];
+    if (!primary || seen.has(primary.label.toLowerCase())) continue;
+    seen.add(primary.label.toLowerCase());
+    result.push({ ...primary, href: courseHref(c.slug) });
+  }
+  return result;
+}
+
 function HeroCarousel() {
   const slides = menus.map((m) => {
     const landing = landingsByMenu(m.key)[0];
@@ -297,29 +312,44 @@ function HeroCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const pausedRef = useRef(false);
+  // scrollTo(smooth)가 진행 중인 동안 중간 스크롤 위치마다 onScroll이 "가장 가까운 카드"를 다시 계산해
+  // index를 되돌려 버리는 버그를 겪었다(점/화살표를 눌러도 항상 0번으로 복귀) — 프로그램이 직접 스크롤을
+  // 거는 동안에는 onScroll의 index 보정을 잠시 꺼서 서로 되돌리는 피드백 루프를 끊는다.
+  const scrollingRef = useRef(false);
+  const scrollingTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
+  // offsetLeft는 offsetParent 기준이라 track 자체의 스크롤 위치와 안 맞을 수 있다. 뷰포트 기준
+  // getBoundingClientRect로 계산해야 정확하다.
   const scrollToIndex = (i: number) => {
     const track = trackRef.current;
     const card = track?.children[i] as HTMLElement | undefined;
-    if (track && card) track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: "smooth" });
+    if (!track || !card) return;
+    scrollingRef.current = true;
+    clearTimeout(scrollingTimerRef.current);
+    const delta = card.getBoundingClientRect().left - track.getBoundingClientRect().left;
+    track.scrollTo({ left: track.scrollLeft + delta, behavior: "smooth" });
+    scrollingTimerRef.current = setTimeout(() => { scrollingRef.current = false; }, 600);
   };
 
-  useEffect(() => { scrollToIndex(index); }, [index]);
+  const goTo = (i: number) => { setIndex(i); scrollToIndex(i); };
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = setInterval(() => { if (!pausedRef.current) setIndex((i) => (i + 1) % total); }, 4000);
+    const timer = setInterval(() => { if (!pausedRef.current) setIndex((i) => { const next = (i + 1) % total; scrollToIndex(next); return next; }); }, 4000);
     return () => clearInterval(timer);
   }, [total]);
 
-  // 사용자가 직접 스와이프/드래그로 스크롤해도 점 표시가 따라가도록 현재 위치에 가장 가까운 카드를 추적.
+  // 사용자가 직접 스와이프/드래그로 스크롤해도 점 표시가 따라가도록 현재 위치에 가장 가까운 카드를 추적
+  // (프로그램이 건 스크롤이 진행 중일 때는 건너뛴다 — 위 설명 참고).
   const onScroll = () => {
+    if (scrollingRef.current) return;
     const track = trackRef.current;
     if (!track) return;
+    const trackLeft = track.getBoundingClientRect().left;
     let closest = 0;
     let min = Infinity;
     Array.from(track.children).forEach((child, i) => {
-      const d = Math.abs((child as HTMLElement).offsetLeft - track.offsetLeft - track.scrollLeft);
+      const d = Math.abs((child as HTMLElement).getBoundingClientRect().left - trackLeft);
       if (d < min) { min = d; closest = i; }
     });
     setIndex(closest);
@@ -345,13 +375,27 @@ function HeroCarousel() {
         ))}
       </div>
       <div className="container hero-carousel-controls">
-        <button type="button" className="hero-carousel-arrow" aria-label="이전 분야" onClick={() => setIndex((i) => (i - 1 + total) % total)}><ArrowLeft size={16} /></button>
+        <button type="button" className="hero-carousel-arrow" aria-label="이전 분야" onClick={() => goTo((index - 1 + total) % total)}><ArrowLeft size={16} /></button>
         <div className="hero-carousel-dots">
           {slides.map((s, i) => (
-            <button key={s.key} type="button" className={i === index ? "dot active" : "dot"} aria-label={`${s.kicker} 배너로 이동`} onClick={() => setIndex(i)} />
+            <button key={s.key} type="button" className={i === index ? "dot active" : "dot"} aria-label={`${s.kicker} 배너로 이동`} onClick={() => goTo(i)} />
           ))}
         </div>
-        <button type="button" className="hero-carousel-arrow" aria-label="다음 분야" onClick={() => setIndex((i) => (i + 1) % total)}><ArrowRight size={16} /></button>
+        <button type="button" className="hero-carousel-arrow" aria-label="다음 분야" onClick={() => goTo((index + 1) % total)}><ArrowRight size={16} /></button>
+      </div>
+      <div className="container hero-carousel-tools">
+        <span className="hero-carousel-tools-label">{slides[index].kicker}에서 배우는 툴</span>
+        <div className="hero-carousel-tools-row">
+          {categoryTools(menus[index].interest).map((t) => (
+            <Link key={t.href} href={t.href} className="hero-carousel-tool-chip">
+              {t.logo && <img src={t.logo} alt="" width={24} height={24} loading="lazy" />}
+              <span>{t.label}</span>
+            </Link>
+          ))}
+          <Link href={`/courses?track=${menus[index].interest}`} className="hero-carousel-tool-chip hero-carousel-tool-all">
+            {slides[index].kicker} 전체과정 <ArrowRight size={13} />
+          </Link>
+        </div>
       </div>
     </section>
   );

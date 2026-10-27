@@ -173,6 +173,15 @@
 .hero-carousel-dots { display: flex; align-items: center; gap: 6px; }
 .hero-carousel-dots .dot { width: 6px; height: 6px; border-radius: 50%; border: 0; background: var(--border); transition: background 160ms var(--ease-out), width 160ms var(--ease-out); }
 .hero-carousel-dots .dot.active { width: 18px; border-radius: 4px; background: var(--foreground); }
+/* 현재 보고 있는 분야 카드의 실제 수업 툴 — 과정 32개 전부로 가는 두 번째 경로(2026-10-27) */
+.hero-carousel-tools { display: flex; align-items: center; gap: 14px; margin-top: 18px; flex-wrap: wrap; }
+.hero-carousel-tools-label { flex: none; color: var(--muted-foreground); font-size: 12px; font-weight: 600; }
+.hero-carousel-tools-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.hero-carousel-tool-chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); font-size: 12px; font-weight: 600; transition: background 160ms var(--ease-out), border-color 160ms var(--ease-out); }
+.hero-carousel-tool-chip:hover { background: var(--secondary); border-color: var(--foreground); }
+.hero-carousel-tool-chip img { border-radius: 4px; }
+.hero-carousel-tool-all { background: var(--foreground); color: var(--background); border-color: var(--foreground); }
+.hero-carousel-tool-all:hover { background: #8875f5; border-color: #8875f5; color: #fff; }
 /* 히어로 바로 아래 — 분야별 바로가기 아이콘 행(motemote.kr 숏컷 UX 참고) */
 .category-shortcuts { padding: 22px 0; border-bottom: 1px solid var(--border); }
 .category-shortcuts-row { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -533,6 +542,7 @@
   .hero-carousel-headline { font-size: 19px; }
   .hero-carousel-kicker { font-size: 12px; }
   .hero-carousel-arrow { width: 30px; height: 30px; }
+  .hero-carousel-tools { flex-direction: column; align-items: flex-start; gap: 8px; }
   .category-shortcuts-row { gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
   .category-shortcuts-row::-webkit-scrollbar { display: none; }
   .category-shortcut { flex: 0 0 auto; width: 78px; padding: 10px 4px; }
