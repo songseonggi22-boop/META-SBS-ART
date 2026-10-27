@@ -5,10 +5,12 @@ import {
   ArrowRight,
   ArrowUpRight,
   Box,
+  Calculator,
   Check,
   Code2,
   Cuboid,
   FileImage,
+  Landmark,
   Layers3,
   Move3d,
   PenTool,
@@ -22,7 +24,7 @@ import QuickFeeForm from "@/components/QuickFeeForm";
 import PortfolioShowcase from "@/components/PortfolioShowcase";
 import { portfolioItems } from "@/lib/portfolio";
 import { coursesByTrack, getCourse, trackLabels } from "@/lib/courses";
-import { courseHref } from "@/lib/landings";
+import { courseHref, landingsByMenu, menus } from "@/lib/landings";
 import { toolLogos } from "@/lib/toolLogos";
 
 // 각 과정 카드의 썸네일은 같은 사업자(SBS아카데미AIX학원) 공식 포트폴리오(sbsart.com, 2026-09-21 확인)의
@@ -273,32 +275,55 @@ function QuickBrowse() {
   );
 }
 
-function HeroVisual() {
+// 히어로 우측 비주얼 — 전에는 추상적인 3D 도형·그라디언트였으나, "이게 무슨 사이트인지 한눈에 안 보인다"는
+// 피드백(2026-10-27, motemote.kr 참고)으로 실제 분야별 사진 4장(이미 쓰고 있는 category-hero 실사진)을
+// 바로 누를 수 있는 콜라주로 교체. 가짜 통계·추상 그래픽 대신 실제 분야·실제 사진·실제 링크만 쓴다.
+const heroShowcaseMenus = ["visual", "motion", "cg", "interior"] as const;
+
+function HeroShowcase() {
   return (
-    <div className="hero-visual" aria-label="디지털 제작 툴과 커리큘럼을 표현한 그래픽">
-      <div className="hero-visual-noise" />
-      <div className="visual-topline">
-        <span>STUDIO / 01</span>
-        <span>MAKE IT MOVE</span>
-      </div>
-      <div className="visual-orbit orbit-one" />
-      <div className="visual-orbit orbit-two" />
-      <div className="visual-cube">
-        <div className="cube-face cube-front">3D</div>
-        <div className="cube-face cube-side">AI</div>
-        <div className="cube-face cube-top">C/</div>
-      </div>
-      <div className="visual-caption">
-        <span className="caption-index">[ 2026 ]</span>
-        <strong>TOOLS<br />TO<br />SCENES</strong>
-      </div>
-      <div className="visual-pills">
-        <span>PS</span>
-        <span>AE</span>
-        <span>AI</span>
-        <span>CAD</span>
-      </div>
+    <div className="hero-visual hero-showcase" aria-label="분야별 과정 바로가기">
+      {heroShowcaseMenus.map((key) => {
+        const m = menus.find((x) => x.key === key)!;
+        const target = landingsByMenu(m.key)[0];
+        return (
+          <Link key={m.key} href={target ? `/daejeon/${target.slug}` : "/courses"} className="showcase-tile">
+            <img src={m.heroImage} alt="" loading="eager" fetchPriority="high" />
+            <span className="showcase-tile-label">{m.label}</span>
+          </Link>
+        );
+      })}
     </div>
+  );
+}
+
+// 히어로 바로 아래 분야별 바로가기 아이콘 행 — motemote.kr의 아이콘 숏컷 UX를 참고해, 실제 7개 분야
+// 메뉴 + 국비지원·수강료 조회 페이지로 바로 연결. "실시간 랭킹"·할인 카운트다운처럼 실제 데이터가
+// 없는 항목은 만들지 않는다(가짜 수치·거짓 긴급성 금지 원칙).
+function CategoryShortcuts() {
+  return (
+    <nav className="category-shortcuts" aria-label="분야별 바로가기">
+      <div className="container category-shortcuts-row">
+        {menus.map((m) => {
+          const Icon = trackIcon[m.interest];
+          const target = landingsByMenu(m.key)[0];
+          return (
+            <Link key={m.key} href={target ? `/daejeon/${target.slug}` : "/courses"} className="category-shortcut">
+              <span className="category-shortcut-icon"><Icon size={22} strokeWidth={1.5} /></span>
+              <span>{m.label}</span>
+            </Link>
+          );
+        })}
+        <Link href="/funding" className="category-shortcut">
+          <span className="category-shortcut-icon"><Landmark size={22} strokeWidth={1.5} /></span>
+          <span>국비지원</span>
+        </Link>
+        <Link href="/pricing" className="category-shortcut">
+          <span className="category-shortcut-icon"><Calculator size={22} strokeWidth={1.5} /></span>
+          <span>수강료 조회</span>
+        </Link>
+      </div>
+    </nav>
   );
 }
 
@@ -386,9 +411,11 @@ export default function Home() {
               <span>Welcome to the Future of Making</span>
             </div>
           </div>
-          <HeroVisual />
+          <HeroShowcase />
         </div>
       </section>
+
+      <CategoryShortcuts />
 
       <QuickBrowse />
 
