@@ -127,16 +127,12 @@
 .icon-button:hover { background: var(--secondary); transform: translateY(-2px); }
 .mobile-menu-button, .mobile-nav { display: none; }
 
-.hero-section { padding: 42px 0 0; }
-.hero-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, .95fr); gap: 24px; }
-.hero-copy { position: relative; min-height: 568px; padding: 82px 56px 48px; border: 1px solid var(--border); background: var(--card); overflow: hidden; }
-.hero-copy::before { content: ""; position: absolute; top: 0; right: 0; width: 46%; height: 1px; background: var(--foreground); }
+.hero-section { padding: 32px 0 0; }
 .eyebrow, .section-kicker, .visual-topline, .method-card-header, .resource-meta, .price-label, .footer-label, .aside-index { display: flex; align-items: center; gap: 10px; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .16em; }
 .eyebrow-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent); }
-.hero-copy h1, .inner-hero h1, .cta-inner h2, .method-copy h2, .resource-preview h2, .section-heading-row h2 { margin: 26px 0 22px; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(60px, 7vw, 106px); line-height: .88; letter-spacing: -.075em; font-weight: 700; }
-.hero-copy h1 em, .inner-hero h1 em, .cta-inner h2 em, .method-copy h2 em, .resource-preview h2 em, .section-heading-row h2 em { color: #8875f5; font-style: normal; }
+.inner-hero h1, .cta-inner h2, .method-copy h2, .resource-preview h2, .section-heading-row h2 { margin: 26px 0 22px; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(60px, 7vw, 106px); line-height: .88; letter-spacing: -.075em; font-weight: 700; }
+.inner-hero h1 em, .cta-inner h2 em, .method-copy h2 em, .resource-preview h2 em, .section-heading-row h2 em { color: #8875f5; font-style: normal; }
 .hero-description { max-width: 450px; margin: 0; color: var(--muted-foreground); font-size: 17px; line-height: 1.75; }
-.hero-actions { display: flex; align-items: center; gap: 18px; margin-top: 36px; }
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 45px; padding: 0 20px; border: 1px solid transparent; border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: -.02em; transition: transform 160ms var(--ease-out), background 180ms var(--ease-out), color 180ms var(--ease-out), border-color 180ms var(--ease-out); }
 .button:active { transform: scale(.97); }
 .button-primary { background: var(--foreground); color: var(--background); }
@@ -148,9 +144,19 @@
 .button-dark { background: var(--foreground); color: var(--background); }
 .button-dark:hover { background: #8875f5; color: white; transform: translateY(-2px); }
 .full-button { width: 100%; }
-.hero-note { position: absolute; left: 56px; bottom: 38px; display: flex; align-items: center; gap: 10px; color: var(--muted-foreground); font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 10px; letter-spacing: .09em; }
-.note-line { width: 32px; height: 1px; background: var(--muted-foreground); }
-.hero-visual { position: relative; min-height: 568px; overflow: hidden; border: 1px solid var(--border); isolation: isolate; }
+/* 히어로 캐러셀 바로 아래 — 큰 추상 헤드라인 대신 짧은 한 줄 설명 + 상담 CTA + 수강료 조회 폼을
+   모트모트 스타일(배너 → 바로 액션)로 압축한 바(2026-10-27). */
+.hero-quickbar { padding: 22px 0; border-bottom: 1px solid var(--border); }
+.hero-quickbar-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.hero-quickbar-text { display: flex; flex-direction: column; gap: 4px; }
+.hero-quickbar-text strong { font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+.hero-quickbar-text span { color: var(--muted-foreground); font-size: 13px; }
+.hero-quickbar-actions { display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; }
+.hero-quickbar-actions .fee-form { margin: 0; max-width: 420px; padding: 0; border: 0; background: transparent; }
+.hero-quickbar-actions .fee-fields { display: flex; gap: 8px; }
+.hero-quickbar-actions .fee-fields input { width: 110px; padding: 0 12px; height: 45px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); font-size: 13px; }
+.hero-quickbar-actions .fee-agree { margin-top: 6px; font-size: 11px; }
+.hero-visual { position: relative; height: 568px; overflow: hidden; border: 1px solid var(--border); isolation: isolate; }
 /* 히어로 우측 — 추상 3D 도형 대신 실제 분야별 사진 2x2 콜라주(2026-10-27, motemote.kr 참고로 "무슨 사이트인지"
    즉시 드러나도록 교체). 각 타일이 그 분야 랜딩으로 바로 연결되는 실제 링크. */
 /* 히어로 슬라이드 배너 — motemote.kr 메인 배너의 자동 슬라이드·인덱스 배지 UX 참고(2026-10-27),
@@ -499,9 +505,6 @@
 
 @media (max-width: 1050px) {
   .container { padding-left: 24px; padding-right: 24px; }
-  .hero-grid { grid-template-columns: minmax(0, 1fr) minmax(340px, .86fr); }
-  .hero-copy { padding-left: 38px; padding-right: 38px; }
-  .hero-note { left: 38px; }
   /* 세로로 쌓지 않고 옆으로 넘기는 슬라이더로 전환 — 좁은 화면에서 설명·칩까지 꽉 찬 카드를 2단으로
      욱여넣으면 글자가 9px까지 줄어 안 읽혔다. 카드 하나가 화면 폭 대부분을 쓰게 하고 스와이프로 넘긴다. */
   .courses-section-arrows { display: flex; }
@@ -523,13 +526,12 @@
   .mobile-nav-inner { display: grid; padding-top: 10px; padding-bottom: 13px; }
   .mobile-nav-link { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 16px; }
   .hero-section { padding-top: 18px; }
-  .hero-grid { grid-template-columns: 1fr; gap: 12px; }
-  .hero-copy { min-height: 480px; padding: 50px 24px 35px; }
-  .hero-copy h1 { font-size: clamp(59px, 17vw, 86px); }
   .hero-description { font-size: 15px; }
-  .hero-note { left: 24px; bottom: 27px; font-size: 9px; }
+  .hero-quickbar-inner { flex-direction: column; align-items: flex-start; }
+  .hero-quickbar-actions .fee-fields input { width: 100%; }
+  .hero-quickbar-actions .fee-fields { flex-wrap: wrap; }
   .desktop-only { display: none; }
-  .hero-visual { min-height: 300px; }
+  .hero-visual { height: 300px; }
   .hero-carousel-overlay { padding: 18px; }
   .hero-carousel-label { font-size: 19px; }
   .hero-carousel-blurb { font-size: 12px; }
@@ -650,8 +652,6 @@
 .fee-band-inner strong { display: block; margin: 8px 0 6px; font: 700 26px "Pretendard Variable", "Pretendard", sans-serif; letter-spacing: -.05em; }
 .fee-band-inner p { margin: 0; color: var(--muted-foreground); font-size: 14px; }
 .pricing-fee { margin-top: 48px; padding: 32px; border: 1px solid var(--border); background: var(--secondary); }
-.hero-fee { margin-top: 26px; max-width: 520px; padding: 18px; border: 1px solid var(--border); background: var(--card); }
-.hero-fee > span { display: block; margin-bottom: 10px; font-size: 12px; font-weight: 600; }
 .cta-fee { margin-top: 48px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,.18); max-width: 720px; }
 .cta-fee > span { display: block; margin-bottom: 12px; font-size: 13px; opacity: .85; }
 .mid-cta { padding: 34px 0; background: #181815; color: #f7f4ef; }
@@ -666,7 +666,6 @@
   .resource-works-grid { grid-template-columns: 1fr; }
   .tip-steps li { grid-template-columns: 36px minmax(0, 1fr); gap: 10px; }
 }
-.hero-copy .hero-note { display: none; }
 
 /* ── 강좌 상세 · 트랙 카드 과정 목록 ── */
 .course-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; padding: 0; }

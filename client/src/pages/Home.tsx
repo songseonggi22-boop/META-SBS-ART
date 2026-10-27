@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  ArrowDownRight,
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
@@ -478,36 +477,23 @@ export default function Home() {
   return (
     <div>
       <section className="hero-section">
-        <div className="container hero-grid">
-          <div className="hero-copy">
-            <div className="eyebrow"><span className="eyebrow-dot" /> COMPUTER / CREATIVE / AI</div>
-            <h1>
-              생각을
-              <br />
-              <em>장면으로.</em>
-            </h1>
-            <p className="hero-description">
-              포토샵부터 3D, 모션그래픽, AI 자동화까지.<br className="desktop-only" />
-              배우는 순서가 결과의 밀도를 바꿉니다.
-            </p>
-            <div className="hero-actions">
-              <Link href="/#courses" className="button button-primary">
-                커리큘럼 보기 <ArrowDownRight size={17} />
-              </Link>
-              <button type="button" className="button button-text" onClick={() => open({ sourcePage: "home-hero" })}>
-                상담 시작하기 <ArrowRight size={16} />
-              </button>
-            </div>
-            <div className="hero-fee">
-              <span>수강료가 궁금하다면 · 이름/번호만 입력</span>
-              <QuickFeeForm sourcePage="home-hero-fee" />
-            </div>
-            <div className="hero-note">
-              <span className="note-line" />
-              <span>Welcome to the Future of Making</span>
-            </div>
-          </div>
+        <div className="container">
           <HeroCarousel />
+        </div>
+      </section>
+
+      <section className="hero-quickbar">
+        <div className="container hero-quickbar-inner">
+          <div className="hero-quickbar-text">
+            <strong>포토샵부터 3D, 모션그래픽, AI 자동화까지.</strong>
+            <span>배우는 순서가 결과의 밀도를 바꿉니다.</span>
+          </div>
+          <div className="hero-quickbar-actions">
+            <button type="button" className="button button-primary" onClick={() => open({ sourcePage: "home-hero" })}>
+              무료 상담 신청 <ArrowRight size={16} />
+            </button>
+            <QuickFeeForm sourcePage="home-hero-fee" />
+          </div>
         </div>
       </section>
 
