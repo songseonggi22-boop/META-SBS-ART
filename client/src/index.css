@@ -156,27 +156,23 @@
 .hero-quickbar-actions .fee-fields { display: flex; gap: 8px; }
 .hero-quickbar-actions .fee-fields input { width: 110px; padding: 0 12px; height: 45px; border: 1px solid var(--border); border-radius: 999px; background: var(--card); font-size: 13px; }
 .hero-quickbar-actions .fee-agree { margin-top: 6px; font-size: 11px; }
-.hero-visual { position: relative; height: 568px; overflow: hidden; border: 1px solid var(--border); isolation: isolate; }
-/* 히어로 우측 — 추상 3D 도형 대신 실제 분야별 사진 2x2 콜라주(2026-10-27, motemote.kr 참고로 "무슨 사이트인지"
-   즉시 드러나도록 교체). 각 타일이 그 분야 랜딩으로 바로 연결되는 실제 링크. */
-/* 히어로 슬라이드 배너 — motemote.kr 메인 배너의 자동 슬라이드·인덱스 배지 UX 참고(2026-10-27),
-   이미지·카피는 전부 우리 실데이터. */
-.hero-carousel { padding: 0; touch-action: pan-y; cursor: grab; }
-.hero-carousel:active { cursor: grabbing; }
-.hero-carousel-track { display: flex; width: 100%; height: 100%; transition: transform 500ms var(--ease-out); }
-.hero-carousel-slide { position: relative; flex: 0 0 100%; width: 100%; height: 100%; display: block; overflow: hidden; }
+/* 히어로 "피크" 캐러셀 — 카드 여러 장이 동시에 보이고 가장자리는 다음 카드가 살짝 비치는 레이아웃
+   (2026-10-27, 참고 사이트 메인 배너의 레이아웃 메커니즘만 차용 — 사진·캐릭터는 전부 우리 자체 데이터).
+   가로 스크롤은 이 사이트의 QuickBrowse와 같은 풀블리드 네이티브 스크롤 트랙 방식을 재사용한다. */
+.hero-carousel-section { padding-top: 24px; }
+.hero-carousel-track { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0 32px; scrollbar-width: none; }
+.hero-carousel-track::-webkit-scrollbar { display: none; }
+.hero-carousel-slide { position: relative; flex: 0 0 min(420px, 78vw); height: 460px; border-radius: 20px; overflow: hidden; scroll-snap-align: start; display: block; }
 .hero-carousel-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.hero-carousel-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 32px; background: linear-gradient(0deg, rgba(10,10,10,.7) 0%, rgba(10,10,10,0) 50%); }
-.hero-carousel-blurb { margin: 0 0 6px; color: rgba(255,255,255,.88); font-size: 13px; font-weight: 500; }
-.hero-carousel-label { margin: 0; color: #fff; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -.03em; line-height: 1.2; }
-.hero-carousel-arrow { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 36px; height: 36px; margin-top: -18px; border: 0; border-radius: 50%; background: rgba(255,255,255,.85); color: #181818; transition: background 160ms var(--ease-out); }
-.hero-carousel-arrow:hover { background: #fff; }
-.hero-carousel-arrow.prev { left: 16px; }
-.hero-carousel-arrow.next { right: 16px; }
-.hero-carousel-badge { position: absolute; right: 16px; bottom: 16px; z-index: 2; padding: 5px 10px; border-radius: 999px; background: rgba(0,0,0,.5); color: #fff; font-size: 11px; font-weight: 600; }
-.hero-carousel-dots { position: absolute; left: 32px; bottom: 18px; z-index: 2; display: flex; gap: 6px; }
-.hero-carousel-dots .dot { width: 6px; height: 6px; border-radius: 50%; border: 0; background: rgba(255,255,255,.45); transition: background 160ms var(--ease-out), width 160ms var(--ease-out); }
-.hero-carousel-dots .dot.active { width: 18px; border-radius: 4px; background: #fff; }
+.hero-carousel-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; background: linear-gradient(0deg, rgba(10,10,10,.72) 0%, rgba(10,10,10,0) 55%); }
+.hero-carousel-kicker { margin: 0 0 8px; color: rgba(255,255,255,.85); font-size: 13px; font-weight: 500; }
+.hero-carousel-headline { margin: 0; max-width: 88%; color: #fff; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 25px; font-weight: 700; letter-spacing: -.02em; line-height: 1.3; }
+.hero-carousel-controls { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 18px; }
+.hero-carousel-arrow { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 50%; background: var(--card); color: var(--foreground); transition: background 160ms var(--ease-out); }
+.hero-carousel-arrow:hover { background: var(--secondary); }
+.hero-carousel-dots { display: flex; align-items: center; gap: 6px; }
+.hero-carousel-dots .dot { width: 6px; height: 6px; border-radius: 50%; border: 0; background: var(--border); transition: background 160ms var(--ease-out), width 160ms var(--ease-out); }
+.hero-carousel-dots .dot.active { width: 18px; border-radius: 4px; background: var(--foreground); }
 /* 히어로 바로 아래 — 분야별 바로가기 아이콘 행(motemote.kr 숏컷 UX 참고) */
 .category-shortcuts { padding: 22px 0; border-bottom: 1px solid var(--border); }
 .category-shortcuts-row { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -531,11 +527,12 @@
   .hero-quickbar-actions .fee-fields input { width: 100%; }
   .hero-quickbar-actions .fee-fields { flex-wrap: wrap; }
   .desktop-only { display: none; }
-  .hero-visual { height: 300px; }
+  .hero-carousel-track { padding: 0 18px; }
+  .hero-carousel-slide { height: 320px; }
   .hero-carousel-overlay { padding: 18px; }
-  .hero-carousel-label { font-size: 19px; }
-  .hero-carousel-blurb { font-size: 12px; }
-  .hero-carousel-arrow { width: 30px; height: 30px; margin-top: -15px; }
+  .hero-carousel-headline { font-size: 19px; }
+  .hero-carousel-kicker { font-size: 12px; }
+  .hero-carousel-arrow { width: 30px; height: 30px; }
   .category-shortcuts-row { gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
   .category-shortcuts-row::-webkit-scrollbar { display: none; }
   .category-shortcut { flex: 0 0 auto; width: 78px; padding: 10px 4px; }

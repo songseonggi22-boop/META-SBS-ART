@@ -278,63 +278,82 @@ function QuickBrowse() {
 // 히어로 우측 비주얼 — 추상 3D 도형 → 실제 분야별 사진 슬라이드 배너(2026-10-27, motemote.kr 메인 배너의
 // 자동 슬라이드·인덱스 배지 UX 참고). 이미지·카피는 전부 우리 데이터(category-hero 실사진 + 랜딩 첫 포인트
 // 문구), 가짜 할인·품절임박 같은 조작적 문구는 쓰지 않는다. 7개 분야 전부를 순환.
+// 카드 여러 장이 동시에 보이고 가장자리는 다음/이전 카드가 살짝 비치는 "피크" 캐러셀(2026-10-27,
+// 모트모트 메인 배너 레이아웃 참고 — 사진·캐릭터는 가져오지 않고 레이아웃 메커니즘만). 가로 스크롤은
+// 이 사이트에 이미 있는 QuickBrowse의 풀블리드 스크롤 트랙과 같은 방식(네이티브 overflow-x + 스냅)을
+// 재사용해 터치 스와이프가 공짜로 따라온다. 이미지·카피는 전부 우리 데이터(7개 분야 실사진 + 랜딩 포인트).
 function HeroCarousel() {
-  const slides = menus.map((m) => ({
-    menu: m,
-    href: (() => { const t = landingsByMenu(m.key)[0]; return t ? `/daejeon/${t.slug}` : "/courses"; })(),
-    blurb: landingsByMenu(m.key)[0]?.points[0] ?? m.label,
-  }));
+  const slides = menus.map((m) => {
+    const landing = landingsByMenu(m.key)[0];
+    return {
+      key: m.key,
+      href: landing ? `/daejeon/${landing.slug}` : "/courses",
+      image: m.heroImage,
+      kicker: m.label,
+      headline: landing?.points[0] ?? m.label,
+    };
+  });
+  const total = slides.length;
+  const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const pausedRef = useRef(false);
-  const total = slides.length;
-  const go = (dir: 1 | -1) => setIndex((i) => (i + dir + total) % total);
+
+  const scrollToIndex = (i: number) => {
+    const track = trackRef.current;
+    const card = track?.children[i] as HTMLElement | undefined;
+    if (track && card) track.scrollTo({ left: card.offsetLeft - track.offsetLeft, behavior: "smooth" });
+  };
+
+  useEffect(() => { scrollToIndex(index); }, [index]);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const timer = setInterval(() => { if (!pausedRef.current) setIndex((i) => (i + 1) % total); }, 4500);
+    const timer = setInterval(() => { if (!pausedRef.current) setIndex((i) => (i + 1) % total); }, 4000);
     return () => clearInterval(timer);
   }, [total]);
 
-  // 드래그/스와이프로도 넘길 수 있게 — 포인터 다운~업 사이 가로 이동량이 임계치를 넘으면 한 칸 이동.
-  const dragStartX = useRef<number | null>(null);
-  const onPointerDown = (e: React.PointerEvent) => { dragStartX.current = e.clientX; pausedRef.current = true; };
-  const onPointerUp = (e: React.PointerEvent) => {
-    if (dragStartX.current === null) return;
-    const delta = e.clientX - dragStartX.current;
-    if (Math.abs(delta) > 40) go(delta > 0 ? -1 : 1);
-    dragStartX.current = null;
-    pausedRef.current = false;
+  // 사용자가 직접 스와이프/드래그로 스크롤해도 점 표시가 따라가도록 현재 위치에 가장 가까운 카드를 추적.
+  const onScroll = () => {
+    const track = trackRef.current;
+    if (!track) return;
+    let closest = 0;
+    let min = Infinity;
+    Array.from(track.children).forEach((child, i) => {
+      const d = Math.abs((child as HTMLElement).offsetLeft - track.offsetLeft - track.scrollLeft);
+      if (d < min) { min = d; closest = i; }
+    });
+    setIndex(closest);
   };
 
   return (
-    <div
-      className="hero-visual hero-carousel"
+    <section
+      className="hero-carousel-section"
       aria-label="분야별 과정 배너"
       onPointerEnter={() => (pausedRef.current = true)}
       onPointerLeave={() => (pausedRef.current = false)}
-      onPointerDown={onPointerDown}
-      onPointerUp={onPointerUp}
+      onTouchStart={() => (pausedRef.current = true)}
     >
-      <div className="hero-carousel-track" style={{ transform: `translateX(-${index * 100}%)` }}>
-        {slides.map(({ menu: m, href, blurb }) => (
-          <Link key={m.key} href={href} className="hero-carousel-slide" draggable={false}>
-            <img src={m.heroImage} alt="" loading="eager" fetchPriority="high" draggable={false} />
+      <div className="hero-carousel-track" ref={trackRef} onScroll={onScroll}>
+        {slides.map((s, i) => (
+          <Link key={s.key} href={s.href} className="hero-carousel-slide">
+            <img src={s.image} alt="" loading={i === 0 ? "eager" : "lazy"} fetchPriority={i === 0 ? "high" : "auto"} />
             <div className="hero-carousel-overlay">
-              <p className="hero-carousel-blurb">{blurb}</p>
-              <p className="hero-carousel-label">{m.label}</p>
+              <p className="hero-carousel-kicker">{s.kicker}</p>
+              <p className="hero-carousel-headline">{s.headline}</p>
             </div>
           </Link>
         ))}
       </div>
-      <button type="button" className="hero-carousel-arrow prev" aria-label="이전 분야" onClick={() => go(-1)}><ArrowLeft size={16} /></button>
-      <button type="button" className="hero-carousel-arrow next" aria-label="다음 분야" onClick={() => go(1)}><ArrowRight size={16} /></button>
-      <div className="hero-carousel-badge">{index + 1} / {total}</div>
-      <div className="hero-carousel-dots">
-        {slides.map((s, i) => (
-          <button key={s.menu.key} type="button" className={i === index ? "dot active" : "dot"} aria-label={`${s.menu.label} 배너로 이동`} onClick={() => setIndex(i)} />
-        ))}
+      <div className="container hero-carousel-controls">
+        <button type="button" className="hero-carousel-arrow" aria-label="이전 분야" onClick={() => setIndex((i) => (i - 1 + total) % total)}><ArrowLeft size={16} /></button>
+        <div className="hero-carousel-dots">
+          {slides.map((s, i) => (
+            <button key={s.key} type="button" className={i === index ? "dot active" : "dot"} aria-label={`${s.kicker} 배너로 이동`} onClick={() => setIndex(i)} />
+          ))}
+        </div>
+        <button type="button" className="hero-carousel-arrow" aria-label="다음 분야" onClick={() => setIndex((i) => (i + 1) % total)}><ArrowRight size={16} /></button>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -476,11 +495,7 @@ export default function Home() {
   const scrollCourses = (dir: 1 | -1) => courseGridRef.current?.scrollBy({ left: dir * 280, behavior: "smooth" });
   return (
     <div>
-      <section className="hero-section">
-        <div className="container">
-          <HeroCarousel />
-        </div>
-      </section>
+      <HeroCarousel />
 
       <section className="hero-quickbar">
         <div className="container hero-quickbar-inner">
