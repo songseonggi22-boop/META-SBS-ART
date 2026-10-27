@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, Moon, Sun, X } from "lucide-react";
 import { getLanding, landingsByMenu, menus } from "@/lib/landings";
 import { footerNav, topNav } from "@/lib/nav";
+import HeaderSearch from "./HeaderSearch";
 
 // 전국 지점 — 같은 사업자(SBS아카데미AIX학원) 공식 사이트(daejeoncom.kr, 2026-10-13 사용자 제공) 푸터의
 // 지점별 실제 사이트로 연결. 우리 학원(대전)은 daejeon.sbsart.com에 해당.
@@ -121,6 +122,8 @@ export default function SiteShell({ children }: { children: ReactNode }) {
               </Link>
             ))}
           </nav>
+
+          <HeaderSearch />
 
           <div className="header-actions">
             <button type="button" className="button button-primary header-cta" onClick={() => openConsult({ sourcePage: "header" })}>

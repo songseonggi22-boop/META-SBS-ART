@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ArrowDownRight,
   ArrowLeft,
@@ -23,7 +23,8 @@ import { useConsultModal } from "@/components/ConsultModalContext";
 import QuickFeeForm from "@/components/QuickFeeForm";
 import PortfolioShowcase from "@/components/PortfolioShowcase";
 import { portfolioItems } from "@/lib/portfolio";
-import { coursesByTrack, getCourse, trackLabels } from "@/lib/courses";
+import { courses as allCourses, coursesByTrack, getCourse, trackLabels } from "@/lib/courses";
+import type { CourseInterest } from "@/components/ConsultModalContext";
 import { courseHref, landingsByMenu, menus } from "@/lib/landings";
 import { toolLogos } from "@/lib/toolLogos";
 
@@ -327,6 +328,60 @@ function CategoryShortcuts() {
   );
 }
 
+// 전체 교육과정 목록 — motemote.kr의 탭+번호 리스트 UI를 참고(2026-10-27)했지만, 실제 판매·조회 데이터가
+// 없으므로 "랭킹"이 아니라 정직하게 "전체 과정 목록"으로 쓴다. 실제 lib/courses.ts 32개 과정 전부,
+// 트랙 탭으로 필터링.
+const directoryTracks: { key: CourseInterest | "all"; label: string }[] = [
+  { key: "all", label: "전체" },
+  { key: "graphic", label: trackLabels.graphic },
+  { key: "motion", label: trackLabels.motion },
+  { key: "cg", label: trackLabels.cg },
+  { key: "interior", label: trackLabels.interior },
+  { key: "ai", label: trackLabels.ai },
+  { key: "drawing", label: trackLabels.drawing },
+  { key: "cert", label: trackLabels.cert },
+  { key: "it", label: trackLabels.it },
+];
+
+function CourseDirectory() {
+  const [tab, setTab] = useState<CourseInterest | "all">("all");
+  const list = tab === "all" ? allCourses : allCourses.filter((c) => c.track === tab);
+  return (
+    <section className="course-directory section-pad-small" aria-label="전체 교육과정 목록">
+      <div className="container">
+        <div className="section-kicker"><span>06</span><span>ALL COURSES</span></div>
+        <h2>전체 교육과정<br /><em>한눈에 보기.</em></h2>
+        <div className="directory-tabs" role="tablist" aria-label="분야 필터">
+          {directoryTracks.map((t) => (
+            <button
+              key={t.key}
+              type="button"
+              role="tab"
+              aria-selected={tab === t.key}
+              className={tab === t.key ? "directory-tab active" : "directory-tab"}
+              onClick={() => setTab(t.key)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <ol className="directory-list">
+          {list.map((c, i) => (
+            <li key={c.slug}>
+              <Link href={courseHref(c.slug)} className="directory-row">
+                <span className="directory-index">{(i + 1).toString().padStart(2, "0")}</span>
+                <span className="directory-title">{c.title}</span>
+                <span className="directory-meta">{c.period} · {c.tools}</span>
+                <ArrowUpRight size={15} />
+              </Link>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
 function CourseCard({ course }: { course: (typeof courses)[number] }) {
   const { open } = useConsultModal();
   const Icon = course.icon;
@@ -508,6 +563,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <CourseDirectory />
 
       <section className="cta-section">
         <div className="container cta-inner">
