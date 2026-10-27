@@ -130,7 +130,11 @@
 .hero-section { padding: 32px 0 0; }
 .eyebrow, .section-kicker, .visual-topline, .method-card-header, .resource-meta, .price-label, .footer-label, .aside-index { display: flex; align-items: center; gap: 10px; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .16em; }
 .eyebrow-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent); }
-.inner-hero h1, .cta-inner h2, .method-copy h2, .resource-preview h2, .section-heading-row h2 { margin: 26px 0 22px; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(60px, 7vw, 106px); line-height: .88; letter-spacing: -.075em; font-weight: 700; }
+.inner-hero h1 { margin: 26px 0 22px; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(60px, 7vw, 106px); line-height: .88; letter-spacing: -.075em; font-weight: 700; }
+/* 2026-10-27 — 헤더/히어로 위쪽은 괜찮다는 피드백이라 inner-hero h1(다른 페이지 상단 타이틀)은 그대로
+   두고, 홈 아래쪽 섹션 제목만 모트모트 수준(QuickBrowse h2와 같은 체계)으로 축소한다. */
+.cta-inner h2, .method-copy h2, .resource-preview h2, .section-heading-row h2 { margin: 14px 0 0; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.16; letter-spacing: -.03em; font-weight: 700; }
+.cta-inner h2 { font-size: clamp(34px, 4.6vw, 58px); }
 .inner-hero h1 em, .cta-inner h2 em, .method-copy h2 em, .resource-preview h2 em, .section-heading-row h2 em { color: #8875f5; font-style: normal; }
 .hero-description { max-width: 450px; margin: 0; color: var(--muted-foreground); font-size: 17px; line-height: 1.75; }
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 45px; padding: 0 20px; border: 1px solid transparent; border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: -.02em; transition: transform 160ms var(--ease-out), background 180ms var(--ease-out), color 180ms var(--ease-out), border-color 180ms var(--ease-out); }
@@ -206,13 +210,13 @@
 .ticker-track { display: inline-flex; align-items: center; min-width: max-content; gap: 28px; padding: 15px 0; font: 600 10px "Pretendard Variable", "Pretendard", sans-serif; letter-spacing: .18em; animation: ticker 30s linear infinite; }
 .ticker b { margin-left: 28px; color: #8875f5; font-size: 15px; }
 @keyframes ticker { to { transform: translateX(-50%); } }
-.section-pad { padding: 140px 0; }
-.section-pad-small { padding: 60px 0 130px; }
+.section-pad { padding: 100px 0; }
+.section-pad-small { padding: 56px 0 100px; }
 .intro-grid, .about-grid { display: grid; grid-template-columns: 20% 1fr; gap: 40px; }
 .section-kicker { color: var(--muted-foreground); }
 .section-kicker span:first-child { color: #8875f5; }
 .intro-content { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr); gap: 72px; }
-.section-lede { margin: 0; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(36px, 4.8vw, 72px); line-height: .98; letter-spacing: -.075em; font-weight: 600; }
+.section-lede { margin: 0; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(28px, 3.6vw, 46px); line-height: 1.22; letter-spacing: -.04em; font-weight: 600; }
 .section-lede span { color: #8875f5; }
 .intro-support { padding-top: 10px; }
 .intro-support p, .method-copy > p, .long-copy { margin: 0; color: var(--muted-foreground); font-size: 16px; line-height: 1.85; }
@@ -220,12 +224,16 @@
 .intro-tags span, .check-list span { display: flex; align-items: center; gap: 8px; }
 .intro-tags svg, .check-list svg { color: #8875f5; }
 .courses-section { background: var(--secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.section-heading-row { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 54px; }
-.section-heading-row h2 { margin-bottom: 0; font-size: clamp(48px, 6vw, 82px); }
+.section-heading-row { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 40px; }
+.section-heading-row h2 { margin-bottom: 0; }
 .heading-aside { margin: 0 0 8px; color: var(--muted-foreground); font-size: 14px; line-height: 1.7; text-align: right; }
-.courses-section-arrows { display: none; gap: 8px; flex: none; }
-.course-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.course-card { position: relative; min-height: 340px; display: flex; flex-direction: column; padding: 23px 20px 20px; background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out); }
+/* 2026-10-27 — 과정 카드 묶음을 모트모트 상품 캐러셀처럼 가로 스크롤 + 화살표 네비게이션으로 전환
+   (이전엔 데스크톱은 4열 그리드, 1050px 이하에서만 가로 스크롤로 바뀌었다). PC에서도 화살표 상시 노출. */
+.courses-section-arrows { display: flex; gap: 8px; flex: none; }
+.course-grid { display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 4px; scrollbar-width: none; }
+.course-grid::-webkit-scrollbar { display: none; }
+.course-card { flex: 0 0 auto; width: min(290px, 80vw); position: relative; min-height: 340px; display: flex; flex-direction: column; padding: 23px 20px 20px; background: var(--card); border: 1px solid var(--border); overflow: hidden; scroll-snap-align: start; transition: transform 220ms var(--ease-out), box-shadow 220ms var(--ease-out); }
+.course-card:nth-child(4), .course-card:nth-child(5) { min-height: 280px; }
 .course-card:hover { transform: translateY(-8px); box-shadow: 12px 14px 0 rgba(24,24,21,.1); }
 .course-card::after { content: ""; position: absolute; right: -30px; bottom: -50px; width: 120px; height: 120px; border-radius: 50%; background: var(--card-accent); opacity: .55; filter: blur(1px); }
 .course-card-topline { display: flex; align-items: start; justify-content: space-between; color: var(--muted-foreground); font: 600 10px "Pretendard Variable", "Pretendard", sans-serif; letter-spacing: .1em; }
@@ -246,7 +254,7 @@
 .accent-cyan { --card-accent: #63e5f2; }
 .accent-orange { --card-accent: #ffae69; }
 .accent-pink { --card-accent: #f487d3; }
-.method-section { background: var(--card); }
+.method-section { background: var(--secondary); }
 .method-grid { display: grid; grid-template-columns: minmax(360px, .9fr) minmax(0, 1.1fr); gap: 100px; align-items: center; }
 .method-card { min-height: 460px; padding: 24px; position: relative; overflow: hidden; }
 .method-card-dark { background: #181815; color: #f7f4ef; }
@@ -256,23 +264,26 @@
 .method-card > p { position: absolute; z-index: 2; bottom: 25px; left: 25px; margin: 0; font-size: 14px; line-height: 1.7; }
 .method-card > p strong { color: #c8ff39; }
 .method-copy { max-width: 620px; }
-.method-copy h2 { margin-top: 25px; font-size: clamp(48px, 5.8vw, 80px); }
 .method-copy > p { max-width: 520px; margin-top: 24px; }
 .arrow-link { display: inline-flex; align-items: center; gap: 9px; margin-top: 28px; padding-bottom: 7px; border-bottom: 1px solid var(--foreground); font-size: 13px; font-weight: 700; transition: gap 180ms var(--ease-out), color 180ms var(--ease-out); }
 .arrow-link:hover { gap: 15px; color: #8875f5; }
-.resource-preview { background: #d7cfff; color: #181815; }
+/* 2026-10-27 — 진한 보라 배경 통 블록 대신 다른 섹션들과 같은 흰 배경 + 중립 톤으로(색 블록은 과했다는
+   피드백). 자료실 리스트 자체(순위 리스트형 행 UX)는 motemote 패턴과 이미 맞으니 구조는 유지. */
+.resource-preview { background: var(--background); color: var(--foreground); }
 .resource-preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 90px; }
-.resource-preview h2 { margin-top: 25px; font-size: clamp(48px, 5.8vw, 82px); }
-.resource-teaser-list { border-top: 1px solid rgba(24,24,21,.4); }
-.resource-teaser { display: grid; grid-template-columns: 120px 1fr auto; align-items: center; gap: 14px; padding: 23px 0; border-bottom: 1px solid rgba(24,24,21,.4); transition: padding 180ms var(--ease-out), background 180ms var(--ease-out); }
-.resource-teaser:hover { padding-left: 10px; padding-right: 10px; background: rgba(255,255,255,.22); }
+.resource-teaser-list { border-top: 1px solid var(--border); }
+.resource-teaser { display: grid; grid-template-columns: 120px 1fr auto; align-items: center; gap: 14px; padding: 23px 0; border-bottom: 1px solid var(--border); transition: padding 180ms var(--ease-out), background 180ms var(--ease-out); }
+.resource-teaser:hover { padding-left: 10px; padding-right: 10px; background: var(--secondary); }
 .resource-teaser span { font: 600 10px "Pretendard Variable", "Pretendard", sans-serif; letter-spacing: .1em; }
 .resource-teaser strong { font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 16px; line-height: 1.3; letter-spacing: -.05em; }
 .resource-teaser svg { transition: transform 180ms var(--ease-out); }
 .resource-teaser:hover svg { transform: rotate(45deg); }
 .resource-more { display: inline-flex; align-items: center; gap: 8px; margin-top: 26px; font-size: 13px; font-weight: 700; }
 /* 전체 교육과정 목록 — motemote.kr의 탭+번호 리스트 UI 참고, 실제 32개 과정 전부(2026-10-27) */
-.course-directory h2 { margin: 18px 0 28px; font-size: clamp(36px, 4.2vw, 56px); }
+.course-directory { background: var(--secondary); }
+.course-directory h2 { margin: 18px 0 28px; }
+/* 섹션 배경이 회색이라 기본 hover(연한 회색) 그대로면 안 보여 카드색으로 바꿔준다 */
+.course-directory .directory-row:hover, .course-directory .directory-tab:hover:not(.active) { background: var(--card); }
 /* 참고 사이트(모트모트)의 "실시간 주간 랭킹" 탭 칩 UI 참고(2026-10-27) — 가로 스크롤 알약 탭으로 정리.
    실제 데이터·상품 사진은 가져오지 않고 탭 상호작용 패턴만 반영. */
 .directory-tabs { display: flex; flex-wrap: nowrap; gap: 8px; margin-bottom: 28px; overflow-x: auto; scrollbar-width: none; }
@@ -286,10 +297,10 @@
 .directory-index { font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 12px; font-weight: 700; color: var(--muted-foreground); }
 .directory-title { font-size: 14px; font-weight: 600; letter-spacing: -.02em; }
 .directory-meta { color: var(--muted-foreground); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
-.cta-section { background: #181815; color: #f7f4ef; padding: 132px 0 120px; }
+.cta-section { background: #181815; color: #f7f4ef; padding: 108px 0 96px; }
 .cta-inner { position: relative; }
 .cta-label { display: flex; align-items: center; gap: 9px; color: #c8ff39; font: 600 10px "Pretendard Variable", "Pretendard", sans-serif; letter-spacing: .17em; }
-.cta-inner h2 { margin-top: 28px; color: #f7f4ef; font-size: clamp(60px, 8.6vw, 122px); }
+.cta-inner h2 { margin-top: 20px; color: #f7f4ef; }
 .cta-inner h2 em { color: #c8ff39; }
 .cta-bottom { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-top: 50px; }
 .cta-bottom p { margin: 0; color: #aaa79e; line-height: 1.75; }
@@ -417,12 +428,19 @@
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 /* ── 과정별 실제 결과물 (sbsart.com 공식 포트폴리오 연동) ── */
-.portfolio-group { margin-top: 54px; }
-.portfolio-group:first-of-type { margin-top: 40px; }
-.portfolio-group-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px; }
+.portfolio-group { margin-top: 48px; }
+.portfolio-group:first-of-type { margin-top: 36px; }
+.portfolio-group-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.portfolio-group-head-text { display: flex; align-items: baseline; gap: 12px; }
 .portfolio-group-head h3 { margin: 0; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 20px; letter-spacing: -.05em; }
 .portfolio-group-head span { color: var(--muted-foreground); font: 600 10px "Pretendard Variable", "Pretendard", sans-serif; letter-spacing: .06em; }
+.portfolio-group-arrows { display: flex; gap: 8px; flex: none; }
 .portfolio-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+/* 2026-10-27 — 과정별 결과물을 3열 고정 그리드 대신 motemote 상품 캐러셀처럼 가로 스크롤 카드 행으로
+   (PortfolioCard 자체는 Community·Careers·PortfolioDetail에서도 쓰므로 그대로 두고, 감싸는 트랙만 교체). */
+.portfolio-carousel-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 4px; scrollbar-width: none; }
+.portfolio-carousel-track::-webkit-scrollbar { display: none; }
+.portfolio-carousel-item { flex: 0 0 auto; width: 260px; scroll-snap-align: start; }
 /* 썸네일만 덩그러니 있으면 장식 이미지처럼 보여 클릭을 못 받는다 — 이미지 아래 항상 보이는
    카드 본문(과정 칩·제목·학생정보·"작품 보기" 문구)을 깔아 자료실·과정 카드와 같은 "눌러서
    들어가는 콘텐츠" 생김새로 통일한다. */
@@ -467,6 +485,7 @@
 
 @media (max-width: 760px) {
   .portfolio-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .portfolio-carousel-item { width: min(72vw, 240px); }
   .portfolio-group { margin-top: 40px; }
   .portfolio-card-body { padding: 11px 12px 13px; gap: 4px; }
   .portfolio-card-body strong { font-size: 13px; }
@@ -527,13 +546,8 @@
 
 @media (max-width: 1050px) {
   .container { padding-left: 24px; padding-right: 24px; }
-  /* 세로로 쌓지 않고 옆으로 넘기는 슬라이더로 전환 — 좁은 화면에서 설명·칩까지 꽉 찬 카드를 2단으로
-     욱여넣으면 글자가 9px까지 줄어 안 읽혔다. 카드 하나가 화면 폭 대부분을 쓰게 하고 스와이프로 넘긴다. */
-  .courses-section-arrows { display: flex; }
-  .course-grid { display: flex; grid-template-columns: none; overflow-x: auto; scroll-snap-type: x proximity; gap: 14px; padding-bottom: 4px; scrollbar-width: none; }
-  .course-grid::-webkit-scrollbar { display: none; }
-  .course-card { flex: 0 0 auto; width: min(78vw, 360px); scroll-snap-align: start; }
-  .course-card:nth-child(4), .course-card:nth-child(5) { min-height: 280px; }
+  /* 좁은 화면에서는 카드 하나가 화면 폭 대부분을 쓰게 — 가로 스크롤 자체는 이제 기본값(위 .course-grid) */
+  .course-card { width: min(78vw, 360px); }
   .intro-content { gap: 40px; }
   .method-grid { gap: 55px; }
 }
@@ -573,15 +587,14 @@
   .tool-grid::-webkit-scrollbar { display: none; }
   .tool-grid-item { flex: 0 0 auto; }
   .ticker-track { padding: 12px 0; }
-  .section-pad { padding: 88px 0; }
-  .section-pad-small { padding: 42px 0 88px; }
+  .section-pad { padding: 72px 0; }
+  .section-pad-small { padding: 40px 0 76px; }
   .intro-grid, .about-grid, .resource-preview-grid { grid-template-columns: 1fr; gap: 28px; }
   .directory-list { grid-template-columns: 1fr; }
   .directory-meta { display: none; }
   .intro-content { grid-template-columns: 1fr; gap: 33px; }
-  .section-lede { font-size: clamp(40px, 11vw, 58px); }
-  .section-heading-row { align-items: start; flex-direction: column; gap: 22px; margin-bottom: 34px; }
-  .section-heading-row h2, .resource-preview h2, .method-copy h2 { font-size: clamp(48px, 13vw, 70px); }
+  .section-lede { font-size: clamp(26px, 8.5vw, 36px); }
+  .section-heading-row { align-items: start; flex-direction: column; gap: 22px; margin-bottom: 30px; }
   .heading-aside { margin: 0; text-align: left; }
   .course-card, .course-card:nth-child(4), .course-card:nth-child(5) { min-height: 285px; padding: 18px 15px 17px; width: 82vw; }
   .method-grid { grid-template-columns: 1fr; gap: 45px; }
@@ -590,8 +603,7 @@
   .resource-teaser { grid-template-columns: 84px 1fr auto; gap: 10px; padding: 19px 0; }
   .resource-teaser span { font-size: 8px; }
   .resource-teaser strong { font-size: 14px; }
-  .cta-section { padding: 90px 0 78px; }
-  .cta-inner h2 { font-size: clamp(57px, 16vw, 82px); }
+  .cta-section { padding: 72px 0 60px; }
   .cta-bottom { align-items: start; flex-direction: column; margin-top: 38px; }
   .footer-grid { grid-template-columns: 1.5fr 1fr 1fr; gap: 28px 18px; padding-top: 50px; padding-bottom: 50px; }
   .footer-brand { grid-column: 1 / -1; }
