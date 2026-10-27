@@ -276,24 +276,65 @@ function QuickBrowse() {
   );
 }
 
-// 히어로 우측 비주얼 — 전에는 추상적인 3D 도형·그라디언트였으나, "이게 무슨 사이트인지 한눈에 안 보인다"는
-// 피드백(2026-10-27, motemote.kr 참고)으로 실제 분야별 사진 4장(이미 쓰고 있는 category-hero 실사진)을
-// 바로 누를 수 있는 콜라주로 교체. 가짜 통계·추상 그래픽 대신 실제 분야·실제 사진·실제 링크만 쓴다.
-const heroShowcaseMenus = ["visual", "motion", "cg", "interior"] as const;
+// 히어로 우측 비주얼 — 추상 3D 도형 → 실제 분야별 사진 슬라이드 배너(2026-10-27, motemote.kr 메인 배너의
+// 자동 슬라이드·인덱스 배지 UX 참고). 이미지·카피는 전부 우리 데이터(category-hero 실사진 + 랜딩 첫 포인트
+// 문구), 가짜 할인·품절임박 같은 조작적 문구는 쓰지 않는다. 7개 분야 전부를 순환.
+function HeroCarousel() {
+  const slides = menus.map((m) => ({
+    menu: m,
+    href: (() => { const t = landingsByMenu(m.key)[0]; return t ? `/daejeon/${t.slug}` : "/courses"; })(),
+    blurb: landingsByMenu(m.key)[0]?.points[0] ?? m.label,
+  }));
+  const [index, setIndex] = useState(0);
+  const pausedRef = useRef(false);
+  const total = slides.length;
+  const go = (dir: 1 | -1) => setIndex((i) => (i + dir + total) % total);
 
-function HeroShowcase() {
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = setInterval(() => { if (!pausedRef.current) setIndex((i) => (i + 1) % total); }, 4500);
+    return () => clearInterval(timer);
+  }, [total]);
+
+  // 드래그/스와이프로도 넘길 수 있게 — 포인터 다운~업 사이 가로 이동량이 임계치를 넘으면 한 칸 이동.
+  const dragStartX = useRef<number | null>(null);
+  const onPointerDown = (e: React.PointerEvent) => { dragStartX.current = e.clientX; pausedRef.current = true; };
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (dragStartX.current === null) return;
+    const delta = e.clientX - dragStartX.current;
+    if (Math.abs(delta) > 40) go(delta > 0 ? -1 : 1);
+    dragStartX.current = null;
+    pausedRef.current = false;
+  };
+
   return (
-    <div className="hero-visual hero-showcase" aria-label="분야별 과정 바로가기">
-      {heroShowcaseMenus.map((key) => {
-        const m = menus.find((x) => x.key === key)!;
-        const target = landingsByMenu(m.key)[0];
-        return (
-          <Link key={m.key} href={target ? `/daejeon/${target.slug}` : "/courses"} className="showcase-tile">
-            <img src={m.heroImage} alt="" loading="eager" fetchPriority="high" />
-            <span className="showcase-tile-label">{m.label}</span>
+    <div
+      className="hero-visual hero-carousel"
+      aria-label="분야별 과정 배너"
+      onPointerEnter={() => (pausedRef.current = true)}
+      onPointerLeave={() => (pausedRef.current = false)}
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
+    >
+      <div className="hero-carousel-track" style={{ transform: `translateX(-${index * 100}%)` }}>
+        {slides.map(({ menu: m, href, blurb }) => (
+          <Link key={m.key} href={href} className="hero-carousel-slide" draggable={false}>
+            <img src={m.heroImage} alt="" loading="eager" fetchPriority="high" draggable={false} />
+            <div className="hero-carousel-overlay">
+              <p className="hero-carousel-blurb">{blurb}</p>
+              <p className="hero-carousel-label">{m.label}</p>
+            </div>
           </Link>
-        );
-      })}
+        ))}
+      </div>
+      <button type="button" className="hero-carousel-arrow prev" aria-label="이전 분야" onClick={() => go(-1)}><ArrowLeft size={16} /></button>
+      <button type="button" className="hero-carousel-arrow next" aria-label="다음 분야" onClick={() => go(1)}><ArrowRight size={16} /></button>
+      <div className="hero-carousel-badge">{index + 1} / {total}</div>
+      <div className="hero-carousel-dots">
+        {slides.map((s, i) => (
+          <button key={s.menu.key} type="button" className={i === index ? "dot active" : "dot"} aria-label={`${s.menu.label} 배너로 이동`} onClick={() => setIndex(i)} />
+        ))}
+      </div>
     </div>
   );
 }
@@ -466,7 +507,7 @@ export default function Home() {
               <span>Welcome to the Future of Making</span>
             </div>
           </div>
-          <HeroShowcase />
+          <HeroCarousel />
         </div>
       </section>
 

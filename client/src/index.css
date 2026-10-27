@@ -153,12 +153,24 @@
 .hero-visual { position: relative; min-height: 568px; overflow: hidden; border: 1px solid var(--border); isolation: isolate; }
 /* 히어로 우측 — 추상 3D 도형 대신 실제 분야별 사진 2x2 콜라주(2026-10-27, motemote.kr 참고로 "무슨 사이트인지"
    즉시 드러나도록 교체). 각 타일이 그 분야 랜딩으로 바로 연결되는 실제 링크. */
-.hero-showcase { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 2px; background: var(--border); }
-.showcase-tile { position: relative; display: block; overflow: hidden; background: var(--secondary); }
-.showcase-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 320ms var(--ease-out); }
-.showcase-tile:hover img { transform: scale(1.06); }
-.showcase-tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(10,10,10,.68) 0%, rgba(10,10,10,0) 45%); }
-.showcase-tile-label { position: absolute; left: 16px; bottom: 14px; z-index: 1; color: #fff; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 15px; font-weight: 700; letter-spacing: -.02em; }
+/* 히어로 슬라이드 배너 — motemote.kr 메인 배너의 자동 슬라이드·인덱스 배지 UX 참고(2026-10-27),
+   이미지·카피는 전부 우리 실데이터. */
+.hero-carousel { padding: 0; touch-action: pan-y; cursor: grab; }
+.hero-carousel:active { cursor: grabbing; }
+.hero-carousel-track { display: flex; width: 100%; height: 100%; transition: transform 500ms var(--ease-out); }
+.hero-carousel-slide { position: relative; flex: 0 0 100%; width: 100%; height: 100%; display: block; overflow: hidden; }
+.hero-carousel-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero-carousel-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 32px; background: linear-gradient(0deg, rgba(10,10,10,.7) 0%, rgba(10,10,10,0) 50%); }
+.hero-carousel-blurb { margin: 0 0 6px; color: rgba(255,255,255,.88); font-size: 13px; font-weight: 500; }
+.hero-carousel-label { margin: 0; color: #fff; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -.03em; line-height: 1.2; }
+.hero-carousel-arrow { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 36px; height: 36px; margin-top: -18px; border: 0; border-radius: 50%; background: rgba(255,255,255,.85); color: #181818; transition: background 160ms var(--ease-out); }
+.hero-carousel-arrow:hover { background: #fff; }
+.hero-carousel-arrow.prev { left: 16px; }
+.hero-carousel-arrow.next { right: 16px; }
+.hero-carousel-badge { position: absolute; right: 16px; bottom: 16px; z-index: 2; padding: 5px 10px; border-radius: 999px; background: rgba(0,0,0,.5); color: #fff; font-size: 11px; font-weight: 600; }
+.hero-carousel-dots { position: absolute; left: 32px; bottom: 18px; z-index: 2; display: flex; gap: 6px; }
+.hero-carousel-dots .dot { width: 6px; height: 6px; border-radius: 50%; border: 0; background: rgba(255,255,255,.45); transition: background 160ms var(--ease-out), width 160ms var(--ease-out); }
+.hero-carousel-dots .dot.active { width: 18px; border-radius: 4px; background: #fff; }
 /* 히어로 바로 아래 — 분야별 바로가기 아이콘 행(motemote.kr 숏컷 UX 참고) */
 .category-shortcuts { padding: 22px 0; border-bottom: 1px solid var(--border); }
 .category-shortcuts-row { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -518,7 +530,10 @@
   .hero-note { left: 24px; bottom: 27px; font-size: 9px; }
   .desktop-only { display: none; }
   .hero-visual { min-height: 300px; }
-  .showcase-tile-label { font-size: 13px; left: 12px; bottom: 10px; }
+  .hero-carousel-overlay { padding: 18px; }
+  .hero-carousel-label { font-size: 19px; }
+  .hero-carousel-blurb { font-size: 12px; }
+  .hero-carousel-arrow { width: 30px; height: 30px; margin-top: -15px; }
   .category-shortcuts-row { gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
   .category-shortcuts-row::-webkit-scrollbar { display: none; }
   .category-shortcut { flex: 0 0 auto; width: 78px; padding: 10px 4px; }
