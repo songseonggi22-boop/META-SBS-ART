@@ -12,6 +12,7 @@ import {
   Landmark,
   Layers3,
   Move3d,
+  MousePointerClick,
   PenTool,
   Play,
   Sparkles,
@@ -413,6 +414,7 @@ function HeroCarousel() {
             onClick={() => setOpenKey(s.key)}
           >
             <img src={s.image} alt="" loading={i === 0 ? "eager" : "lazy"} fetchPriority={i === 0 ? "high" : "auto"} />
+            <span className="hero-carousel-cta"><MousePointerClick size={13} /> 배우는 툴 보기</span>
             <div className="hero-carousel-overlay">
               <p className="hero-carousel-kicker">{s.kicker}</p>
               <p className="hero-carousel-headline">{s.headline}</p>
@@ -420,6 +422,7 @@ function HeroCarousel() {
           </button>
         ))}
       </div>
+      <p className="hero-carousel-hint">카드를 눌러 분야별로 배우는 프로그램을 확인해보세요</p>
       <div className="container hero-carousel-controls">
         <button type="button" className="hero-carousel-arrow" aria-label="이전 분야" onClick={() => goTo((index - 1 + total) % total)}><ArrowLeft size={16} /></button>
         <div className="hero-carousel-dots">
