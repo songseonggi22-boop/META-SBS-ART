@@ -25,6 +25,7 @@ export const toolLogos: Record<string, string> = {
   autocad: "/tool-logos/autocad.png",
   오토캐드: "/tool-logos/autocad.png",
   sketchup: "/tool-logos/sketchup.png",
+  "sketchup pro": "/tool-logos/sketchup.png",
   스케치업: "/tool-logos/sketchup.png",
   "3ds max": "/tool-logos/3dsmax.png",
   "3dsmax": "/tool-logos/3dsmax.png",

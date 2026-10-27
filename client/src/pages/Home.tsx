@@ -16,6 +16,7 @@ import {
   Play,
   Sparkles,
   WandSparkles,
+  X,
 } from "lucide-react";
 import { Link } from "wouter";
 import { useConsultModal } from "@/components/ConsultModalContext";
@@ -24,7 +25,7 @@ import PortfolioShowcase from "@/components/PortfolioShowcase";
 import { portfolioItems } from "@/lib/portfolio";
 import { courses as allCourses, coursesByTrack, getCourse, trackLabels } from "@/lib/courses";
 import type { CourseInterest } from "@/components/ConsultModalContext";
-import { courseHref, landingsByMenu, menus } from "@/lib/landings";
+import { courseHref, landingsByMenu, menus, type MenuKey } from "@/lib/landings";
 import { splitTools, toolLogos } from "@/lib/toolLogos";
 
 // 각 과정 카드의 썸네일은 같은 사업자(SBS아카데미AIX학원) 공식 포트폴리오(sbsart.com, 2026-09-21 확인)의
@@ -297,6 +298,45 @@ function categoryTools(interest: CourseInterest) {
   return result;
 }
 
+// 분야 카드를 누르면 뜨는 "배우는 툴" 팝업 — 전에는 캐러셀이 지금 보여주고 있는 카드가 바뀔 때마다(자동
+// 재생·스와이프 포함) 하단 바가 계속 바뀌어 "내가 보고 싶은 과정이 아닌데도 계속 뜬다"는 불편함이
+// 있었다(2026-10-27 피드백). PC는 클릭, 모바일은 터치 — 둘 다 같은 onClick 이벤트라 별도 분기가 필요
+// 없다. 직접 누른 카드에 대해서만, 누른 순간에만 뜨고, 닫기 전까지 유지된다.
+function CategoryToolModal({ menuKey, onClose }: { menuKey: MenuKey; onClose: () => void }) {
+  const menu = menus.find((m) => m.key === menuKey)!;
+  const tools = categoryTools(menu.interest);
+  const landing = landingsByMenu(menu.key)[0];
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [onClose]);
+
+  return (
+    <div className="tool-modal-backdrop" onClick={onClose}>
+      <div className="tool-modal-panel" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label={`${menu.label}에서 배우는 툴`}>
+        <div className="tool-modal-head">
+          <span>{menu.label}에서 배우는 툴</span>
+          <button type="button" className="tool-modal-close" aria-label="닫기" onClick={onClose}><X size={18} /></button>
+        </div>
+        <div className="tool-modal-grid">
+          {tools.map((t) => (
+            <Link key={t.href} href={t.href} className="tool-modal-item" onClick={onClose}>
+              {t.logo ? <img src={t.logo} alt="" width={36} height={36} loading="lazy" /> : <span className="tool-modal-item-fallback">{t.label.slice(0, 2)}</span>}
+              <span>{t.label}</span>
+            </Link>
+          ))}
+        </div>
+        <Link href={landing ? `/daejeon/${landing.slug}` : `/courses?track=${menu.interest}`} className="button button-primary full-button" onClick={onClose}>
+          {menu.label} 전체과정 보기 <ArrowRight size={16} />
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 function HeroCarousel() {
   const slides = menus.map((m) => {
     const landing = landingsByMenu(m.key)[0];
@@ -311,6 +351,7 @@ function HeroCarousel() {
   const total = slides.length;
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
+  const [openKey, setOpenKey] = useState<MenuKey | null>(null);
   const pausedRef = useRef(false);
   // scrollTo(smooth)가 진행 중인 동안 중간 스크롤 위치마다 onScroll이 "가장 가까운 카드"를 다시 계산해
   // index를 되돌려 버리는 버그를 겪었다(점/화살표를 눌러도 항상 0번으로 복귀) — 프로그램이 직접 스크롤을
@@ -365,13 +406,18 @@ function HeroCarousel() {
     >
       <div className="hero-carousel-track" ref={trackRef} onScroll={onScroll}>
         {slides.map((s, i) => (
-          <Link key={s.key} href={s.href} className="hero-carousel-slide">
+          <button
+            key={s.key}
+            type="button"
+            className="hero-carousel-slide"
+            onClick={() => setOpenKey(s.key)}
+          >
             <img src={s.image} alt="" loading={i === 0 ? "eager" : "lazy"} fetchPriority={i === 0 ? "high" : "auto"} />
             <div className="hero-carousel-overlay">
               <p className="hero-carousel-kicker">{s.kicker}</p>
               <p className="hero-carousel-headline">{s.headline}</p>
             </div>
-          </Link>
+          </button>
         ))}
       </div>
       <div className="container hero-carousel-controls">
@@ -383,20 +429,7 @@ function HeroCarousel() {
         </div>
         <button type="button" className="hero-carousel-arrow" aria-label="다음 분야" onClick={() => goTo((index + 1) % total)}><ArrowRight size={16} /></button>
       </div>
-      <div className="container hero-carousel-tools">
-        <span className="hero-carousel-tools-label">{slides[index].kicker}에서 배우는 툴</span>
-        <div className="hero-carousel-tools-row">
-          {categoryTools(menus[index].interest).map((t) => (
-            <Link key={t.href} href={t.href} className="hero-carousel-tool-chip">
-              {t.logo && <img src={t.logo} alt="" width={24} height={24} loading="lazy" />}
-              <span>{t.label}</span>
-            </Link>
-          ))}
-          <Link href={`/courses?track=${menus[index].interest}`} className="hero-carousel-tool-chip hero-carousel-tool-all">
-            {slides[index].kicker} 전체과정 <ArrowRight size={13} />
-          </Link>
-        </div>
-      </div>
+      {openKey && <CategoryToolModal menuKey={openKey} onClose={() => setOpenKey(null)} />}
     </section>
   );
 }
