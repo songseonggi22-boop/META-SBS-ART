@@ -440,30 +440,44 @@ function HeroCarousel() {
 // 히어로 바로 아래 분야별 바로가기 아이콘 행 — motemote.kr의 아이콘 숏컷 UX를 참고해, 실제 7개 분야
 // 메뉴 + 국비지원·수강료 조회 페이지로 바로 연결. "실시간 랭킹"·할인 카운트다운처럼 실제 데이터가
 // 없는 항목은 만들지 않는다(가짜 수치·거짓 긴급성 금지 원칙).
-function CategoryShortcuts() {
+// 히어로 바로 아래 바로가기 — 원래는 실제 브랜드 로고(ToolGrid)가 한참 아래 "02 THE PROGRAM" 섹션에,
+// 분야 아이콘(CategoryShortcuts)은 따로 히어로 바로 밑에 떨어져 있었다. "사람들이 누를 수 있게"
+// 피드백(2026-10-27)으로 둘을 하나의 "바로가기" 섹션으로 합쳐 히어로 바로 아래 가장 눈에 띄는 자리로
+// 이동 — 알아보기 쉬운 실제 툴 로고를 먼저, 분야·국비지원·수강료조회는 보조 줄로. THE PROGRAM 섹션의
+// 중복 ToolGrid는 제거(아래 Home() 참고).
+function QuickAccess() {
   return (
-    <nav className="category-shortcuts" aria-label="분야별 바로가기">
-      <div className="container category-shortcuts-row">
-        {menus.map((m) => {
-          const Icon = trackIcon[m.interest];
-          const target = landingsByMenu(m.key)[0];
-          return (
-            <Link key={m.key} href={target ? `/daejeon/${target.slug}` : "/courses"} className="category-shortcut">
-              <span className="category-shortcut-icon"><Icon size={22} strokeWidth={1.5} /></span>
-              <span>{m.label}</span>
+    <section className="quick-access" aria-label="바로가기">
+      <div className="container">
+        <div className="quick-access-group">
+          <span className="quick-access-label">자주 찾는 프로그램 · 눌러서 바로 그 과정으로</span>
+          <ToolGrid />
+        </div>
+        <div className="quick-access-group">
+          <span className="quick-access-label">분야로 둘러보기</span>
+          <nav className="category-shortcuts-row" aria-label="분야별 바로가기">
+            {menus.map((m) => {
+              const Icon = trackIcon[m.interest];
+              const target = landingsByMenu(m.key)[0];
+              return (
+                <Link key={m.key} href={target ? `/daejeon/${target.slug}` : "/courses"} className="category-shortcut">
+                  <span className="category-shortcut-icon"><Icon size={22} strokeWidth={1.5} /></span>
+                  <span>{m.label}</span>
+                </Link>
+              );
+            })}
+            <Link href="/funding" className="category-shortcut">
+              <span className="category-shortcut-icon"><Landmark size={22} strokeWidth={1.5} /></span>
+              <span>국비지원</span>
             </Link>
-          );
-        })}
-        <Link href="/funding" className="category-shortcut">
-          <span className="category-shortcut-icon"><Landmark size={22} strokeWidth={1.5} /></span>
-          <span>국비지원</span>
-        </Link>
-        <Link href="/pricing" className="category-shortcut">
-          <span className="category-shortcut-icon"><Calculator size={22} strokeWidth={1.5} /></span>
-          <span>수강료 조회</span>
-        </Link>
+            <Link href="/pricing" className="category-shortcut">
+              <span className="category-shortcut-icon"><Calculator size={22} strokeWidth={1.5} /></span>
+              <span>수강료 조회</span>
+            </Link>
+          </nav>
+        </div>
       </div>
-    </nav>
+    </section>
   );
 }
 
@@ -592,7 +606,7 @@ export default function Home() {
         </div>
       </section>
 
-      <CategoryShortcuts />
+      <QuickAccess />
 
       <QuickBrowse />
 
@@ -635,10 +649,6 @@ export default function Home() {
               <button type="button" className="icon-button" aria-label="이전 트랙" onClick={() => scrollCourses(-1)}><ArrowLeft size={18} /></button>
               <button type="button" className="icon-button" aria-label="다음 트랙" onClick={() => scrollCourses(1)}><ArrowRight size={18} /></button>
             </div>
-          </div>
-          <div className="tool-grid-intro">
-            <span className="tool-grid-label">자주 찾는 프로그램 · 눌러서 바로 그 과정으로</span>
-            <ToolGrid />
           </div>
           <div className="course-grid" ref={courseGridRef}>
             {courses.map((course) => <CourseCard key={course.number} course={course} />)}
