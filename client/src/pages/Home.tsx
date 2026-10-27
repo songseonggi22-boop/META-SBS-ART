@@ -30,6 +30,7 @@ import { courses as allCourses, coursesByTrack, getCourse, trackLabels } from "@
 import type { CourseInterest } from "@/components/ConsultModalContext";
 import { courseHref, landingsByMenu, menus, type MenuKey } from "@/lib/landings";
 import { splitTools, toolLogos } from "@/lib/toolLogos";
+import { SITE } from "@/seo";
 
 // 각 과정 카드의 썸네일은 같은 사업자(SBS아카데미AIX학원) 공식 포트폴리오(sbsart.com, 2026-09-21 확인)의
 // 실제 수강생 결과물 1건씩(lib/portfolio.ts) — 눌러도 sbsart.com으로 나가지 않고 이 사이트 안의 `/portfolio/:id`
@@ -620,6 +621,10 @@ export default function Home() {
   const scrollCourses = (dir: 1 | -1) => courseGridRef.current?.scrollBy({ left: dir * 280, behavior: "smooth" });
   return (
     <div>
+      {/* 히어로가 분야별로 돌아가는 캐러셀이라 고정된 큰 타이틀을 둘 자리가 없다 — 모트모트 홈도 같은
+          이유로 sr-only h1을 쓴다(2026-10-27, H1 누락 지적으로 추가). 시각 디자인은 그대로 두고
+          검색엔진·스크린리더용 페이지 제목만 명확히 한다. */}
+      <h1 className="sr-only">{SITE.name} — 포토샵·일러스트·모션그래픽·CG·컴활·AI 활용 교육</h1>
       <HeroCarousel />
 
       <section className="hero-quickbar">
