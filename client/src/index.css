@@ -273,8 +273,11 @@
 .resource-more { display: inline-flex; align-items: center; gap: 8px; margin-top: 26px; font-size: 13px; font-weight: 700; }
 /* 전체 교육과정 목록 — motemote.kr의 탭+번호 리스트 UI 참고, 실제 32개 과정 전부(2026-10-27) */
 .course-directory h2 { margin: 18px 0 28px; font-size: clamp(36px, 4.2vw, 56px); }
-.directory-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
-.directory-tab { padding: 9px 16px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--muted-foreground); font-size: 12px; font-weight: 600; transition: background 160ms var(--ease-out), color 160ms var(--ease-out), border-color 160ms var(--ease-out); }
+/* 참고 사이트(모트모트)의 "실시간 주간 랭킹" 탭 칩 UI 참고(2026-10-27) — 가로 스크롤 알약 탭으로 정리.
+   실제 데이터·상품 사진은 가져오지 않고 탭 상호작용 패턴만 반영. */
+.directory-tabs { display: flex; flex-wrap: nowrap; gap: 8px; margin-bottom: 28px; overflow-x: auto; scrollbar-width: none; }
+.directory-tabs::-webkit-scrollbar { display: none; }
+.directory-tab { flex: 0 0 auto; padding: 9px 16px; border: 1px solid var(--border); border-radius: 999px; background: transparent; color: var(--muted-foreground); font-size: 12px; font-weight: 600; white-space: nowrap; transition: background 160ms var(--ease-out), color 160ms var(--ease-out), border-color 160ms var(--ease-out); }
 .directory-tab:hover { border-color: var(--foreground); color: var(--foreground); }
 .directory-tab.active { background: var(--foreground); border-color: var(--foreground); color: var(--background); }
 .directory-list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 36px; list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--border); }
