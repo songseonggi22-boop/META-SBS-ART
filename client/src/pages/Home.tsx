@@ -3,6 +3,7 @@ import {
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
+  Bot,
   Box,
   Calculator,
   Check,
@@ -16,6 +17,7 @@ import {
   PenTool,
   Play,
   Sparkles,
+  Video,
   WandSparkles,
   X,
 } from "lucide-react";
@@ -147,6 +149,31 @@ const toolLinks: { tool: string; course: string; label: string }[] = [
   { tool: "html5", course: "html-css", label: "HTML/CSS" },
   { tool: "n8n", course: "n8n-efficiency", label: "n8n" },
 ];
+
+// "이번년도 인기 툴" 요청(2026-10-27) — Claude·유튜브는 실제 과정(ai-agent, youtube-ai)이 있지만
+// 공식 로고는 둘 다 서면 승인이 있어야 쓸 수 있어서(Anthropic 상표 가이드라인, YouTube Brand Use
+// Request Form 확인) 로고 대신 범용 아이콘으로 표시한다. "인기"는 실제 신청·조회 데이터가 없어
+// 검증 불가능한 주장이라 "대표 프로그램"으로 정직하게 라벨링.
+const featuredTools: { label: string; course: string; logo?: string; icon?: typeof Bot }[] = [
+  { label: "포토샵", course: "photoshop", logo: toolLogos.photoshop },
+  { label: "일러스트레이터", course: "illustrator", logo: toolLogos.illustrator },
+  { label: "프리미어 프로", course: "premiere", logo: toolLogos.premiere },
+  { label: "Claude(클로드)", course: "ai-agent", icon: Bot },
+  { label: "유튜브 영상편집", course: "youtube-ai", icon: Video },
+];
+
+function FeaturedTools() {
+  return (
+    <div className="tool-grid">
+      {featuredTools.map((t) => (
+        <Link key={t.course} href={courseHref(t.course)} className="tool-grid-item">
+          {t.logo ? <img src={t.logo} alt="" loading="lazy" /> : t.icon && <span className="tool-grid-item-icon"><t.icon size={24} strokeWidth={1.5} /></span>}
+          <span>{t.label}</span>
+        </Link>
+      ))}
+    </div>
+  );
+}
 
 function ToolGrid() {
   return (
@@ -475,6 +502,10 @@ function QuickAccess() {
               <span>수강료 조회</span>
             </Link>
           </nav>
+        </div>
+        <div className="quick-access-group">
+          <span className="quick-access-label">대표 프로그램</span>
+          <FeaturedTools />
         </div>
       </div>
     </section>
