@@ -199,6 +199,18 @@ export default function SiteShell({ children }: { children: ReactNode }) {
       <main>{children}</main>
 
       <footer className="site-footer official-footer exact-footer">
+        {/* 히어로 바로 아래 있던 "분야로 둘러보기" 7개 분야 아이콘 행 — 히어로 캐러셀·교육과정 메가메뉴와
+            똑같은 내용이 겹쳐 무거워지기만 한다는 지적(2026-10-28)으로 제거. 분야별 랜딩 링크 자체는
+            없애지 않고, 다른 바로가기 링크들과 같은 자리인 푸터로 옮겼다. */}
+        <nav className="container footer-links footer-category-links" aria-label="분야별 바로가기">
+          <span className="footer-links-label">분야별 바로가기</span>
+          {menus.map((m) => {
+            const target = landingsByMenu(m.key)[0];
+            return (
+              <Link key={m.key} href={target ? `/daejeon/${target.slug}` : "/courses"}>{m.label}</Link>
+            );
+          })}
+        </nav>
         <nav className="container footer-links" aria-label="바로가기">
           {footerNav.map((item) => (
             <Link key={item.href} href={item.href}>{item.label}</Link>

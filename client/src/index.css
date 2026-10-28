@@ -197,15 +197,11 @@
 .tool-modal-item:hover { background: var(--secondary); border-color: var(--foreground); transform: translateY(-2px); }
 .tool-modal-item img { border-radius: 8px; }
 .tool-modal-item-fallback { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; background: var(--secondary); font-size: 11px; font-weight: 700; }
-/* 히어로 바로 아래 — 분야별 바로가기 아이콘 행(motemote.kr 숏컷 UX 참고) */
-/* 히어로 바로 아래 통합 바로가기 — 실제 툴 로고(ToolGrid)와 분야 아이콘을 한 섹션에 묶음(2026-10-27) */
+/* 히어로 바로 아래 통합 바로가기 — 실제 툴 로고(ToolGrid)+대표 프로그램(2026-10-27). 분야 아이콘 행은
+   히어로 캐러셀·교육과정 메가메뉴와 겹쳐 2026-10-28에 제거, 푸터로 이동(.footer-category-links). */
 .quick-access { padding: 26px 0; border-bottom: 1px solid var(--border); }
 .quick-access-group + .quick-access-group { margin-top: 22px; }
 .quick-access-label { display: block; margin-bottom: 14px; color: var(--muted-foreground); font: 600 11px "Pretendard Variable", "Pretendard", sans-serif; letter-spacing: .1em; }
-.category-shortcuts-row { display: flex; flex-wrap: wrap; gap: 10px; }
-.category-shortcut { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 92px; padding: 14px 6px; border: 1px solid transparent; border-radius: 14px; color: var(--foreground); text-align: center; font-size: 12px; font-weight: 600; transition: background 160ms var(--ease-out), border-color 160ms var(--ease-out), transform 160ms var(--ease-out); }
-.category-shortcut:hover { background: var(--secondary); border-color: var(--border); transform: translateY(-2px); }
-.category-shortcut-icon { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--secondary); color: var(--foreground); }
 .ticker { margin-top: 24px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); overflow: hidden; white-space: nowrap; }
 .ticker-track { display: inline-flex; align-items: center; min-width: max-content; gap: 28px; padding: 15px 0; font: 600 10px "Pretendard Variable", "Pretendard", sans-serif; letter-spacing: .18em; animation: ticker 30s linear infinite; }
 .ticker b { margin-left: 28px; color: #8875f5; font-size: 15px; }
@@ -580,9 +576,6 @@
   .tool-modal-panel { width: 100%; max-height: 75vh; border-radius: 20px 20px 0 0; animation: tool-modal-up 200ms var(--ease-out); }
   @keyframes tool-modal-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
   .tool-modal-grid { grid-template-columns: repeat(3, 1fr); }
-  .category-shortcuts-row { gap: 6px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
-  .category-shortcuts-row::-webkit-scrollbar { display: none; }
-  .category-shortcut { flex: 0 0 auto; width: 78px; padding: 10px 4px; }
   .tool-grid { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
   .tool-grid::-webkit-scrollbar { display: none; }
   .tool-grid-item { flex: 0 0 auto; }
@@ -779,6 +772,10 @@ button.mobile-nav-link.open svg { transform: rotate(180deg); }
 .mobile-sub-group-links { display: flex; flex-wrap: wrap; gap: 8px; }
 .footer-links { display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 28px 0 22px; border-bottom: 1px solid var(--border); font-size: 13px; }
 .footer-links a:hover { text-decoration: underline; }
+/* 2026-10-28 — 히어로 아래 있던 분야 바로가기를 옮겨온 자리. 아래 메인 바로가기 줄과 같은 톤이되
+   구분되게 라벨만 추가, 테두리는 메인 줄에만 남긴다. */
+.footer-category-links { padding: 24px 0 10px; border-bottom: 0; }
+.footer-links-label { margin-right: 2px; color: #888; font-size: 11px; font-weight: 600; letter-spacing: .06em; }
 @media (max-width: 1240px) {
   .desktop-nav, .mega-bar, .header-cta { display: none !important; }
   .mobile-menu-button { display: grid; }
