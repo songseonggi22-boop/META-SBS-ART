@@ -42,7 +42,7 @@ export default function PortfolioShowcase() {
       <div className="container">
         <div className="section-heading-row">
           <div>
-            <div className="section-kicker"><span>03</span><span>REAL RESULTS</span></div>
+            <div className="section-kicker"><span>07</span><span>REAL RESULTS</span></div>
             <h2>과정별<br /><em>실제 결과물.</em></h2>
           </div>
           <p className="heading-aside">
@@ -51,8 +51,10 @@ export default function PortfolioShowcase() {
           </p>
         </div>
 
-        {courseOrder.map((course, groupIndex) => (
-          <PortfolioGroup key={course} course={course} eager={groupIndex === 0} />
+        {/* 2026-11-01 — 포트폴리오 섹션을 홈 하단(전체과정 다음, 마지막 CTA 앞)으로 옮기면서 더 이상
+            "스크롤 없이 바로 보이는" 위치가 아니게 됐다 — 전부 지연 로딩으로. */}
+        {courseOrder.map((course) => (
+          <PortfolioGroup key={course} course={course} eager={false} />
         ))}
       </div>
     </section>

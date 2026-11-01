@@ -943,8 +943,6 @@ export default function Home() {
         </div>
       </section>
 
-      <PortfolioShowcase />
-
       <HotDealSection />
 
       <section className="resource-preview section-pad" id="resources">
@@ -963,6 +961,8 @@ export default function Home() {
       </section>
 
       <CourseDirectory />
+
+      <PortfolioShowcase />
 
       <section className="cta-section">
         <div className="container cta-inner">
