@@ -40,6 +40,18 @@ import {
   CTA_LABEL_CLOSED as HOTDEAL_CTA_CLOSED,
   hotDealItems,
 } from "@/data/hotdeal";
+import {
+  RANKING_UPDATED_AT,
+  courseRankingCategories,
+  certRankingCategories,
+  courseRanking,
+  certRanking,
+  type CourseRankingCategory,
+  type CertRankingCategory,
+  type CourseRankingItem,
+  type CertRankingItem,
+  type RankChange,
+} from "@/data/ranking";
 
 // 각 과정 카드의 썸네일은 같은 사업자(SBS아카데미AIX학원) 공식 포트폴리오(sbsart.com, 2026-09-21 확인)의
 // 실제 수강생 결과물 1건씩(lib/portfolio.ts) — 눌러도 sbsart.com으로 나가지 않고 이 사이트 안의 `/portfolio/:id`
@@ -712,6 +724,154 @@ function HotDealSection() {
   );
 }
 
+// "이번 주 랭킹" 섹션 — 참고 사이트(motemote.kr)의 "실시간 주간 랭킹" 구조(토글+카테고리 칩+2열 순위
+// 목록)만 참고해 우리 스타일로 새로 작성(2026-11-01). 이전 "01 WHY US" intro-section 자리를 그대로
+// 대체 — section-kicker 클래스 자체는 다른 섹션(02/03/06 등)에서 계속 쓰므로 CSS는 그대로 두되, 이
+// 섹션은 번호 배지를 쓰지 않는 디자인이라 마크업에서 쓰지 않는다. 데이터는 client/src/data/ranking.ts
+// 고정값 — 서버·API 연동 없음, 전부 화면 구성을 보여주기 위한 더미(예시) 데이터(제목 끝 "(예시)").
+function RankingThumb({ src }: { src: string }) {
+  const [broken, setBroken] = useState(false);
+  if (!src || broken) return <span className="ranking-row-thumb ranking-row-thumb-empty" aria-hidden="true" />;
+  return (
+    <span className="ranking-row-thumb">
+      <img src={src} alt="" loading="lazy" onError={() => setBroken(true)} />
+    </span>
+  );
+}
+
+function RankingChangeBadge({ change, value }: { change: RankChange; value?: number }) {
+  if (change === "new") return <span className="ranking-change ranking-change-new">NEW</span>;
+  if (change === "same") return <span className="ranking-change ranking-change-same">-</span>;
+  if (change === "up") return <span className="ranking-change ranking-change-up">▲{value ?? ""}</span>;
+  return <span className="ranking-change ranking-change-down">▼{value ?? ""}</span>;
+}
+
+function CourseRankingRow({ item }: { item: CourseRankingItem }) {
+  const body = (
+    <>
+      <span className="ranking-row-rank">{item.rank}</span>
+      <RankingThumb src={item.image} />
+      <span className="ranking-row-info">
+        <strong className="ranking-row-title">{item.title}</strong>
+        <span className="ranking-row-meta">{item.period} · 수강생 {item.students}명</span>
+      </span>
+    </>
+  );
+  if (!item.link) return <div className="ranking-row ranking-row-static" aria-disabled="true">{body}</div>;
+  return <Link href={item.link} className="ranking-row">{body}</Link>;
+}
+
+function CertRankingRow({ item }: { item: CertRankingItem }) {
+  const body = (
+    <>
+      <span className="ranking-row-rank">{item.rank}</span>
+      <RankingThumb src={item.image} />
+      <span className="ranking-row-info">
+        <strong className="ranking-row-title">{item.title}</strong>
+        <RankingChangeBadge change={item.change} value={item.changeValue} />
+      </span>
+    </>
+  );
+  if (!item.link) return <div className="ranking-row ranking-row-static" aria-disabled="true">{body}</div>;
+  return <Link href={item.link} className="ranking-row">{body}</Link>;
+}
+
+function RankingSection() {
+  const [mode, setMode] = useState<"course" | "cert">("course");
+  const [courseCategory, setCourseCategory] = useState<CourseRankingCategory>("전체");
+  const [certCategory, setCertCategory] = useState<CertRankingCategory>("전체");
+
+  const categories = mode === "course" ? courseRankingCategories : certRankingCategories;
+  const activeCategory = mode === "course" ? courseCategory : certCategory;
+
+  return (
+    <section className="ranking-section section-pad">
+      <div className="container">
+        <div className="ranking-head">
+          <h2>이번 주 인기 강의 · 자격증 순위</h2>
+          <span className="ranking-updated">{RANKING_UPDATED_AT} 기준</span>
+        </div>
+
+        <div className="ranking-toggle" role="tablist" aria-label="순위 종류">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "course"}
+            className={mode === "course" ? "ranking-toggle-btn active" : "ranking-toggle-btn"}
+            onClick={() => setMode("course")}
+          >
+            인기 강의
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "cert"}
+            className={mode === "cert" ? "ranking-toggle-btn active" : "ranking-toggle-btn"}
+            onClick={() => setMode("cert")}
+          >
+            자격증 순위
+          </button>
+        </div>
+
+        <div className="ranking-chips" role="tablist" aria-label="카테고리">
+          {categories.map((c) => (
+            <button
+              key={c}
+              type="button"
+              role="tab"
+              aria-selected={activeCategory === c}
+              className={activeCategory === c ? "ranking-chip active" : "ranking-chip"}
+              onClick={() => (mode === "course" ? setCourseCategory(c as CourseRankingCategory) : setCertCategory(c as CertRankingCategory))}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+
+        <div
+          className="ranking-panel"
+          role="tabpanel"
+          aria-label={`${mode === "course" ? "인기 강의" : "자격증"} ${activeCategory} 순위`}
+        >
+          {/* key가 바뀔 때마다 새로 마운트되며 아래 CSS 애니메이션(translateX, ease-out)이 다시 실행된다
+              — 칩/토글을 누르면 목록이 슬라이드로 전환되는 효과(2026-11-01, 새 라이브러리 없이 CSS만). */}
+          <div className="ranking-slide" key={`${mode}-${activeCategory}`}>
+            <div className="ranking-columns">
+              {mode === "course" ? (
+                <>
+                  <ol className="ranking-column">
+                    {courseRanking[courseCategory].slice(0, 5).map((item) => (
+                      <li key={item.rank}><CourseRankingRow item={item} /></li>
+                    ))}
+                  </ol>
+                  <ol className="ranking-column">
+                    {courseRanking[courseCategory].slice(5, 10).map((item) => (
+                      <li key={item.rank}><CourseRankingRow item={item} /></li>
+                    ))}
+                  </ol>
+                </>
+              ) : (
+                <>
+                  <ol className="ranking-column">
+                    {certRanking[certCategory].slice(0, 5).map((item) => (
+                      <li key={item.rank}><CertRankingRow item={item} /></li>
+                    ))}
+                  </ol>
+                  <ol className="ranking-column">
+                    {certRanking[certCategory].slice(5, 10).map((item) => (
+                      <li key={item.rank}><CertRankingRow item={item} /></li>
+                    ))}
+                  </ol>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const { open } = useConsultModal();
   const courseGridRef = useRef<HTMLDivElement>(null);
@@ -755,22 +915,7 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="intro-section section-pad">
-        <div className="container intro-grid">
-          <div className="section-kicker"><span>01</span><span>WHY US</span></div>
-          <div className="intro-content">
-            <p className="section-lede">툴을 배우는 곳이 아니라, <br className="desktop-only" /><span>작업하는 사람</span>이 되는 곳.</p>
-            <div className="intro-support">
-              <p>기능을 나열하는 수업 대신, 하나의 작업이 완성되는 과정을 따라갑니다. 기초 툴부터 실무형 결과물, 그리고 반복을 줄이는 AI 워크플로우까지 한 흐름으로 연결합니다.</p>
-              <div className="intro-tags">
-                <span><Check size={13} /> 기초부터 실무까지</span>
-                <span><Check size={13} /> 결과물 중심</span>
-                <span><Check size={13} /> 도구 간 연결</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <RankingSection />
 
       <section className="courses-section section-pad" id="courses">
         <div className="container">
