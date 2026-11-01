@@ -128,14 +128,14 @@
 .mobile-menu-button, .mobile-nav { display: none; }
 
 .hero-section { padding: 32px 0 0; }
-.eyebrow, .section-kicker, .visual-topline, .method-card-header, .resource-meta, .price-label, .footer-label, .aside-index { display: flex; align-items: center; gap: 10px; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .16em; }
+.eyebrow, .section-kicker, .visual-topline, .resource-meta, .price-label, .footer-label, .aside-index { display: flex; align-items: center; gap: 10px; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .16em; }
 .eyebrow-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent); }
 .inner-hero h1 { margin: 26px 0 22px; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(60px, 7vw, 106px); line-height: .88; letter-spacing: -.075em; font-weight: 700; }
 /* 2026-10-27 — 헤더/히어로 위쪽은 괜찮다는 피드백이라 inner-hero h1(다른 페이지 상단 타이틀)은 그대로
    두고, 홈 아래쪽 섹션 제목만 모트모트 수준(QuickBrowse h2와 같은 체계)으로 축소한다. */
-.cta-inner h2, .method-copy h2, .resource-preview h2, .section-heading-row h2 { margin: 14px 0 0; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.16; letter-spacing: -.03em; font-weight: 700; }
+.cta-inner h2, .resource-preview h2, .section-heading-row h2 { margin: 14px 0 0; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.16; letter-spacing: -.03em; font-weight: 700; }
 .cta-inner h2 { font-size: clamp(34px, 4.6vw, 58px); }
-.inner-hero h1 em, .cta-inner h2 em, .method-copy h2 em, .resource-preview h2 em, .section-heading-row h2 em { color: #8875f5; font-style: normal; }
+.inner-hero h1 em, .cta-inner h2 em, .resource-preview h2 em, .section-heading-row h2 em { color: #8875f5; font-style: normal; }
 .hero-description { max-width: 450px; margin: 0; color: var(--muted-foreground); font-size: 17px; line-height: 1.75; }
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 45px; padding: 0 20px; border: 1px solid transparent; border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: -.02em; transition: transform 160ms var(--ease-out), background 180ms var(--ease-out), color 180ms var(--ease-out), border-color 180ms var(--ease-out); }
 .button:active { transform: scale(.97); }
@@ -215,7 +215,7 @@
 .section-lede { margin: 0; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(28px, 3.6vw, 46px); line-height: 1.22; letter-spacing: -.04em; font-weight: 600; }
 .section-lede span { color: #8875f5; }
 .intro-support { padding-top: 10px; }
-.intro-support p, .method-copy > p, .long-copy { margin: 0; color: var(--muted-foreground); font-size: 16px; line-height: 1.85; }
+.intro-support p, .long-copy { margin: 0; color: var(--muted-foreground); font-size: 16px; line-height: 1.85; }
 .intro-tags { display: grid; gap: 10px; margin-top: 28px; color: var(--foreground); font-size: 12px; }
 .intro-tags span, .check-list span { display: flex; align-items: center; gap: 8px; }
 .intro-tags svg, .check-list svg { color: #8875f5; }
@@ -250,19 +250,57 @@
 .accent-cyan { --card-accent: #63e5f2; }
 .accent-orange { --card-accent: #ffae69; }
 .accent-pink { --card-accent: #f487d3; }
-.method-section { background: var(--secondary); }
-.method-grid { display: grid; grid-template-columns: minmax(360px, .9fr) minmax(0, 1.1fr); gap: 100px; align-items: center; }
-.method-card { min-height: 460px; padding: 24px; position: relative; overflow: hidden; }
-.method-card-dark { background: #181815; color: #f7f4ef; }
-.method-card-dark::before { content: ""; position: absolute; inset: 0; opacity: .18; background: linear-gradient(rgba(200,255,57,.6) 1px, transparent 1px), linear-gradient(90deg, rgba(200,255,57,.6) 1px, transparent 1px); background-size: 32px 32px; transform: perspective(400px) rotateX(52deg) scale(1.6) translateY(25%); transform-origin: center bottom; }
-.method-card-header { position: relative; z-index: 1; justify-content: space-between; color: #c8ff39; }
-.method-letter { position: absolute; z-index: 1; right: 14%; top: 22%; color: #c8ff39; font: 700 270px/.8 "Pretendard Variable", "Pretendard", sans-serif; letter-spacing: -.2em; transform: rotate(-12deg); }
-.method-card > p { position: absolute; z-index: 2; bottom: 25px; left: 25px; margin: 0; font-size: 14px; line-height: 1.7; }
-.method-card > p strong { color: #c8ff39; }
-.method-copy { max-width: 620px; }
-.method-copy > p { max-width: 520px; margin-top: 24px; }
 .arrow-link { display: inline-flex; align-items: center; gap: 9px; margin-top: 28px; padding-bottom: 7px; border-bottom: 1px solid var(--foreground); font-size: 13px; font-weight: 700; transition: gap 180ms var(--ease-out), color 180ms var(--ease-out); }
 .arrow-link:hover { gap: 15px; color: #8875f5; }
+
+/* ── "100시간 한정 수강료 지원" — 참고 사이트 HOT DEAL 섹션 구조만 참고, 데이터는
+   client/src/data/hotdeal.ts 고정값(2026-11-01, 이전 04 HOW WE WORK method-section 자리 교체) ── */
+.hotdeal-section { background: #111210; color: #f7f4ef; padding: 80px 0; overflow: hidden; }
+.hotdeal-grid { display: grid; grid-template-columns: 270px 1fr; gap: 48px; align-items: start; }
+.hotdeal-left { display: flex; flex-direction: column; gap: 14px; }
+.hotdeal-badge { align-self: flex-start; padding: 6px 14px; border-radius: 8px; background: #d1476b; color: #fff; font: 700 12px "Pretendard Variable", "Pretendard", sans-serif; letter-spacing: .08em; }
+.hotdeal-badge.hotdeal-badge-closed { background: rgba(255,255,255,.14); color: rgba(255,255,255,.75); }
+.hotdeal-title { margin: 2px 0 0; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(22px, 2.4vw, 28px); font-weight: 700; line-height: 1.35; letter-spacing: -.02em; color: #fff; }
+.hotdeal-countdown { margin: 4px 0 0; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 48px; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.hotdeal-seats { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.hotdeal-seats-text { margin: 0; font-size: 13px; color: rgba(255,255,255,.85); }
+.hotdeal-progress-track { height: 6px; border-radius: 999px; background: rgba(255,255,255,.15); overflow: hidden; }
+.hotdeal-progress-fill { height: 100%; border-radius: 999px; background: #d1476b; transition: width 600ms var(--ease-out); }
+.hotdeal-updated { margin: 0; font-size: 11px; color: rgba(255,255,255,.45); }
+.hotdeal-cta { margin-top: 6px; }
+.hotdeal-notice { margin: 0; font-size: 11px; color: rgba(255,255,255,.45); line-height: 1.6; }
+.hotdeal-about-link { margin-top: auto; padding-top: 10px; color: rgba(255,255,255,.75); font-size: 12px; display: inline-flex; align-items: center; gap: 6px; transition: color 160ms var(--ease-out); }
+.hotdeal-about-link:hover { color: #fff; }
+
+.hotdeal-cards { position: relative; min-width: 0; }
+.hotdeal-cards-track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; padding-bottom: 4px; }
+.hotdeal-cards-track::-webkit-scrollbar { display: none; }
+.hotdeal-card { flex: 0 0 calc((100% - 32px) / 3); scroll-snap-align: start; display: block; border-radius: 16px; overflow: hidden; background: #fff; color: #181818; transition: transform 200ms var(--ease-out); }
+.hotdeal-card:hover { transform: translateY(-4px); }
+.hotdeal-card-media { display: block; aspect-ratio: 1 / 1; background: var(--secondary); }
+.hotdeal-card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hotdeal-card-media-empty { display: block; background: #e5e5e2; }
+.hotdeal-card-body { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 14px 16px 16px; }
+.hotdeal-card-info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.hotdeal-card-category { color: #78787a; font-size: 11px; font-weight: 600; }
+.hotdeal-card-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 14px; line-height: 1.35; letter-spacing: -.02em; }
+.hotdeal-card-period { color: #78787a; font-size: 11px; }
+.hotdeal-card-percent { flex: none; font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: 26px; font-weight: 700; color: #d1476b; }
+.hotdeal-cards-arrows { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
+.hotdeal-cards-arrows .icon-button { border-color: rgba(255,255,255,.25); color: #fff; background: transparent; }
+.hotdeal-cards-arrows .icon-button:hover { background: rgba(255,255,255,.12); }
+
+@media (max-width: 1050px) {
+  .hotdeal-section { padding: 60px 0; }
+  .hotdeal-card { flex-basis: calc((100% - 16px) / 2); }
+}
+@media (max-width: 760px) {
+  .hotdeal-section { padding: 40px 0; }
+  .hotdeal-grid { grid-template-columns: 1fr; gap: 28px; }
+  .hotdeal-badge { border-radius: 4px; }
+  .hotdeal-countdown { font-size: 36px; }
+  .hotdeal-card { flex-basis: 55%; }
+}
 /* 2026-10-27 — 진한 보라 배경 통 블록 대신 다른 섹션들과 같은 흰 배경 + 중립 톤으로(색 블록은 과했다는
    피드백). 자료실 리스트 자체(순위 리스트형 행 UX)는 motemote 패턴과 이미 맞으니 구조는 유지. */
 .resource-preview { background: var(--background); color: var(--foreground); }
@@ -545,7 +583,6 @@
   /* 좁은 화면에서는 카드 하나가 화면 폭 대부분을 쓰게 — 가로 스크롤 자체는 이제 기본값(위 .course-grid) */
   .course-card { width: min(78vw, 360px); }
   .intro-content { gap: 40px; }
-  .method-grid { gap: 55px; }
 }
 
 @media (max-width: 760px) {
@@ -590,9 +627,6 @@
   .section-heading-row { align-items: start; flex-direction: column; gap: 22px; margin-bottom: 30px; }
   .heading-aside { margin: 0; text-align: left; }
   .course-card, .course-card:nth-child(4), .course-card:nth-child(5) { min-height: 285px; padding: 18px 15px 17px; width: 82vw; }
-  .method-grid { grid-template-columns: 1fr; gap: 45px; }
-  .method-card { min-height: 355px; }
-  .method-letter { font-size: 205px; }
   .resource-teaser { grid-template-columns: 84px 1fr auto; gap: 10px; padding: 19px 0; }
   .resource-teaser span { font-size: 8px; }
   .resource-teaser strong { font-size: 14px; }
@@ -726,7 +760,7 @@
 
 /* ── 한글 줄바꿈: 단어 중간에서 끊지 않고(keep-all), 제목은 균형 있게, 본문은 마지막 줄 고아 방지 ── */
 html { word-break: keep-all; overflow-wrap: break-word; line-break: strict; }
-h1, h2, h3, .section-lede, .hero-description, .heading-aside, .cta-bottom p, .method-copy p { text-wrap: balance; }
+h1, h2, h3, .section-lede, .hero-description, .heading-aside, .cta-bottom p { text-wrap: balance; }
 p, li, dd, summary, figcaption { text-wrap: pretty; }
 .tip-callout, .course-facts dd, .course-chips a, .resource-teaser strong, .resource-row h2, .footer-links a { overflow-wrap: anywhere; }
 input, textarea, select, button { word-break: keep-all; }

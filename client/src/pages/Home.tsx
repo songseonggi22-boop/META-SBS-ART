@@ -10,7 +10,6 @@ import {
   Cuboid,
   FileImage,
   Layers3,
-  Move3d,
   MousePointerClick,
   PenTool,
   Play,
@@ -29,6 +28,18 @@ import type { CourseInterest } from "@/components/ConsultModalContext";
 import { courseHref, landingsByMenu, menus, type MenuKey } from "@/lib/landings";
 import { splitTools, toolLogos } from "@/lib/toolLogos";
 import { SITE } from "@/seo";
+import {
+  HOTDEAL_STARTS_AT,
+  HOTDEAL_DURATION_HOURS,
+  SUPPORT_PERCENT,
+  SEAT_LIMIT,
+  SEATS_TAKEN,
+  SEATS_UPDATED_AT,
+  NOTICE as HOTDEAL_NOTICE,
+  CTA_LABEL_OPEN as HOTDEAL_CTA_OPEN,
+  CTA_LABEL_CLOSED as HOTDEAL_CTA_CLOSED,
+  hotDealItems,
+} from "@/data/hotdeal";
 
 // 각 과정 카드의 썸네일은 같은 사업자(SBS아카데미AIX학원) 공식 포트폴리오(sbsart.com, 2026-09-21 확인)의
 // 실제 수강생 결과물 1건씩(lib/portfolio.ts) — 눌러도 sbsart.com으로 나가지 않고 이 사이트 안의 `/portfolio/:id`
@@ -584,6 +595,123 @@ function CourseCard({ course }: { course: (typeof courses)[number] }) {
   );
 }
 
+// "100시간 한정 수강료 지원" 섹션 — 참고 사이트(motemote.kr)의 HOT DEAL 섹션 구조(배지·카운트다운·
+// 잔여인원·카드 슬라이더)만 참고해 우리 스타일로 새로 작성(2026-11-01). 이전 "04 HOW WE WORK"
+// method-section 자리를 그대로 대체 — 뒤따르는 05 RESOURCE ROOM·06 ALL COURSES 번호는 안 바꿔도 된다
+// (이 섹션은 번호 대신 HOT DEAL 배지가 그 자리를 대신한다). 데이터는 전부 client/src/data/hotdeal.ts
+// 고정값 — 서버·API 연동 없음, 그 파일만 고치면 반영된다.
+const HOTDEAL_STARTS_MS = new Date(HOTDEAL_STARTS_AT).getTime();
+const HOTDEAL_ENDS_MS = HOTDEAL_STARTS_MS + HOTDEAL_DURATION_HOURS * 3600 * 1000;
+const HOTDEAL_SEATS_TAKEN = Math.min(Math.max(SEATS_TAKEN, 0), SEAT_LIMIT);
+const HOTDEAL_SEATS_LEFT = SEAT_LIMIT - HOTDEAL_SEATS_TAKEN;
+const HOTDEAL_SEATS_FULL = HOTDEAL_SEATS_TAKEN >= SEAT_LIMIT;
+
+type HotDealPhase = "loading" | "upcoming" | "open" | "closed";
+
+// SSR 프리렌더 시각과 방문자가 실제로 보는 시각이 다르므로, 마운트 전(서버 렌더·첫 클라이언트 페인트)에는
+// 항상 같은 "loading" 플레이스홀더만 보여주고 useEffect에서 실제 남은 시간을 계산해 넣는다 — 이 프로젝트가
+// 다크모드 초기값을 항상 라이트로 두는 것과 같은 방식(SiteShell.tsx), 깜빡임 없이 하이드레이션 안전.
+function useHotDealPhase(): { phase: HotDealPhase; remainingMs: number } {
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => {
+    setNow(Date.now());
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  if (now === null) return { phase: "loading", remainingMs: 0 };
+  if (HOTDEAL_SEATS_FULL || now >= HOTDEAL_ENDS_MS) return { phase: "closed", remainingMs: 0 };
+  if (now < HOTDEAL_STARTS_MS) return { phase: "upcoming", remainingMs: HOTDEAL_STARTS_MS - now };
+  return { phase: "open", remainingMs: HOTDEAL_ENDS_MS - now };
+}
+
+// "D-4 04:00:00"(일 / 시:분:초) 형식.
+function formatHotDealCountdown(ms: number) {
+  const totalSeconds = Math.max(Math.floor(ms / 1000), 0);
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  return `D-${days} ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
+
+function HotDealCards() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const showArrows = hotDealItems.length > 3;
+  const scroll = (dir: 1 | -1) => trackRef.current?.scrollBy({ left: dir * 280, behavior: "smooth" });
+
+  return (
+    <div className="hotdeal-cards">
+      <div className="hotdeal-cards-track" ref={trackRef}>
+        {hotDealItems.map((item) => (
+          <Link key={item.link} href={item.link} className="hotdeal-card">
+            {item.image ? (
+              <span className="hotdeal-card-media"><img src={item.image} alt="" loading="lazy" /></span>
+            ) : (
+              <span className="hotdeal-card-media hotdeal-card-media-empty" aria-hidden="true" />
+            )}
+            <span className="hotdeal-card-body">
+              <span className="hotdeal-card-info">
+                <span className="hotdeal-card-category">{item.category}</span>
+                <strong className="hotdeal-card-title">{item.title}</strong>
+                <span className="hotdeal-card-period">{item.period} · 수강료 {SUPPORT_PERCENT}% 지원</span>
+              </span>
+              <span className="hotdeal-card-percent">{SUPPORT_PERCENT}%</span>
+            </span>
+          </Link>
+        ))}
+      </div>
+      {showArrows && (
+        <div className="hotdeal-cards-arrows">
+          <button type="button" className="icon-button" aria-label="이전" onClick={() => scroll(-1)}><ArrowLeft size={18} /></button>
+          <button type="button" className="icon-button" aria-label="다음" onClick={() => scroll(1)}><ArrowRight size={18} /></button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function HotDealSection() {
+  const { open } = useConsultModal();
+  const { phase, remainingMs } = useHotDealPhase();
+  const badgeLabel = phase === "upcoming" ? "오픈 예정" : phase === "closed" ? "마감" : "HOT DEAL";
+  const ctaLabel = phase === "closed" ? HOTDEAL_CTA_CLOSED : HOTDEAL_CTA_OPEN;
+  const seatsPercent = (HOTDEAL_SEATS_TAKEN / SEAT_LIMIT) * 100;
+
+  return (
+    <section className="hotdeal-section" aria-label="수강료 지원 행사">
+      <div className="container hotdeal-grid">
+        <div className="hotdeal-left">
+          <span className={phase === "closed" ? "hotdeal-badge hotdeal-badge-closed" : "hotdeal-badge"}>{badgeLabel}</span>
+          <h2 className="hotdeal-title">{HOTDEAL_DURATION_HOURS}시간 한정!<br />수강료 {SUPPORT_PERCENT}% 지원, 선착순 {SEAT_LIMIT}명</h2>
+          <p className="hotdeal-countdown" aria-live="off">{formatHotDealCountdown(remainingMs)}</p>
+          <div className="hotdeal-seats">
+            <p className="hotdeal-seats-text">선착순 {SEAT_LIMIT}명 · 남은 자리 {HOTDEAL_SEATS_LEFT} / {SEAT_LIMIT}</p>
+            <div
+              className="hotdeal-progress-track"
+              role="progressbar"
+              aria-valuenow={HOTDEAL_SEATS_TAKEN}
+              aria-valuemin={0}
+              aria-valuemax={SEAT_LIMIT}
+              aria-label="접수 인원"
+            >
+              <div className="hotdeal-progress-fill" style={{ width: `${seatsPercent}%` }} />
+            </div>
+            <p className="hotdeal-updated">접수 현황 업데이트 {SEATS_UPDATED_AT}</p>
+          </div>
+          <button type="button" className="button button-light hotdeal-cta" onClick={() => open({ sourcePage: "home-hotdeal" })}>
+            {ctaLabel} <ArrowRight size={16} />
+          </button>
+          <p className="hotdeal-notice">{HOTDEAL_NOTICE}</p>
+          <Link href="/about" className="hotdeal-about-link">학원 안내 보기 <ArrowUpRight size={14} /></Link>
+        </div>
+        <HotDealCards />
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const { open } = useConsultModal();
   const courseGridRef = useRef<HTMLDivElement>(null);
@@ -672,21 +800,7 @@ export default function Home() {
 
       <PortfolioShowcase />
 
-      <section className="method-section section-pad">
-        <div className="container method-grid">
-          <div className="method-card method-card-dark">
-            <div className="method-card-header"><span>PROCESS / 04</span><Move3d size={20} /></div>
-            <div className="method-letter">M</div>
-            <p>막연한 아이디어를 <br className="desktop-only" /><strong>움직이는 결과물</strong>로.</p>
-          </div>
-          <div className="method-copy">
-            <div className="section-kicker"><span>04</span><span>HOW WE WORK</span></div>
-            <h2>작업의 처음과<br /><em>다음 장면</em>까지.</h2>
-            <p>툴 하나를 익히는 데서 끝나지 않습니다. 기획 → 제작 → 수정 → 공유의 리듬을 경험하며 혼자서도 다음 작업을 시작할 수 있도록 설계합니다.</p>
-            <Link href="/about" className="arrow-link">학원 안내 보기 <ArrowUpRight size={16} /></Link>
-          </div>
-        </div>
-      </section>
+      <HotDealSection />
 
       <section className="resource-preview section-pad" id="resources">
         <div className="container resource-preview-grid">
