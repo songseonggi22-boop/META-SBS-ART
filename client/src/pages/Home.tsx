@@ -17,6 +17,7 @@ import {
   Video,
   WandSparkles,
   X,
+  type LucideIcon,
 } from "lucide-react";
 import { Link } from "wouter";
 import { useConsultModal } from "@/components/ConsultModalContext";
@@ -729,14 +730,17 @@ function HotDealSection() {
 // 대체 — section-kicker 클래스 자체는 다른 섹션(02/03/06 등)에서 계속 쓰므로 CSS는 그대로 두되, 이
 // 섹션은 번호 배지를 쓰지 않는 디자인이라 마크업에서 쓰지 않는다. 데이터는 client/src/data/ranking.ts
 // 고정값 — 서버·API 연동 없음, 전부 화면 구성을 보여주기 위한 더미(예시) 데이터(제목 끝 "(예시)").
-function RankingThumb({ src }: { src: string }) {
+function RankingThumb({ src, icon: Icon }: { src: string; icon?: LucideIcon }) {
   const [broken, setBroken] = useState(false);
-  if (!src || broken) return <span className="ranking-row-thumb ranking-row-thumb-empty" aria-hidden="true" />;
-  return (
-    <span className="ranking-row-thumb">
-      <img src={src} alt="" loading="lazy" onError={() => setBroken(true)} />
-    </span>
-  );
+  if (src && !broken) {
+    return (
+      <span className="ranking-row-thumb">
+        <img src={src} alt="" loading="lazy" onError={() => setBroken(true)} />
+      </span>
+    );
+  }
+  if (Icon) return <span className="ranking-row-thumb ranking-row-thumb-icon"><Icon size={28} strokeWidth={1.5} /></span>;
+  return <span className="ranking-row-thumb ranking-row-thumb-empty" aria-hidden="true" />;
 }
 
 function RankingChangeBadge({ change, value }: { change: RankChange; value?: number }) {
@@ -750,7 +754,7 @@ function CourseRankingRow({ item }: { item: CourseRankingItem }) {
   const body = (
     <>
       <span className="ranking-row-rank">{item.rank}</span>
-      <RankingThumb src={item.image} />
+      <RankingThumb src={item.image} icon={item.icon} />
       <span className="ranking-row-info">
         <strong className="ranking-row-title">{item.title}</strong>
         <span className="ranking-row-meta">{item.period} · 수강생 {item.students}명</span>
@@ -765,7 +769,7 @@ function CertRankingRow({ item }: { item: CertRankingItem }) {
   const body = (
     <>
       <span className="ranking-row-rank">{item.rank}</span>
-      <RankingThumb src={item.image} />
+      <RankingThumb src={item.image} icon={item.icon} />
       <span className="ranking-row-info">
         <strong className="ranking-row-title">{item.title}</strong>
         <RankingChangeBadge change={item.change} value={item.changeValue} />
