@@ -917,25 +917,6 @@ export default function Home() {
 
       <RankingSection />
 
-      <section className="courses-section section-pad" id="courses">
-        <div className="container">
-          <div className="section-heading-row">
-            <div>
-              <div className="section-kicker"><span>02</span><span>THE PROGRAM</span></div>
-              <h2>만드는 방식에<br /><em>맞춘 트랙.</em></h2>
-            </div>
-            <p className="heading-aside">필요한 도구를 고르고, <br className="desktop-only" />나만의 제작 루틴을 만드세요.</p>
-            <div className="courses-section-arrows">
-              <button type="button" className="icon-button" aria-label="이전 트랙" onClick={() => scrollCourses(-1)}><ArrowLeft size={18} /></button>
-              <button type="button" className="icon-button" aria-label="다음 트랙" onClick={() => scrollCourses(1)}><ArrowRight size={18} /></button>
-            </div>
-          </div>
-          <div className="course-grid" ref={courseGridRef}>
-            {courses.map((course) => <CourseCard key={course.number} course={course} />)}
-          </div>
-        </div>
-      </section>
-
       <section className="mid-cta">
         <div className="container mid-cta-inner">
           <strong>어떤 트랙이 나에게 맞는지 모르겠다면?</strong>
@@ -961,6 +942,25 @@ export default function Home() {
       </section>
 
       <CourseDirectory />
+
+      <section className="courses-section section-pad" id="courses">
+        <div className="container">
+          <div className="section-heading-row">
+            <div>
+              <div className="section-kicker"><span>07</span><span>THE PROGRAM</span></div>
+              <h2>만드는 방식에<br /><em>맞춘 트랙.</em></h2>
+            </div>
+            <p className="heading-aside">필요한 도구를 고르고, <br className="desktop-only" />나만의 제작 루틴을 만드세요.</p>
+            <div className="courses-section-arrows">
+              <button type="button" className="icon-button" aria-label="이전 트랙" onClick={() => scrollCourses(-1)}><ArrowLeft size={18} /></button>
+              <button type="button" className="icon-button" aria-label="다음 트랙" onClick={() => scrollCourses(1)}><ArrowRight size={18} /></button>
+            </div>
+          </div>
+          <div className="course-grid" ref={courseGridRef}>
+            {courses.map((course) => <CourseCard key={course.number} course={course} />)}
+          </div>
+        </div>
+      </section>
 
       <PortfolioShowcase />
 

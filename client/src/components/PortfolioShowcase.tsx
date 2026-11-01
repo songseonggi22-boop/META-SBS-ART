@@ -42,7 +42,7 @@ export default function PortfolioShowcase() {
       <div className="container">
         <div className="section-heading-row">
           <div>
-            <div className="section-kicker"><span>07</span><span>REAL RESULTS</span></div>
+            <div className="section-kicker"><span>08</span><span>REAL RESULTS</span></div>
             <h2>과정별<br /><em>실제 결과물.</em></h2>
           </div>
           <p className="heading-aside">
