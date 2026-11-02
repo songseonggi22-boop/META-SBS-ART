@@ -19,5 +19,6 @@ export const footerNav: NavLink[] = [
   { label: "자료실", href: "/blog" },
   { label: "학원안내", href: "/about" },
   { label: "수강 안내", href: "/pricing" },
+  { label: "수강료 안내", href: "http://na-daejeoncom.kr/customer/tuition_info.asp" },
   { label: "개인정보처리방침", href: "/privacy" },
 ];

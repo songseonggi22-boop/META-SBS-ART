@@ -212,9 +212,13 @@ export default function SiteShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <nav className="container footer-links" aria-label="바로가기">
-          {footerNav.map((item) => (
-            <Link key={item.href} href={item.href}>{item.label}</Link>
-          ))}
+          {footerNav.map((item) =>
+            item.href.startsWith("http") ? (
+              <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer">{item.label}</a>
+            ) : (
+              <Link key={item.href} href={item.href}>{item.label}</Link>
+            )
+          )}
         </nav>
         <div className="container exact-footer-info">
           <p>대전광역시 서구 대덕대로 179, 9·10층 (둔산동,<br className="footer-mobile-break" /> 엠제이피부과굿모닝어학원빌딩)</p>
