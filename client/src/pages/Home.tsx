@@ -608,15 +608,25 @@ function CourseCard({ course }: { course: (typeof courses)[number] }) {
   );
 }
 
-// "100시간 한정 수강료 지원" 섹션 — 참고 사이트(motemote.kr)의 HOT DEAL 섹션 구조(배지·카운트다운·
+// "N일 한정 수강료 지원" 섹션(7일 주기로 계속 반복) — 참고 사이트(motemote.kr)의 HOT DEAL 섹션 구조(배지·카운트다운·
 // 잔여인원·카드 슬라이더)만 참고해 우리 스타일로 새로 작성(2026-11-01). 이전 "04 HOW WE WORK"
 // method-section 자리를 그대로 대체 — 뒤따르는 05 RESOURCE ROOM·06 ALL COURSES 번호는 안 바꿔도 된다
 // (이 섹션은 번호 대신 HOT DEAL 배지가 그 자리를 대신한다). 데이터는 전부 client/src/data/hotdeal.ts
 // 고정값 — 서버·API 연동 없음, 그 파일만 고치면 반영된다.
 const HOTDEAL_STARTS_MS = new Date(HOTDEAL_STARTS_AT).getTime();
-const HOTDEAL_ENDS_MS = HOTDEAL_STARTS_MS + HOTDEAL_DURATION_HOURS * 3600 * 1000;
+// 7일(기본값) 주기 — 카운트다운이 0에 닿아도 종료되지 않고 다음 7일 주기가 바로 이어진다(2026-11-12).
+const HOTDEAL_CYCLE_MS = HOTDEAL_DURATION_HOURS * 3600 * 1000;
+const HOTDEAL_DURATION_DAYS = Math.round(HOTDEAL_DURATION_HOURS / 24);
+// now가 속한 현재 주기의 "마감 시각"을 구한다 — 저장된 상태 없이 현재 시각만으로 계산하는 순수 함수라
+// 몇 주기가 지났든 항상 다음 경계를 정확히 찾는다.
+function hotDealCycleEnd(nowMs: number) {
+  const cyclesPassed = Math.floor((nowMs - HOTDEAL_STARTS_MS) / HOTDEAL_CYCLE_MS);
+  return HOTDEAL_STARTS_MS + (cyclesPassed + 1) * HOTDEAL_CYCLE_MS;
+}
 const HOTDEAL_SEATS_TAKEN = Math.min(Math.max(SEATS_TAKEN, 0), SEAT_LIMIT);
 const HOTDEAL_SEATS_LEFT = SEAT_LIMIT - HOTDEAL_SEATS_TAKEN;
+// 좌석은 주기가 바뀌어도 자동으로 리셋되지 않는다 — 실제 접수 인원이라 담당자가 hotdeal.ts의
+// SEATS_TAKEN을 직접 고쳐야 한다(시간 카운트다운만 자동 반복).
 const HOTDEAL_SEATS_FULL = HOTDEAL_SEATS_TAKEN >= SEAT_LIMIT;
 
 type HotDealPhase = "loading" | "upcoming" | "open" | "closed";
@@ -633,9 +643,9 @@ function useHotDealPhase(): { phase: HotDealPhase; remainingMs: number } {
   }, []);
 
   if (now === null) return { phase: "loading", remainingMs: 0 };
-  if (HOTDEAL_SEATS_FULL || now >= HOTDEAL_ENDS_MS) return { phase: "closed", remainingMs: 0 };
+  if (HOTDEAL_SEATS_FULL) return { phase: "closed", remainingMs: 0 };
   if (now < HOTDEAL_STARTS_MS) return { phase: "upcoming", remainingMs: HOTDEAL_STARTS_MS - now };
-  return { phase: "open", remainingMs: HOTDEAL_ENDS_MS - now };
+  return { phase: "open", remainingMs: hotDealCycleEnd(now) - now };
 }
 
 // "D-4 04:00:00"(일 / 시:분:초) 형식.
@@ -697,7 +707,7 @@ function HotDealSection() {
       <div className="container hotdeal-grid">
         <div className="hotdeal-left">
           <span className={phase === "closed" ? "hotdeal-badge hotdeal-badge-closed" : "hotdeal-badge"}>{badgeLabel}</span>
-          <h2 className="hotdeal-title">{HOTDEAL_DURATION_HOURS}시간 한정!<br />수강료 {SUPPORT_PERCENT}% 지원, 선착순 {SEAT_LIMIT}명</h2>
+          <h2 className="hotdeal-title">{HOTDEAL_DURATION_DAYS}일 한정!<br />수강료 {SUPPORT_PERCENT}% 지원, 선착순 {SEAT_LIMIT}명</h2>
           <p className="hotdeal-countdown" aria-live="off">{formatHotDealCountdown(remainingMs)}</p>
           <div className="hotdeal-seats">
             <p className="hotdeal-seats-text">선착순 {SEAT_LIMIT}명 · 남은 자리 {HOTDEAL_SEATS_LEFT} / {SEAT_LIMIT}</p>

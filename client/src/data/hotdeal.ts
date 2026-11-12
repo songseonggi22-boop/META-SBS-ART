@@ -3,10 +3,13 @@
 //
 // 수정 순서: 아래 값을 바꾼다 → 저장한다 → `pnpm run build:static` → 배포(git push, Vercel 자동배포).
 
-// 행사 시작 시각(ISO, 타임존 포함). 이 시각부터 카운트다운이 "마감까지 남은 시간"으로 바뀝니다.
+// 행사 시작 시각(ISO, 타임존 포함) — 이 시각부터 카운트다운이 "마감까지 남은 시간"으로 바뀝니다.
+// 2026-11-12: 1회성 100시간 행사가 끝나고 멈춰 있던 걸 "7일 주기로 계속 반복"하도록 변경.
+// 이 값은 그 반복 주기의 기준점(앵커)일 뿐 — 한 번 지나도 끝나지 않고, 7일마다 자동으로 다시 7일 카운트다운이
+// 시작됩니다(Home.tsx의 hotDealCycleEnd 참고). 날짜를 바꿀 필요는 없고, 그대로 두면 됩니다.
 export const HOTDEAL_STARTS_AT = "2026-11-02T10:00:00+09:00";
-// 마감 = 시작 + 이 시간(시간 단위).
-export const HOTDEAL_DURATION_HOURS = 100;
+// 한 주기 길이(시간 단위) = 7일. 이 값을 바꾸면 반복 주기 자체가 바뀝니다(예: 168→72면 3일마다 반복).
+export const HOTDEAL_DURATION_HOURS = 24 * 7;
 export const SUPPORT_PERCENT = 40;
 export const SEAT_LIMIT = 50;
 // 현재 접수 인원 — 이 숫자만 바꾸면 잔여 좌석·진행 막대가 전부 자동으로 갱신됩니다.
