@@ -388,17 +388,32 @@ function CategoryToolModal({ menuKey, onClose }: { menuKey: MenuKey; onClose: ()
   );
 }
 
+// 수험생 이벤트 슬라이드 — 구체적인 할인·조건은 아직 없고(2026-11-12 확정), "시험 끝나면 진짜 하고 싶은 거
+// 시작하자"는 후킹 문구 + 상담 유도만. 카테고리 슬라이드처럼 툴 목록 모달이 아니라 상담 모달을 바로 연다.
+const EXAM_EVENT_SLIDE = {
+  key: "exam-event",
+  image: "/category-hero/cert.webp",
+  kicker: "수험생 이벤트",
+  headline: "시험 끝나면, 진짜 하고 싶은 거 시작하자",
+  action: "consult" as const,
+};
+
 function HeroCarousel() {
-  const slides = menus.map((m) => {
-    const landing = landingsByMenu(m.key)[0];
-    return {
-      key: m.key,
-      href: landing ? `/daejeon/${landing.slug}` : "/courses",
-      image: m.heroImage,
-      kicker: m.label,
-      headline: landing?.points[0] ?? m.label,
-    };
-  });
+  const { open: openConsult } = useConsultModal();
+  const slides = [
+    EXAM_EVENT_SLIDE,
+    ...menus.map((m) => {
+      const landing = landingsByMenu(m.key)[0];
+      return {
+        key: m.key as string,
+        href: landing ? `/daejeon/${landing.slug}` : "/courses",
+        image: m.heroImage,
+        kicker: m.label,
+        headline: landing?.points[0] ?? m.label,
+        action: "tools" as const,
+      };
+    }),
+  ];
   const total = slides.length;
   const trackRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
@@ -461,10 +476,12 @@ function HeroCarousel() {
             key={s.key}
             type="button"
             className="hero-carousel-slide"
-            onClick={() => setOpenKey(s.key)}
+            onClick={() => (s.action === "consult" ? openConsult({ sourcePage: "home-hero-exam-event" }) : setOpenKey(s.key as MenuKey))}
           >
             <img src={s.image} alt="" loading={i === 0 ? "eager" : "lazy"} fetchPriority={i === 0 ? "high" : "auto"} />
-            <span className="hero-carousel-cta"><MousePointerClick size={13} /> 배우는 툴 보기</span>
+            <span className="hero-carousel-cta">
+              {s.action === "consult" ? <><ArrowRight size={13} /> 무료 상담 신청</> : <><MousePointerClick size={13} /> 배우는 툴 보기</>}
+            </span>
             <div className="hero-carousel-overlay">
               <p className="hero-carousel-kicker">{s.kicker}</p>
               <p className="hero-carousel-headline">{s.headline}</p>
