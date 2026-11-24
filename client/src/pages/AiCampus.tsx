@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
-import { Link, useParams, useSearch } from "wouter";
+import { Link, useParams } from "wouter";
 import { useConsultModal } from "@/components/ConsultModalContext";
 import QuickFeeForm from "@/components/QuickFeeForm";
 import ToolRow from "@/components/ToolRow";
@@ -25,9 +25,13 @@ export default function AiCampus() {
 }
 
 function AiCampusIndex() {
-  const search = useSearch();
-  const initial = new URLSearchParams(search).get("dept") as AiCampusDept | null;
-  const [active, setActive] = useState<AiCampusDept | "ALL">(initial && depts.includes(initial) ? initial : "ALL");
+  const [active, setActive] = useState<AiCampusDept | "ALL">("ALL");
+  // 프리렌더 HTML을 hydrate 할 때 wouter의 useSearch()는 빈 문자열이라 ?dept= 가 먹지 않는다.
+  // (CoursesIndex의 ?track= 도 같은 이유로 프로덕션에서만 죽어 있었다.) hydrate 후 직접 읽는다.
+  useEffect(() => {
+    const d = new URLSearchParams(window.location.search).get("dept") as AiCampusDept | null;
+    if (d && depts.includes(d)) setActive(d);
+  }, []);
   const list = useMemo(
     () => (active === "ALL" ? aiCampusCourses : aiCampusCourses.filter((c) => c.dept === active)),
     [active]

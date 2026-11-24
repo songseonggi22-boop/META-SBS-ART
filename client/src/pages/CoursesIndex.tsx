@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { Link, useSearch } from "wouter";
+import { Link } from "wouter";
 import type { CourseInterest } from "@/components/ConsultModalContext";
 import { courses, trackLabels } from "@/lib/courses";
 import { courseHref } from "@/lib/landings";
@@ -11,9 +11,13 @@ const tracks: (CourseInterest | "ALL")[] = ["ALL", "graphic", "motion", "interio
 // 히어로 캐러셀의 "OO 전체과정 보기" 링크(/courses?track=interior)가 해당 탭을 미리 선택해 두도록.
 // 쿼리 없이 들어오면 기존처럼 전체.
 export default function CoursesIndex() {
-  const search = useSearch();
-  const initialTrack = new URLSearchParams(search).get("track") as CourseInterest | null;
-  const [active, setActive] = useState<CourseInterest | "ALL">(initialTrack && tracks.includes(initialTrack) ? initialTrack : "ALL");
+  const [active, setActive] = useState<CourseInterest | "ALL">("ALL");
+  // 프리렌더된 HTML을 hydrate 할 때 wouter의 useSearch()는 빈 문자열을 돌려줘서(서버 스냅샷)
+  // ?track= 선택이 프로덕션에서만 먹지 않았다. hydrate 끝난 뒤 한 번 직접 읽어 맞춘다.
+  useEffect(() => {
+    const t = new URLSearchParams(window.location.search).get("track") as CourseInterest | null;
+    if (t && tracks.includes(t)) setActive(t);
+  }, []);
   const list = useMemo(() => (active === "ALL" ? courses : courses.filter((c) => c.track === active)), [active]);
 
   return (
