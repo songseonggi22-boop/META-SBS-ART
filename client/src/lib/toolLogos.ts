@@ -8,10 +8,12 @@
 // - html5: w3.org/html/logo (W3C 공식 HTML5 로고, CC BY 3.0)
 // - n8n: github.com/n8n-io/n8n (n8n 오픈소스 저장소 자체 배포 에셋)
 // - clip-studio-paint: clipstudio.net 공식 프레스 에셋 페이지
-// 반대로 제외한 것: ChatGPT/OpenAI·Claude/Anthropic(가이드라인이 조건부·비공식 소스라 애매해 보류),
-// Microsoft Excel/Access(정식 라이선스 계약 필요), Procreate(서면 동의 필요), Java 커피컵 로고(유료
-// 라이선스 필요 — Duke 마스코트는 BSD 라이선스로 자유 사용 가능하지만 인지도가 낮아 보류). 매칭되는
-// 로고가 없는 도구는 그냥 글자 칩으로 남는다 — 가짜 로고를 만들어 붙이지 않는다.
+// 2026-11-24 추가: chatgpt·claude·gemini·cursor 4종은 **사용자가 직접 로고 파일을 주어** 넣었다
+// (원본: AI-Sessions/raw/2026-11-24-AI툴-로고/). 흰 배경을 지우고 정사각형 256px PNG로 맞춘 가공본이
+// client/public/tool-logos/ 에 있다. 에이전트가 임의로 받아온 게 아니라 제공받은 자산이다.
+// 여전히 제외: Microsoft Excel/Access(정식 라이선스 계약 필요), Procreate(서면 동의 필요), YouTube
+// (Brand Use Request Form 승인 필요), Java 커피컵 로고(유료 라이선스). 매칭되는 로고가 없는 도구는
+// 그냥 글자 칩으로 남는다 — 가짜 로고를 만들어 붙이지 않는다.
 export const toolLogos: Record<string, string> = {
   photoshop: "/tool-logos/photoshop.png",
   illustrator: "/tool-logos/illustrator.png",
@@ -42,6 +44,24 @@ export const toolLogos: Record<string, string> = {
   "clip-studio-paint": "/tool-logos/clip-studio-paint.png",
   클립스튜디오: "/tool-logos/clip-studio-paint.png",
   "클립 스튜디오": "/tool-logos/clip-studio-paint.png",
+  // AI 도구 — courses.ts/landings.ts 의 tools 문자열에 실제로 쓰이는 표기를 전부 받는다
+  // (예: "Claude Code, Gemini CLI, GPT CLI(Codex)" → 전부 같은 로고).
+  chatgpt: "/tool-logos/chatgpt.png",
+  "chat gpt": "/tool-logos/chatgpt.png",
+  gpt: "/tool-logos/chatgpt.png",
+  "gpt cli(codex)": "/tool-logos/chatgpt.png",
+  챗gpt: "/tool-logos/chatgpt.png",
+  지피티: "/tool-logos/chatgpt.png",
+  claude: "/tool-logos/claude.png",
+  "claude ai": "/tool-logos/claude.png",
+  "claude code": "/tool-logos/claude.png",
+  클로드: "/tool-logos/claude.png",
+  gemini: "/tool-logos/gemini.png",
+  "gemini cli": "/tool-logos/gemini.png",
+  제미나이: "/tool-logos/gemini.png",
+  cursor: "/tool-logos/cursor.png",
+  "cursor ai": "/tool-logos/cursor.png",
+  커서: "/tool-logos/cursor.png",
 };
 
 // "Photoshop, Illustrator, InDesign, GTQ" 같은 콤마/가운뎃점 구분 문자열을 토큰으로 쪼개, 로고가 있으면

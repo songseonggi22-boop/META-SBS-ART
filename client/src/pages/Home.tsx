@@ -171,17 +171,23 @@ const toolLinks: { tool: string; course: string; label: string }[] = [
   { tool: "clip-studio-paint", course: "webtoon", label: "클립스튜디오" },
   { tool: "html5", course: "html-css", label: "HTML/CSS" },
   { tool: "n8n", course: "n8n-efficiency", label: "n8n" },
+  // AI 도구 4종(2026-11-24, 사용자가 로고 제공) — 각 로고를 그 도구가 주력인 실제 과정으로 연결한다.
+  { tool: "chatgpt", course: "chatgpt-first", label: "챗GPT" },
+  { tool: "claude", course: "ai-agent", label: "클로드" },
+  { tool: "gemini", course: "ai-marketing-auto", label: "제미나이" },
+  { tool: "cursor", course: "vibe-coding", label: "커서" },
 ];
 
-// "이번년도 인기 툴" 요청(2026-10-27) — Claude·유튜브는 실제 과정(ai-agent, youtube-ai)이 있지만
-// 공식 로고는 둘 다 서면 승인이 있어야 쓸 수 있어서(Anthropic 상표 가이드라인, YouTube Brand Use
-// Request Form 확인) 로고 대신 범용 아이콘으로 표시한다. "인기"는 실제 신청·조회 데이터가 없어
-// 검증 불가능한 주장이라 "대표 프로그램"으로 정직하게 라벨링.
+// "이번년도 인기 툴" 요청(2026-10-27) — "인기"는 실제 신청·조회 데이터가 없어 검증 불가능한 주장이라
+// "대표 프로그램"으로 정직하게 라벨링. 클로드는 범용 아이콘(Bot)으로 두고 있었는데 2026-11-24 사용자가
+// 로고를 직접 줘서 실제 로고로 교체했다. 유튜브는 로고를 못 써서(Brand Use Request Form 승인 필요)
+// 계속 범용 아이콘.
 const featuredTools: { label: string; course: string; logo?: string; icon?: typeof Bot }[] = [
   { label: "포토샵", course: "photoshop", logo: toolLogos.photoshop },
   { label: "일러스트레이터", course: "illustrator", logo: toolLogos.illustrator },
   { label: "프리미어 프로", course: "premiere", logo: toolLogos.premiere },
-  { label: "Claude(클로드)", course: "ai-agent", icon: Bot },
+  { label: "Claude(클로드)", course: "ai-agent", logo: toolLogos.claude },
+  { label: "챗GPT", course: "chatgpt-first", logo: toolLogos.chatgpt },
   { label: "유튜브 영상편집", course: "youtube-ai", icon: Video },
 ];
 
