@@ -6,6 +6,7 @@ import ConsultModal from "./components/ConsultModal";
 import { ConsultModalProvider } from "./components/ConsultModalContext";
 import Seo from "./components/Seo";
 import FloatingCta from "./components/FloatingCta";
+import EventPopup from "./components/EventPopup";
 import Home from "./pages/Home";
 import Resources from "./pages/Resources";
 import ResourceDetail from "./pages/ResourceDetail";
@@ -55,6 +56,7 @@ export default function App() {
         <SiteShell><Router /></SiteShell>
         <FloatingCta />
         <ConsultModal />
+        <EventPopup />
       </ConsultModalProvider>
     </ErrorBoundary>
   );
