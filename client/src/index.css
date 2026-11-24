@@ -983,3 +983,18 @@ button.mobile-nav-link.open svg { transform: rotate(180deg); }
   .event-popup { padding: 24px 20px 20px; }
   .event-popup-title { font-size: 25px; }
 }
+
+/* ── .AI 캠퍼스(KOREA AI CAMPUS) 입구 배너 — /courses 에서 AI 전문과정으로 넘어가는 띠.
+   사이트의 어두운 CTA 팔레트(#181815/#c8ff39)를 그대로 쓴다. ── */
+.campus-band-wrap { margin-top: 40px; }
+.campus-band { position: relative; display: grid; gap: 8px; padding: 28px 70px 28px 30px; background: #181815; color: #f7f4ef; transition: background 180ms var(--ease-out); }
+.campus-band:hover { background: #22221e; }
+.campus-band-label { color: #c8ff39; font: 600 10px "Pretendard Variable", "Pretendard", sans-serif; letter-spacing: .17em; }
+.campus-band strong { font-family: "Pretendard Variable", "Pretendard", sans-serif; font-size: clamp(19px, 2.2vw, 26px); line-height: 1.25; letter-spacing: -.045em; }
+.campus-band p { margin: 0; max-width: 760px; color: #aaa79e; font-size: 13px; line-height: 1.7; }
+.campus-band > svg { position: absolute; top: 28px; right: 28px; transition: transform 180ms var(--ease-out); }
+.campus-band:hover > svg { transform: rotate(45deg); }
+@media (max-width: 760px) {
+  .campus-band { padding: 22px 20px; }
+  .campus-band > svg { top: 20px; right: 18px; }
+}

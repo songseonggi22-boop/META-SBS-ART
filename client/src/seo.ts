@@ -1,4 +1,5 @@
 import { courses, trackLabels, getCourse } from "@/lib/courses";
+import { aiCampusCourses, aiCampusDeptLabels, getAiCampusCourse } from "@/lib/aiCampus";
 import { resources } from "@/lib/resources";
 import { coursePrimaryLanding, getLanding, landingFaq, landings, menus } from "@/lib/landings";
 import { courseLabels, getPortfolioItem, portfolioItems } from "@/lib/portfolio";
@@ -77,6 +78,12 @@ const staticMeta: Record<string, Omit<PageMeta, "path" | "image">> = {
     description: "시각편집·모션그래픽·인테리어·CG·AI·웹툰/디지털드로잉·자격증·IT까지, 대전AI컴퓨터디자인학원이 운영하는 전체 과정을 분야별로 둘러보세요.",
     jsonld: [crumbs([["홈", "/"], ["전체과정", "/courses"]])],
   },
+  "/ai-campus": {
+    title: brand(".AI 캠퍼스 · AI 전문과정 커리큘럼"),
+    description:
+      "AI 개발·콘텐츠 제작·마케팅·업무 자동화·AI 자격증까지 .AI 캠퍼스(KOREA AI CAMPUS) AI 전문과정 12개의 모듈·회차별 커리큘럼을 한곳에서 확인하세요. 전 과정 100% ZOOM 비대면 라이브.",
+    jsonld: [crumbs([["홈", "/"], ["전체과정", "/courses"], [".AI 캠퍼스", "/ai-campus"]])],
+  },
   "/funding": {
     title: brand("국비지원 안내"),
     description: "국민내일배움카드·국민취업지원제도 같은 국비지원 제도 설명과 확인 절차. 대상 여부와 한도는 상담에서 안내해 드립니다.",
@@ -154,6 +161,34 @@ export function getMeta(path: string): PageMeta {
     };
   }
 
+  const ac = p.match(/^\/ai-campus\/([^/]+)$/);
+  const campus = ac && getAiCampusCourse(ac[1]);
+  if (campus) {
+    const desc = `${campus.title} 커리큘럼. ${campus.tagline} ${campus.hours} · ${campus.days} · ${campus.tools}`;
+    return {
+      path: p,
+      title: brand(`${campus.title} · .AI 캠퍼스 ${aiCampusDeptLabels[campus.dept]}`),
+      description: clip(desc),
+      image: SITE.url + DEFAULT_OG_IMAGE,
+      jsonld: [
+        {
+          "@context": "https://schema.org",
+          "@type": "Course",
+          name: campus.title,
+          description: campus.tagline,
+          provider: { "@id": ORG_ID },
+          url: SITE.url + p,
+          hasCourseInstance: {
+            "@type": "CourseInstance",
+            courseMode: "online",
+            courseWorkload: campus.hours,
+          },
+        },
+        crumbs([["홈", "/"], [".AI 캠퍼스", "/ai-campus"], [campus.title, p]]),
+      ],
+    };
+  }
+
   const cm = p.match(/^\/course\/([^/]+)$/);
   const course = cm && getCourse(cm[1]);
   if (course) {
@@ -197,5 +232,6 @@ export const allRoutes = (): string[] => [
   ...resources.map((r) => `/blog/${r.id}`),
   ...landings.map((l) => `/daejeon/${l.slug}`),
   ...courses.filter((c) => !coursePrimaryLanding(c.slug)).map((c) => `/course/${c.slug}`),
+  ...aiCampusCourses.map((c) => `/ai-campus/${c.slug}`),
   ...portfolioItems.map((i) => `/portfolio/${i.id}`),
 ];

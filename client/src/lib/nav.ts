@@ -13,6 +13,7 @@ export const topNav: NavLink[] = [
 // 푸터용 — 위 상단 메뉴 + 전체과정·수강안내·개인정보처리방침까지 포함한 확장판.
 export const footerNav: NavLink[] = [
   { label: "전체과정", href: "/courses" },
+  { label: ".AI 캠퍼스", href: "/ai-campus" },
   { label: "국비지원", href: "/funding" },
   { label: "취업지원", href: "/careers" },
   { label: "수강후기·작품", href: "/community" },

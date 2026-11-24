@@ -4,6 +4,7 @@ import { Link, useSearch } from "wouter";
 import type { CourseInterest } from "@/components/ConsultModalContext";
 import { courses, trackLabels } from "@/lib/courses";
 import { courseHref } from "@/lib/landings";
+import { aiCampusCourses } from "@/lib/aiCampus";
 
 const tracks: (CourseInterest | "ALL")[] = ["ALL", "graphic", "motion", "interior", "cg", "ai", "drawing", "cert", "it"];
 
@@ -29,6 +30,17 @@ export default function CoursesIndex() {
             <span className="aside-index">COURSES / 01</span>
           </div>
         </div>
+      </section>
+
+      {/* AI 전문 서브브랜드(.AI 캠퍼스) 과정은 운영 방식(100% ZOOM 라이브)이 달라 별도 라우트로 둔다.
+          전체과정을 보러 온 사람이 여기서 바로 넘어갈 수 있게 입구를 둔 것. */}
+      <section className="container campus-band-wrap">
+        <Link href="/ai-campus" className="campus-band">
+          <span className="campus-band-label">KOREA AI CAMPUS</span>
+          <strong>.AI 캠퍼스 AI 전문과정 {aiCampusCourses.length}개 커리큘럼 보기</strong>
+          <p>AI 개발 · 콘텐츠 제작 · 마케팅 · 업무 자동화 · AI 자격증. 전 과정 100% ZOOM 비대면 라이브, 모듈·회차별 커리큘럼을 바로 확인할 수 있습니다.</p>
+          <ArrowUpRight size={18} />
+        </Link>
       </section>
 
       <section className="resource-directory section-pad-small">

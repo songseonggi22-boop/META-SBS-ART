@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation } from "wouter";
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, Moon, Sun, X } from "lucide-react";
 import { getLanding, landingsByMenu, menus } from "@/lib/landings";
+import { aiCampusDeptLabels } from "@/lib/aiCampus";
 import { footerNav, topNav } from "@/lib/nav";
 import HeaderSearch from "./HeaderSearch";
 
@@ -48,6 +49,14 @@ function CoursesMegaPanel({ open }: { open: boolean }) {
             </div>
           </div>
         ))}
+        <div className="mega-col">
+          <span className="mega-bar-label">.AI 캠퍼스</span>
+          <div className="mega-col-links">
+            {Object.entries(aiCampusDeptLabels).map(([key, label]) => (
+              <Link key={key} href={`/ai-campus?dept=${key}`} className="mega-link">{label}</Link>
+            ))}
+          </div>
+        </div>
         <Link href="/courses" className="mega-col mega-col-all">
           전체과정 보기 <ArrowRight size={14} />
         </Link>
@@ -176,6 +185,10 @@ export default function SiteShell({ children }: { children: ReactNode }) {
                     </div>
                   </div>
                 ))}
+                <Link href="/ai-campus" className="mobile-nav-link">
+                  <span>.AI 캠퍼스 (AI 전문과정)</span>
+                  <ArrowUpRight size={16} />
+                </Link>
                 <Link href="/courses" className="mobile-nav-link">
                   <span>전체과정 보기</span>
                   <ArrowUpRight size={16} />

@@ -13,6 +13,7 @@ import ResourceDetail from "./pages/ResourceDetail";
 import Landing from "./pages/Landing";
 import CourseDetail from "./pages/CourseDetail";
 import CoursesIndex from "./pages/CoursesIndex";
+import AiCampus from "./pages/AiCampus";
 import Funding from "./pages/Funding";
 import Careers from "./pages/Careers";
 import Community from "./pages/Community";
@@ -35,6 +36,8 @@ function Router() {
       <Route path="/terms"><InfoPage kind="terms" /></Route>
       <Route path="/privacy" component={PrivacyPage} />
       <Route path="/courses" component={CoursesIndex} />
+      <Route path="/ai-campus" component={AiCampus} />
+      <Route path="/ai-campus/:slug" component={AiCampus} />
       <Route path="/funding" component={Funding} />
       <Route path="/careers" component={Careers} />
       <Route path="/community" component={Community} />
